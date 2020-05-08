@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Locale;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -20,6 +21,8 @@ import javax.swing.JTable;
 
 import ijt.table.DataTable;
 import ijt.table.RowNumberTable;
+import ijt.table.TableManager;
+import ijt.table.gui.action.edit.Rename;
 import ijt.table.gui.action.file.Close;
 import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
@@ -46,10 +49,19 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         super("Data Table");
 
         this.table = table;
+        
+        // index the table into the manager
+        String name = table.getName();
+        TableManager mgr = TableManager.getInstance();
+        name = mgr.createTableName(name);
+        table.setName(name);
+        mgr.addTable(table);
+
 
         // setup layout and menus
         setupLayout();
         setupMenu();
+        updateTitle();
         pack();
 
         // setup listeners
@@ -108,6 +120,10 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
 //        addMenuItem(fileMenu, "Quit", new ExitAction());
         bar.add(fileMenu);
 
+        JMenu editMenu = new JMenu("Edit");
+        addMenuItem(editMenu, "Rename", new Rename());
+        bar.add(editMenu);
+
         JMenu plotMenu = new JMenu("Plot");
         addMenuItem(plotMenu, "Line Plot (Column)", new LinePlot());
         bar.add(plotMenu);
@@ -131,6 +147,30 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     public DataTable getTable()
     {
         return table;
+    }
+    
+    
+    public void repaint()
+    {
+        super.repaint();
+        updateTitle();
+    }
+    
+    
+    public void updateTitle()
+    {
+        System.out.println("update title");
+        if (table == null)
+        {
+            setTitle("No Table");
+            return;
+        }
+        
+        int nr = table.rowNumber();
+        int nc = table.columnNumber();
+        String title = String.format(Locale.US, "%s - %dx%d", table.getName(), nr, nc);
+        
+        setTitle(title);
     }
     
     
