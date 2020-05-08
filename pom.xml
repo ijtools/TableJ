@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.ijtools</groupId>
+	<artifactId>Table_</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>Table</name>
+	<description>Data Table management for ImageJ/Fiji.</description>
+	<url>https://imagej.net/Table</url>
+	<inceptionYear>2014</inceptionYear>
+	<organization>
+		<name>INRAE</name>
+		<url>http://www.inrae.fr/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License v3+</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>dlegland</id>
+			<name>David Legland</name>
+			<roles>
+				<!-- See https://imagej.net/Team -->
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tags/ijtable</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:git://github.com/ijtools/ijTable</connection>
+		<developerConnection>scm:git:git@github.com:ijtools/Table</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/ijtools/ijTable</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/ijtools/ijTable/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/ijtools/ijTable</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>net.ijt</package-name>
+		<license.licenseName>lgpl_v3</license.licenseName>
+		<license.copyrightOwners>INRAE.</license.copyrightOwners>
+
+		<!-- NB: Deploy releases to the SciJava Maven repository. -->
+		<releaseProfiles>deploy-to-scijava</releaseProfiles>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- ImageJ 1.x - https://github.com/imagej/ImageJA -->
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+			<version>1.52o</version>
+		</dependency>
+	
+		<!-- Jama (Java Matrix package) is used for computing inertia ellipsoid --> 
+		<!-- https://mvnrepository.com/artifact/gov.nist.math/jama -->
+		<dependency>
+			<groupId>gov.nist.math</groupId>
+			<artifactId>jama</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+				
+		<!-- Add a dependency to JUnit for unit tests -->
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
+		<dependency>
+		    <groupId>jfree</groupId>
+		    <artifactId>jfreechart</artifactId>
+		    <version>1.0.13</version>
+		</dependency>
+		
+	</dependencies>
+</project>
