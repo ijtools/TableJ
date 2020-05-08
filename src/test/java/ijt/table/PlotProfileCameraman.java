@@ -3,9 +3,12 @@
  */
 package ijt.table;
 
+import javax.swing.JFrame;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
+import ijt.table.gui.DataTableFrame;
 
 /**
  * @author David Legland
@@ -30,7 +33,7 @@ public class PlotProfileCameraman
             table.setValue(i, 0, image.get(i, 256));
         }
 
-        table.show();
+        JFrame frame = new DataTableFrame(table);
+        frame.setVisible(true);
     }
-
 }

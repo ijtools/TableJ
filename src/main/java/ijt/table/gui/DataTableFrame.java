@@ -11,17 +11,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import ijt.table.DataTable;
-import ijt.table.RowNumberTable;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import ijt.table.DataTable;
+import ijt.table.RowNumberTable;
+import ijt.table.gui.action.file.Close;
+import ijt.table.gui.action.file.SaveAs;
+import ijt.table.gui.action.help.About;
 
 /**
  * Display the contents of a DataTable object into a JTable embedded into a
@@ -32,9 +33,8 @@ import javax.swing.JTable;
  */
 public class DataTableFrame extends JFrame implements WindowListener, ActionListener
 {
-
     /**
-     * 
+     * Default serial version UID.
      */
     private static final long serialVersionUID = 1L;
 
@@ -102,20 +102,22 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         JMenuBar bar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
-        addMenuItem(fileMenu, "Save As...", new SaveAsAction());
-        addMenuItem(fileMenu, "Quit", new ExitAction());
+        addMenuItem(fileMenu, "Save As...", new SaveAs());
+        addMenuItem(fileMenu, "Close", new Close());
+//        addMenuItem(fileMenu, "Quit", new ExitAction());
         bar.add(fileMenu);
 
         JMenu helpMenu = new JMenu("Help");
-        addMenuItem(helpMenu, "About...", new AboutAction());
+        addMenuItem(helpMenu, "About...", new About());
         bar.add(helpMenu);
 
         this.setJMenuBar(bar);
     }
 
-    private void addMenuItem(JMenu parent, String label, Action action)
+    private void addMenuItem(JMenu parent, String label, TableFrameAction action)
     {
-        JMenuItem item = new JMenuItem(action);
+        ActionRunner runner = new ActionRunner(this, action);
+        JMenuItem item =new JMenuItem(runner);
         item.setText(label);
         parent.add(item);
     }
@@ -162,46 +164,16 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     {
     }
 
-    private class SaveAsAction extends AbstractAction
-    {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            System.out.println("save as...");
-        }
-    }
-
-    private class ExitAction extends AbstractAction
-    {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            dispose();
-        }
-    }
-
-    private class AboutAction extends AbstractAction
-    {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            System.out.println("About...");
-        }
-    }
-
     /**
      * A simple main function to quickly test GUI on a toy example.
      */
     public static void main(String[] args)
     {
+        // Create a basic data table
         DataTable tbl = new DataTable(15, 5);
         tbl.setColumnNames(new String[] { "length", "area", "diameter", "number", "density" });
+        
+        // Create the frame to display the table.
         JFrame frame = new DataTableFrame(tbl);
         frame.setVisible(true);
     }
