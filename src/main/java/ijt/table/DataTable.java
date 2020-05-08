@@ -188,7 +188,7 @@ public class DataTable
     /**
      * Returns the number of columns (measurements, variables) in the data table.
      */
-    public int geColumnNumber()
+    public int columnNumber()
     {
         return this.nCols;
     }
@@ -196,7 +196,7 @@ public class DataTable
     /**
      * Returns the number of rows (individuals, observations) in the data table.
      */
-    public int getRowNumber()
+    public int rowNumber()
     {
         return this.nRows;
     }

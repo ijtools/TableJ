@@ -23,6 +23,7 @@ import ijt.table.RowNumberTable;
 import ijt.table.gui.action.file.Close;
 import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
+import ijt.table.gui.action.plot.LinePlot;
 
 /**
  * Display the contents of a DataTable object into a JTable embedded into a
@@ -59,8 +60,8 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     private void setupLayout()
     {
         // Need to cast table data to object array...
-        int nRows = table.getRowNumber();
-        int nCols = table.geColumnNumber();
+        int nRows = table.rowNumber();
+        int nCols = table.columnNumber();
         Object[][] dats = new Object[nRows][nCols];
         for (int r = 0; r < nRows; r++)
         {
@@ -107,6 +108,10 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
 //        addMenuItem(fileMenu, "Quit", new ExitAction());
         bar.add(fileMenu);
 
+        JMenu plotMenu = new JMenu("Plot");
+        addMenuItem(plotMenu, "Line Plot (Column)", new LinePlot());
+        bar.add(plotMenu);
+
         JMenu helpMenu = new JMenu("Help");
         addMenuItem(helpMenu, "About...", new About());
         bar.add(helpMenu);
@@ -121,7 +126,14 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         item.setText(label);
         parent.add(item);
     }
-
+    
+    
+    public DataTable getTable()
+    {
+        return table;
+    }
+    
+    
     @Override
     public void windowActivated(WindowEvent evt)
     {

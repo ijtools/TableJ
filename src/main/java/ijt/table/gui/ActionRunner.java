@@ -61,4 +61,8 @@ public class ActionRunner extends AbstractAction
         t.start();
     }
 
+    public TableFrameAction getAction()
+    {
+        return action;
+    }
 }

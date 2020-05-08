@@ -17,6 +17,7 @@ public class Close implements TableFrameAction
     public void run(DataTableFrame frame)
     {
         System.out.println("close frame...");
+        frame.dispose();
     }
 
 }
