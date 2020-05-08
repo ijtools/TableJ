@@ -6,6 +6,7 @@ package ijt.table.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -24,6 +25,7 @@ import ijt.table.RowNumberTable;
 import ijt.table.TableManager;
 import ijt.table.gui.action.edit.Rename;
 import ijt.table.gui.action.file.Close;
+import ijt.table.gui.action.file.OpenDemoTable;
 import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
 import ijt.table.gui.action.plot.LinePlot;
@@ -115,9 +117,10 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         JMenuBar bar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
+        addMenuItem(fileMenu, "Open Demo Table", new OpenDemoTable());
+        fileMenu.addSeparator();
         addMenuItem(fileMenu, "Save As...", new SaveAs());
         addMenuItem(fileMenu, "Close", new Close());
-//        addMenuItem(fileMenu, "Quit", new ExitAction());
         bar.add(fileMenu);
 
         JMenu editMenu = new JMenu("Edit");
@@ -174,6 +177,29 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     }
     
     
+    /**
+     * Creates a new frame to display the input data table, and initialzes it with
+     * from this frame.
+     * 
+     * @param table the table to display in the new frame
+     * @return the new table frame
+     */
+
+    public DataTableFrame createNewTableFrame(DataTable table)
+    {
+        // creates the frame
+        DataTableFrame newFrame = new DataTableFrame(table);
+        
+        // Compute position according to position of current frame
+        Point pos = this.getLocation();
+        int x = pos.x + 10;
+        int y = pos.y + 10;
+        newFrame.setLocation(x, y);
+        
+        // return result
+        return newFrame;
+    }
+
     @Override
     public void windowActivated(WindowEvent evt)
     {
