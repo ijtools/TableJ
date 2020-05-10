@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import ijt.table.DataTable;
+import ijt.table.NumericColumn;
 import ijt.table.RowNumberTable;
 import ijt.table.TableManager;
 import ijt.table.gui.action.edit.Rename;
@@ -77,11 +78,17 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         int nRows = table.rowNumber();
         int nCols = table.columnNumber();
         Object[][] dats = new Object[nRows][nCols];
-        for (int r = 0; r < nRows; r++)
+        for (int c = 0; c < nCols; c++)
         {
-            for (int c = 0; c < nCols; c++)
+            if (table.getColumn(c) instanceof NumericColumn)
             {
-                dats[r][c] = table.getValue(r, c);
+                for (int r = 0; r < nRows; r++)
+                    dats[r][c] = table.getValue(r, c);
+            }
+            else
+            {
+                for (int r = 0; r < nRows; r++)
+                    dats[r][c] = table.get(r, c);
             }
         }
 

@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 
+import ijt.table.CategoricalColumn;
 import ijt.table.DataTable;
+import ijt.table.NumericColumn;
 
 /**
  * @author dlegland
@@ -105,9 +107,17 @@ public class DelimitedTableReader implements TableReader
 	public DataTable readTable(File file) throws IOException
 	{
         // meta data for table
+	    
+	    // number of columns
         int nCols;
+        
+        // table data, indexed by columns first.
         ArrayList<ArrayList<String>> columns;
+        
+        // the names of the columns
         String[] colNames;
+        
+        // the names of the rows
         ArrayList<String> rowNames = new ArrayList<String>();
 
         // Create text reader from file 
@@ -172,21 +182,17 @@ public class DelimitedTableReader implements TableReader
 			}
 		}
 		
-		// read regular lines
+		// read regular lines containing data
 		while (true)
 		{
 			String line = reader.readLine(); 
-			if (line == null)
+			if (line == null || line.isEmpty())
 			{
 				break;
 			}
-			if (line.isEmpty())
-			{
-				break;
-			}
-			
 			nRows++;
-		
+
+			// split the tokens of current line
 			tokens = line.split(delimiterRegexp);
 			
 			// read row name
@@ -212,60 +218,45 @@ public class DelimitedTableReader implements TableReader
 		reader.close();
 		
 		// convert columns
-        DataTable table = new DataTable(nRows, nCols);
+        DataTable table = DataTable.create(nRows, nCols);
 		
 		// convert string arrays to double values
 		for (int c = 0; c < nCols; c++)
 		{
-			ArrayList<String> column = columns.get(c);
+		    // tokens of current column
+			ArrayList<String> colData = columns.get(c);
 			
-//			ArrayList<String> levelTokens = new ArrayList<String>();
-//			boolean isNumeric = true;
-			
-			for (int r = 0; r < nRows; r++)
-			{
-				String token = column.get(r);
-				
-				// test if contains a numeric value or not
-				if(token.matches(".*\\d.*"))
-				{
-				    // numeric value
-				    double value = Double.parseDouble(token);
-                    table.setValue(r, c, value);
-				}
-				else
-				{
-                    throw new  RuntimeException("Can only import tables containing numeric values.");
-//				    if (!(levelTokens.contains(token)))
-//				    {
-//				        levelTokens.add(token);
-//				    }
-//				    isNumeric = false;
-				}
-			}
+			// check if column contains only numeric values
+			double[] values = new double[nRows];
+            boolean isNumeric = true;
+            for (int r = 0; r < nRows; r++)
+            {
+                String token = colData.get(r);
+                if(token.matches(".*\\d.*"))
+                {
+                    values[r] =  Double.parseDouble(token);
+                }
+                else
+                {
+                    isNumeric = false;
+                    break;
+                }
+            }
             
-//            // If column is not numeric, setup levels and store level indices 
-//            if (!isNumeric)
-//            {
-//                // setup levels
-//                String[] levels = levelTokens.toArray(new String[]{});
-//                table.setLevels(c, levels);
-//                
-//                // compute level index for each column
-//                for (int r = 0; r < nRows; r++)
-//                {
-//                    String token = column.get(r);
-//                    table.setValue(r, c, levelTokens.indexOf(token));
-//                }
-//            }
+            if (isNumeric)
+            {
+                table.setColumn(c, new NumericColumn(values));
+            }
+            else
+            {
+                table.setColumn(c, new CategoricalColumn(colData.toArray(new String[0])));
+            }
 		}
 
 		// populates meta-data
 		table.setColumnNames(colNames);
 		if (readRowNames)
-		{
 			table.setRowNames(rowNames.toArray(new String[0]));
-		}
 		
 		// also set the name of the table to the name of the file
 		table.setName(file.getName());

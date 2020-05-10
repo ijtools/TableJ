@@ -21,6 +21,7 @@ public class OpenDemoTable implements TableFrameAction
     public void run(DataTableFrame frame)
     {
         String fileName = this.getClass().getResource("/tables/fisherIris.txt").getFile();
+        System.out.println(fileName);
         File file = new File(fileName);
 
         DataTable table;
