@@ -56,5 +56,4 @@ public class Rename implements TableFrameAction
     {
         return frame.getTable() != null;
     }
-
 }

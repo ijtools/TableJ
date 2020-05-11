@@ -19,6 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import ijt.table.process.SummaryStatistics;
+
 //import org.jfree.chart.ChartFactory;
 //import org.jfree.chart.ChartPanel;
 //import org.jfree.chart.JFreeChart;
@@ -149,6 +151,65 @@ public class DataTable implements Iterable<Column>
         this.rowNames = new ArrayList<String>(0);
     }
 
+    
+    // =============================================================
+    // Global methods
+    
+    /**
+     * @return a table containing summary statistics for each numeric column.
+     */
+    public DataTable summary()
+    {
+        if (!isNumeric())
+        {
+            throw new RuntimeException("Can not compute summary for tabe with non-numeric columns.");
+        }
+        
+        int nc = this.nCols;
+        int nr = 5;
+        
+        DataTable res = DataTable.create(nr, nc);
+        for (int c = 0; c < nc; c++)
+        {
+            NumericColumn col = (NumericColumn) getColumn(c);
+            res.setValue(0, c, SummaryStatistics.min(col));
+            res.setValue(1, c, SummaryStatistics.mean(col));
+            res.setValue(2, c, SummaryStatistics.median(col));
+            res.setValue(3, c, SummaryStatistics.std(col));
+            res.setValue(4, c, SummaryStatistics.max(col));
+        }
+        
+        // setup names for columns and rows
+        res.setColumnNames(this.getColumnNames());
+        res.setRowNames(new String[] {"Min.", "Mean", "Median", "SD", "Max."});
+        
+        // setup name of summary table
+        if (name != null && !name.isEmpty())
+        {
+            res.setName(this.name + "-Summary");
+        }
+        else
+        {
+            res.setName("Summary");
+        }
+        
+        return res;
+    }
+    
+    /**
+     * @return true if this table contains only numeric columns.
+     */
+    public boolean isNumeric()
+    {
+        for (Column col : columns)
+        {
+            if (!(col instanceof NumericColumn))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     
     // =============================================================
     // Data management
@@ -309,6 +370,7 @@ public class DataTable implements Iterable<Column>
      */
     public boolean hasColumnNames()
     {
+//        return !this.colNames.isEmpty();
         for (String name : this.colNames)
         {
             if (name == null || name.isEmpty())
@@ -353,12 +415,7 @@ public class DataTable implements Iterable<Column>
 
     public String[] getRowNames()
     {
-        String[] names = new String[this.nCols];
-        for (int c = 0; c < this.nRows; c++)
-        {
-            names[c] = this.rowNames.get(c);
-        }
-        return names;
+        return this.rowNames.toArray(new String[0]);
     }
 
     public String getRowName(int iRow)
@@ -383,6 +440,15 @@ public class DataTable implements Iterable<Column>
                     "Row index greater than row number: " + rowIndex + ">" + this.nRows);
         this.rowNames.set(rowIndex, name);
     }
+    
+    /**
+     * @return true if all columns has a valid name.
+     */
+    public boolean hasRowNames()
+    {
+        return !this.rowNames.isEmpty();
+    }
+    
 
     
     // =============================================================
@@ -587,7 +653,7 @@ public class DataTable implements Iterable<Column>
         for (int r = 0; r < this.nRows; r++)
         {
             // row header
-            if (this.rowNames != null)
+            if (this.hasRowNames())
                 stream.print(this.getRowName(r) + "\t");
 
             // row data
@@ -666,7 +732,7 @@ public class DataTable implements Iterable<Column>
         for (int r = 0; r < this.nRows; r++)
         {
 
-            if (this.rowNames != null)
+            if (this.hasRowNames())
                 writer.print(this.getRowName(r));
             else
                 writer.print(r);

@@ -38,7 +38,7 @@ public class OpenDemoTable implements TableFrameAction
         table.setName("fisherIris");
         
         // add the new frame to the GUI
-        frame.createNewTableFrame(table).setVisible(true);
+        frame.createNewTableFrame(table);
     }
 
 }

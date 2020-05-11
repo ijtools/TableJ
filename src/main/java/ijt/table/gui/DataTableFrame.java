@@ -25,6 +25,8 @@ import ijt.table.NumericColumn;
 import ijt.table.RowNumberTable;
 import ijt.table.TableManager;
 import ijt.table.gui.action.edit.Rename;
+import ijt.table.gui.action.edit.SelectColumns;
+import ijt.table.gui.action.edit.Summary;
 import ijt.table.gui.action.file.Close;
 import ijt.table.gui.action.file.OpenDemoTable;
 import ijt.table.gui.action.file.SaveAs;
@@ -47,6 +49,15 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
 
     DataTable table;
 
+    /**
+     * Creates a new frame for displaying the content of the given DataTable.
+     * 
+     * The data table is indexed into the global table manager. Therefore the
+     * name of the table may ba modified to make sure it is unique within the
+     * manager.
+     * 
+     * @param table
+     */
     public DataTableFrame(DataTable table)
     {
         super("Data Table");
@@ -74,33 +85,12 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
 
     private void setupLayout()
     {
-        // Need to cast table data to object array...
-        int nRows = table.rowNumber();
-        int nCols = table.columnNumber();
-        Object[][] dats = new Object[nRows][nCols];
-        for (int c = 0; c < nCols; c++)
-        {
-            if (table.getColumn(c) instanceof NumericColumn)
-            {
-                for (int r = 0; r < nRows; r++)
-                    dats[r][c] = table.getValue(r, c);
-            }
-            else
-            {
-                for (int r = 0; r < nRows; r++)
-                    dats[r][c] = table.get(r, c);
-            }
-        }
-
+        // Convert table data into necessary format
+        Object[][] data = convertTableToObjectArray(table);
+        String[] colNames = computeDisplayColNames(table);
+        
         // Create JTable instance
-        String[] colNames = table.getColumnNames();
-        if (colNames == null)
-        {
-            colNames = new String[nCols];
-            for (int c = 0; c < nCols; c++)
-                colNames[c] = Integer.toString(c + 1);
-        }
-        JTable jTable = new JTable(dats, colNames);
+        JTable jTable = new JTable(data, colNames);
         jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         // Create the frame containing the table
@@ -118,6 +108,67 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         panel.add(jTable.getTableHeader(), BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
     }
+    
+    private Object[][] convertTableToObjectArray(DataTable table)
+    {
+        // table size
+        int nRows = table.rowNumber();
+        int nCols = table.columnNumber();
+        
+        // number of columns for displaying row name (either 0 or 1)
+        int nRowCols = table.hasRowNames() ? 1 : 0;
+        
+        // allocate memory
+        Object[][] data = new Object[nRows][nRowCols + nCols];
+        
+        // eventually add row names
+        if (nRowCols > 0)
+        {
+            for (int r = 0; r < nRows; r++)
+            {
+                data[r][0] = table.getRowName(r);
+            }
+        }
+        
+        // fill up data
+        for (int c = 0; c < nCols; c++)
+        {
+            if (table.getColumn(c) instanceof NumericColumn)
+            {
+                for (int r = 0; r < nRows; r++)
+                    data[r][c + nRowCols] = table.getValue(r, c);
+            }
+            else
+            {
+                for (int r = 0; r < nRows; r++)
+                    data[r][c + nRowCols] = table.get(r, c);
+            }
+        }
+        return data;
+    }
+    
+    private String[] computeDisplayColNames(DataTable table)
+    {
+        int nCols = table.columnNumber();
+
+        // number of columns for displaying row name (either 0 or 1)
+        int nRowCols = table.hasRowNames() ? 1 : 0;
+        
+        String[] colNames = new String[nCols + nRowCols];
+        
+        if (nRowCols > 0)
+        {
+            colNames[0] = "Row Names";
+        }
+        
+        String[] baseColNames = table.getColumnNames();
+        for (int c = 0; c < nCols; c++)
+        {
+            colNames[c + nRowCols] = baseColNames[c];
+        }
+        
+        return colNames;
+    }
 
     private void setupMenu()
     {
@@ -132,6 +183,9 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
 
         JMenu editMenu = new JMenu("Edit");
         addMenuItem(editMenu, "Rename", new Rename());
+        addMenuItem(editMenu, "Select Columns...", new SelectColumns());
+        editMenu.addSeparator();
+        addMenuItem(editMenu, "Summary", new Summary());
         bar.add(editMenu);
 
         JMenu plotMenu = new JMenu("Plot");
@@ -185,11 +239,12 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     
     
     /**
-     * Creates a new frame to display the input data table, and initialzes it with
-     * from this frame.
+     * Creates a new frame to display the input data table, and initializes it
+     * with from this frame.
      * 
-     * @param table the table to display in the new frame
-     * @return the new table frame
+     * @param table
+     *            the table to display in the new frame.
+     * @return the new table frame.
      */
 
     public DataTableFrame createNewTableFrame(DataTable table)
@@ -199,9 +254,11 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         
         // Compute position according to position of current frame
         Point pos = this.getLocation();
-        int x = pos.x + 10;
-        int y = pos.y + 10;
+        int x = pos.x + 20;
+        int y = pos.y + 20;
         newFrame.setLocation(x, y);
+        
+        newFrame.setVisible(true);
         
         // return result
         return newFrame;
@@ -220,7 +277,7 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     @Override
     public void windowClosing(WindowEvent evt)
     {
-        System.out.println("close");
+//        System.out.println("close");
         dispose();
     }
 
