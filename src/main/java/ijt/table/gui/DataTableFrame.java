@@ -24,6 +24,7 @@ import ijt.table.DataTable;
 import ijt.table.NumericColumn;
 import ijt.table.RowNumberTable;
 import ijt.table.TableManager;
+import ijt.table.gui.action.edit.CorrelationMatrix;
 import ijt.table.gui.action.edit.Rename;
 import ijt.table.gui.action.edit.SelectColumns;
 import ijt.table.gui.action.edit.Summary;
@@ -185,6 +186,7 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         addMenuItem(editMenu, "Rename", new Rename());
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
         editMenu.addSeparator();
+        addMenuItem(editMenu, "Correlation Matrix", new CorrelationMatrix());
         addMenuItem(editMenu, "Summary", new Summary());
         bar.add(editMenu);
 
