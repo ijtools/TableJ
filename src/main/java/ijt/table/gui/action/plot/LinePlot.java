@@ -43,7 +43,7 @@ public class LinePlot implements TableFrameAction
 
         // Initialize XY series
         XYSeries seriesXY = new XYSeries(colNames[colIndex]);
-        for (int i = 0; i < table.rowNumber(); i++)
+        for (int i = 0; i < table.rowCount(); i++)
         {
             seriesXY.add(i, table.getValue(i, colIndex));
         }

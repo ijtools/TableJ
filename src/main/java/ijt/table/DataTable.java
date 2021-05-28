@@ -21,13 +21,6 @@ import javax.swing.JTable;
 
 import ijt.table.process.SummaryStatistics;
 
-//import org.jfree.chart.ChartFactory;
-//import org.jfree.chart.ChartPanel;
-//import org.jfree.chart.JFreeChart;
-//import org.jfree.chart.plot.PlotOrientation;
-//import org.jfree.data.xy.XYSeries;
-//import org.jfree.data.xy.XYSeriesCollection;
-
 /**
  * A simple plain table for storing measurement results. Data table is indexed
  * by column first. Methods access data by row indexing first.
@@ -283,7 +276,7 @@ public class DataTable implements Iterable<Column>
     /**
      * Returns the number of columns (measurements, variables) in the data table.
      */
-    public int columnNumber()
+    public int columnCount()
     {
         return this.nCols;
     }
@@ -395,7 +388,7 @@ public class DataTable implements Iterable<Column>
     /**
      * Returns the number of rows (individuals, observations) in the data table.
      */
-    public int rowNumber()
+    public int rowCount()
     {
         return this.nRows;
     }

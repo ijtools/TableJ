@@ -36,8 +36,8 @@ public class DelimitedTableReaderTest
         
         DataTable table = reader.readTable(file);
         
-        assertEquals(150, table.rowNumber());
-        assertEquals(5, table.columnNumber());
+        assertEquals(150, table.rowCount());
+        assertEquals(5, table.columnCount());
         
         assertTrue(table.getColumn(0) instanceof NumericColumn);
         assertTrue(table.getColumn(1) instanceof NumericColumn);

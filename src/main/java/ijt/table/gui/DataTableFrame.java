@@ -113,8 +113,8 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     private Object[][] convertTableToObjectArray(DataTable table)
     {
         // table size
-        int nRows = table.rowNumber();
-        int nCols = table.columnNumber();
+        int nRows = table.rowCount();
+        int nCols = table.columnCount();
         
         // number of columns for displaying row name (either 0 or 1)
         int nRowCols = table.hasRowNames() ? 1 : 0;
@@ -150,7 +150,7 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     
     private String[] computeDisplayColNames(DataTable table)
     {
-        int nCols = table.columnNumber();
+        int nCols = table.columnCount();
 
         // number of columns for displaying row name (either 0 or 1)
         int nRowCols = table.hasRowNames() ? 1 : 0;
@@ -232,8 +232,8 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
             return;
         }
         
-        int nr = table.rowNumber();
-        int nc = table.columnNumber();
+        int nr = table.rowCount();
+        int nc = table.columnCount();
         String title = String.format(Locale.US, "%s - %dx%d", table.getName(), nr, nc);
         
         setTitle(title);

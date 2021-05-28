@@ -10,7 +10,7 @@ import javax.swing.AbstractAction;
 import ij.IJ;
 
 /**
- * Runs an instance of TableFrame action, by superclassng the Action class to
+ * Runs an instance of TableFrame action, by superclassing the Action class to
  * facilitate integration into frame menu.
  * 
  * @author dlegland

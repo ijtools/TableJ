@@ -46,7 +46,7 @@ public class NumericColumn extends Column implements Iterable<Double>
     @Override
     public Object get(int row)
     {
-        return new Double(data[row]);
+        return Double.valueOf(data[row]);
     }
 
     @Override

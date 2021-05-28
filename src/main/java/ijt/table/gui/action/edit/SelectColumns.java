@@ -27,8 +27,8 @@ public class SelectColumns implements TableFrameAction
         DataTable table = frame.getTable();
 
         // get general info from table
-        int nCols = table.columnNumber();
-        int nRows = table.rowNumber();
+        int nCols = table.columnCount();
+        int nRows = table.rowCount();
         String[] colNames = table.getColumnNames();
 
         // Display dialog for choosing options

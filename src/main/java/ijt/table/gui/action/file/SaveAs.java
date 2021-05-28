@@ -63,8 +63,8 @@ public class SaveAs implements TableFrameAction
 
         // TODO: create I/O package
         
-        int nc = table.columnNumber();
-        int nr = table.rowNumber();
+        int nc = table.columnCount();
+        int nr = table.rowCount();
         
         
         // Write header name of each column

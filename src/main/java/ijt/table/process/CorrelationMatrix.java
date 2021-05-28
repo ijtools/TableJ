@@ -26,7 +26,7 @@ public class CorrelationMatrix
     {
         DataTable covMat = new CovarianceMatrix().process(table);
         
-        int nc = table.columnNumber();
+        int nc = table.columnCount();
 
         DataTable corrMat = DataTable.create(nc, nc);
         
