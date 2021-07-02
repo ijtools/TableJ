@@ -33,6 +33,7 @@ import ijt.table.gui.action.file.OpenDemoTable;
 import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
 import ijt.table.gui.action.plot.LinePlot;
+import ijt.table.gui.action.plot.ScatterPlot;
 
 /**
  * Display the contents of a DataTable object into a JTable embedded into a
@@ -192,6 +193,7 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
 
         JMenu plotMenu = new JMenu("Plot");
         addMenuItem(plotMenu, "Line Plot (Column)", new LinePlot());
+        addMenuItem(plotMenu, "Scatter Plot", new ScatterPlot());
         bar.add(plotMenu);
 
         JMenu helpMenu = new JMenu("Help");
