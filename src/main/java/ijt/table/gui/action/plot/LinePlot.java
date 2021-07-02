@@ -3,14 +3,18 @@
  */
 package ijt.table.gui.action.plot;
 
+import java.awt.Point;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.JFrame;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
+import org.knowm.xchart.style.Styler.LegendPosition;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import ij.gui.GenericDialog;
 import ijt.table.Table;
@@ -25,9 +29,9 @@ public class LinePlot implements TableFrameAction
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(TableFrame parentFrame)
     {
-        Table table = frame.getTable();
+        Table table = parentFrame.getTable();
 
         GenericDialog gd = new GenericDialog("Line Plot");
         String[] colNames = table.getColumnNames();
@@ -41,48 +45,85 @@ public class LinePlot implements TableFrameAction
         
         int colIndex = gd.getNextChoiceIndex();
 
-        // Initialize XY series
-        XYSeries seriesXY = new XYSeries(colNames[colIndex]);
-        for (int i = 0; i < table.rowCount(); i++)
-        {
-            seriesXY.add(i, table.getValue(i, colIndex));
-        }
-
-        // add series to a data set
-        XYSeriesCollection xyDataset = new XYSeriesCollection();
-        xyDataset.addSeries(seriesXY);
-
+        // Default name for table
         String tableName = table.getName();
-        if (tableName == null)
+        if (tableName == null || tableName.length() == 0)
         {
-            tableName = "No Name";
+            tableName = "Data";
         }
         
-        // create line chart from data set
-        JFreeChart chart = ChartFactory.createXYLineChart(tableName, "", "", xyDataset, PlotOrientation.VERTICAL, true,
-                true, true);
-        chart.fireChartChanged();
+        // Create the Chart
+        XYChart chart = new XYChartBuilder()
+                .width(600)
+                .height(500)
+                .title(tableName)
+                .xAxisTitle("Row index")
+                .yAxisTitle("")
+                .build();
+        
+        // Additional chart style
+        chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Line);
+        chart.getStyler().setLegendPosition(LegendPosition.InsideNE);
 
-        // we put the chart into a panel
-        ChartPanel chartPanel = new ChartPanel(chart, 500, 200, 500, 200, 500, 500, false, false, true, true, true,
-                true);
+        // Initialize XY series
+        double[] xData = generateLinearVector(table.rowCount());
+        XYSeries series = chart.addSeries(colNames[colIndex], xData, table.getColumnValues(colIndex));
+        series.setMarker(SeriesMarkers.NONE);
 
-//      this.getContentPane().add(  GuiUtil.createLineBoxPanel( chartPanel ) );
-//      this.getContentPane().add(chartPanel);
-
-        // default size
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-
-        // add it to our application
+        // Create and set up the window.
         JFrame plotFrame = new JFrame();
-        plotFrame .setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        plotFrame .setContentPane(chartPanel);
-        plotFrame .pack();
+        plotFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // show !
-        plotFrame .setVisible(true);
-//        return frame;
-
+        // relocate with respect to parent frame
+        Point pos0 = parentFrame.getLocation();
+        plotFrame.setLocation(pos0.x + 30, pos0.y + 20);
+        
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
+        try
+        {
+            javax.swing.SwingUtilities.invokeAndWait(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    // add a panel containing the chart 
+                    @SuppressWarnings({ "rawtypes", "unchecked" })
+                    XChartPanel chartPanel = new XChartPanel(chart);
+                    plotFrame.add(chartPanel);
+                    
+                    // Display the window.
+                    plotFrame.pack();
+                    plotFrame.setVisible(true);
+                }
+            });
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Generate a linear vectors containing values starting from 1, 2... to
+     * nValues.
+     * 
+     * @param nValues
+     *            the number of values
+     * @return a linear vector of nRows values
+     */
+    private double[] generateLinearVector(int nValues)
+    {
+        double[] values = new double[nValues];
+        for (int i = 0; i < nValues; i++)
+        {
+            values[i] = i+1;
+        }
+        return values;
     }
     
     public boolean isAvailable(TableFrame frame)

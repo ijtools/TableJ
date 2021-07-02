@@ -11,7 +11,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>Table</name>
 	<description>Data Table management for ImageJ/Fiji.</description>
 	<url>https://imagej.net/Table</url>
-	<inceptionYear>2014</inceptionYear>
+	<inceptionYear>2020</inceptionYear>
 	<organization>
 		<name>INRAE</name>
 		<url>http://www.inrae.fr/</url>
@@ -105,12 +105,13 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		    <scope>test</scope>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
+		<!-- plotting library -->
 		<dependency>
-		    <groupId>jfree</groupId>
-		    <artifactId>jfreechart</artifactId>
-		    <version>1.0.13</version>
-		</dependency>
-		
+		    <groupId>org.knowm.xchart</groupId>
+		    <artifactId>xchart</artifactId>
+	    	<version>3.8.0</version>
+	    </dependency>
+	   
 	</dependencies>
+	
 </project>
