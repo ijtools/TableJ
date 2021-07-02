@@ -13,8 +13,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import ij.gui.GenericDialog;
-import ijt.table.DataTable;
-import ijt.table.gui.DataTableFrame;
+import ijt.table.Table;
+import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 /**
@@ -25,9 +25,9 @@ public class LinePlot implements TableFrameAction
 {
 
     @Override
-    public void run(DataTableFrame frame)
+    public void run(TableFrame frame)
     {
-        DataTable table = frame.getTable();
+        Table table = frame.getTable();
 
         GenericDialog gd = new GenericDialog("Line Plot");
         String[] colNames = table.getColumnNames();
@@ -85,7 +85,7 @@ public class LinePlot implements TableFrameAction
 
     }
     
-    public boolean isAvailable(DataTableFrame frame)
+    public boolean isAvailable(TableFrame frame)
     {
         return frame.getTable() != null;
     }

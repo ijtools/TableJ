@@ -26,14 +26,14 @@ public class ActionRunner extends AbstractAction
     /**
      * The frame from which the acton is run.
      */
-    DataTableFrame frame;
+    TableFrame frame;
     
     /**
      * The action to run.
      */
     TableFrameAction action;
     
-    public ActionRunner(DataTableFrame frame, TableFrameAction action)
+    public ActionRunner(TableFrame frame, TableFrameAction action)
     {
         this.frame = frame;
         this.action = action;

@@ -12,8 +12,8 @@ import java.util.Locale;
 
 import javax.swing.JFileChooser;
 
-import ijt.table.DataTable;
-import ijt.table.gui.DataTableFrame;
+import ijt.table.Table;
+import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 /**
@@ -25,9 +25,9 @@ public class SaveAs implements TableFrameAction
     private JFileChooser saveWindow = null;
     
     @Override
-    public void run(DataTableFrame frame)
+    public void run(TableFrame frame)
     {
-        DataTable table = frame.getTable();
+        Table table = frame.getTable();
         if (table == null)
         {
             return;

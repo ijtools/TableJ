@@ -20,7 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import ijt.table.DataTable;
+import ijt.table.Table;
 import ijt.table.NumericColumn;
 import ijt.table.RowNumberTable;
 import ijt.table.TableManager;
@@ -41,14 +41,14 @@ import ijt.table.gui.action.plot.LinePlot;
  * @author David Legland
  *
  */
-public class DataTableFrame extends JFrame implements WindowListener, ActionListener
+public class TableFrame extends JFrame implements WindowListener, ActionListener
 {
     /**
      * Default serial version UID.
      */
     private static final long serialVersionUID = 1L;
 
-    DataTable table;
+    Table table;
 
     /**
      * Creates a new frame for displaying the content of the given DataTable.
@@ -59,7 +59,7 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
      * 
      * @param table
      */
-    public DataTableFrame(DataTable table)
+    public TableFrame(Table table)
     {
         super("Data Table");
 
@@ -110,7 +110,7 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         panel.add(scrollPane, BorderLayout.CENTER);
     }
     
-    private Object[][] convertTableToObjectArray(DataTable table)
+    private Object[][] convertTableToObjectArray(Table table)
     {
         // table size
         int nRows = table.rowCount();
@@ -148,7 +148,7 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
         return data;
     }
     
-    private String[] computeDisplayColNames(DataTable table)
+    private String[] computeDisplayColNames(Table table)
     {
         int nCols = table.columnCount();
 
@@ -210,7 +210,7 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     }
     
     
-    public DataTable getTable()
+    public Table getTable()
     {
         return table;
     }
@@ -249,10 +249,10 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
      * @return the new table frame.
      */
 
-    public DataTableFrame createNewTableFrame(DataTable table)
+    public TableFrame createNewTableFrame(Table table)
     {
         // creates the frame
-        DataTableFrame newFrame = new DataTableFrame(table);
+        TableFrame newFrame = new TableFrame(table);
         
         // Compute position according to position of current frame
         Point pos = this.getLocation();
@@ -314,11 +314,11 @@ public class DataTableFrame extends JFrame implements WindowListener, ActionList
     public static void main(String[] args)
     {
         // Create a basic data table
-        DataTable tbl = new DataTable(15, 5);
+        Table tbl = new Table(15, 5);
         tbl.setColumnNames(new String[] { "length", "area", "diameter", "number", "density" });
         
         // Create the frame to display the table.
-        JFrame frame = new DataTableFrame(tbl);
+        JFrame frame = new TableFrame(tbl);
         frame.setVisible(true);
     }
 

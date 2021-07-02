@@ -4,9 +4,9 @@
 package ijt.table.gui.action.edit;
 
 import ij.gui.GenericDialog;
-import ijt.table.DataTable;
+import ijt.table.Table;
 import ijt.table.TableManager;
-import ijt.table.gui.DataTableFrame;
+import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 /**
@@ -17,9 +17,9 @@ public class Rename implements TableFrameAction
 {
 
     @Override
-    public void run(DataTableFrame frame)
+    public void run(TableFrame frame)
     {
-        DataTable table = frame.getTable();
+        Table table = frame.getTable();
         if (table == null)
         {
             return;
@@ -52,7 +52,7 @@ public class Rename implements TableFrameAction
         frame.repaint();
     }
     
-    public boolean isAvailable(DataTableFrame frame)
+    public boolean isAvailable(TableFrame frame)
     {
         return frame.getTable() != null;
     }

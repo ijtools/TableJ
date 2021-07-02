@@ -3,7 +3,7 @@
  */
 package ijt.table.process;
 
-import ijt.table.DataTable;
+import ijt.table.Table;
 
 /**
  * Compute the correlation matrix of a numeric table, and returns the result in a
@@ -22,13 +22,13 @@ public class CorrelationMatrix
     }
 
     
-    public DataTable process(DataTable table)
+    public Table process(Table table)
     {
-        DataTable covMat = new CovarianceMatrix().process(table);
+        Table covMat = new CovarianceMatrix().process(table);
         
         int nc = table.columnCount();
 
-        DataTable corrMat = DataTable.create(nc, nc);
+        Table corrMat = Table.create(nc, nc);
         
         for (int i = 0; i < nc; i++)
         {

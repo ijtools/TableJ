@@ -6,8 +6,8 @@ package ijt.table.gui.action.edit;
 import java.util.ArrayList;
 
 import ij.gui.GenericDialog;
-import ijt.table.DataTable;
-import ijt.table.gui.DataTableFrame;
+import ijt.table.Table;
+import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 
@@ -22,9 +22,9 @@ public class SelectColumns implements TableFrameAction
      * @see imago.gui.Plugin#run(imago.gui.ImagoFrame, java.lang.String)
      */
     @Override
-    public void run(DataTableFrame frame)
+    public void run(TableFrame frame)
     {
-        DataTable table = frame.getTable();
+        Table table = frame.getTable();
 
         // get general info from table
         int nCols = table.columnCount();
@@ -73,7 +73,7 @@ public class SelectColumns implements TableFrameAction
         }
         
         
-        DataTable res = DataTable.create(nRows, columnIndices.length);
+        Table res = Table.create(nRows, columnIndices.length);
         for (int i = 0; i < columnIndices.length; i++)
         {
             int index = columnIndices[i];

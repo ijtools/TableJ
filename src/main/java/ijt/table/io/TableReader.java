@@ -6,7 +6,7 @@ package ijt.table.io;
 import java.io.File;
 import java.io.IOException;
 
-import ijt.table.DataTable;
+import ijt.table.Table;
 
 /**
  * @author dlegland
@@ -14,5 +14,5 @@ import ijt.table.DataTable;
  */
 public interface TableReader
 {
-	public DataTable readTable(File file) throws IOException;
+	public Table readTable(File file) throws IOException;
 }

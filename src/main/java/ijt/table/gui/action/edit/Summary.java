@@ -3,8 +3,8 @@
  */
 package ijt.table.gui.action.edit;
 
-import ijt.table.DataTable;
-import ijt.table.gui.DataTableFrame;
+import ijt.table.Table;
+import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 /**
@@ -17,19 +17,19 @@ public class Summary implements TableFrameAction
 {
 
     @Override
-    public void run(DataTableFrame frame)
+    public void run(TableFrame frame)
     {
-        DataTable table = frame.getTable();
+        Table table = frame.getTable();
         if (table == null)
         {
             return;
         }
         
-        DataTable res = table.summary();
+        Table res = table.summary();
         frame.createNewTableFrame(res);
     }
     
-    public boolean isAvailable(DataTableFrame frame)
+    public boolean isAvailable(TableFrame frame)
     {
         return frame.getTable() != null;
     }

@@ -22,20 +22,20 @@ import javax.swing.JTable;
 import ijt.table.process.SummaryStatistics;
 
 /**
- * A simple plain table for storing measurement results. Data table is indexed
- * by column first. Methods access data by row indexing first.
+ * A simple plain table for storing measurement results. 
+ * Methods access data by row indexing first.
  * 
  * @author David Legland
  *
  */
-public class DataTable implements Iterable<Column>
+public class Table implements Iterable<Column>
 {
     // =============================================================
     // Static factories
     
-    public static final DataTable create(int nRows, int nCols)
+    public static final Table create(int nRows, int nCols)
     {
-        return new DataTable(nRows, nCols);
+        return new Table(nRows, nCols);
     }
     
     
@@ -76,7 +76,7 @@ public class DataTable implements Iterable<Column>
      * @param nRows the number of rows
      * @param nCols the number of columns
      */
-    public DataTable(int nRows, int nCols)
+    public Table(int nRows, int nCols)
     {
         this.nCols = nCols;
         this.nRows = nRows;
@@ -89,7 +89,7 @@ public class DataTable implements Iterable<Column>
         initRowNames();
     }
 
-    public DataTable(double[][] data)
+    public Table(double[][] data)
     {
         initData(data);
         this.nCols = data.length;
@@ -98,7 +98,7 @@ public class DataTable implements Iterable<Column>
         initRowNames();
     }
 
-    public DataTable(double[][] data, String[] colNames, String[] rowNames)
+    public Table(double[][] data, String[] colNames, String[] rowNames)
     {
         initData(data);
 
@@ -151,7 +151,7 @@ public class DataTable implements Iterable<Column>
     /**
      * @return a table containing summary statistics for each numeric column.
      */
-    public DataTable summary()
+    public Table summary()
     {
         if (!isNumeric())
         {
@@ -161,7 +161,7 @@ public class DataTable implements Iterable<Column>
         int nc = this.nCols;
         int nr = 5;
         
-        DataTable res = DataTable.create(nr, nc);
+        Table res = Table.create(nr, nc);
         for (int c = 0; c < nc; c++)
         {
             NumericColumn col = (NumericColumn) getColumn(c);
@@ -467,14 +467,14 @@ public class DataTable implements Iterable<Column>
     // =============================================================
     // Operations on tables
 
-    public DataTable concatenateColumns(DataTable table)
+    public Table concatenateColumns(Table table)
     {
         if (this.nRows != table.nRows)
             throw new IllegalArgumentException("Data tables must have the same number of rows");
 
         // allocate result
         int newNCols = this.nCols + table.nCols;
-        DataTable result = new DataTable(nRows, newNCols);
+        Table result = new Table(nRows, newNCols);
 
         // add values of this table
         for (int col = 0; col < nCols; col++)
@@ -500,14 +500,14 @@ public class DataTable implements Iterable<Column>
         return result;
     }
 
-    public DataTable concatenateRows(DataTable table)
+    public Table concatenateRows(Table table)
     {
         if (this.nCols != table.nCols)
             throw new IllegalArgumentException("Data tables must have the same number of columns");
 
         // allocate result
         int newNRows = this.nRows + table.nRows;
-        DataTable result = new DataTable(newNRows, nCols);
+        Table result = new Table(newNRows, nCols);
 
         for (int col = 0; col < nCols; col++)
         {
@@ -784,7 +784,7 @@ public class DataTable implements Iterable<Column>
      */
     public final static void main(String[] args)
     {
-        DataTable table = new DataTable(15, 5);
+        Table table = new Table(15, 5);
         Random randgen = new Random(156);
         for (int c = 0; c < 5; c++)
         {

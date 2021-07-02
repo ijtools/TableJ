@@ -15,7 +15,7 @@ public interface TableFrameAction
      * 
      * @param frame the frame containing the menu item used to run this action.
      */
-	public abstract void run(DataTableFrame frame);
+	public abstract void run(TableFrame frame);
 	
 	/**
      * Utility methods that can be used to decide whether the action should be
@@ -25,7 +25,7 @@ public interface TableFrameAction
      * @param frame the frame that intend to run this action
      * @return a boolean indicating whether the action can be run or not.
      */
-	public default boolean isAvailable(DataTableFrame frame)
+	public default boolean isAvailable(TableFrame frame)
 	{
 	    return true;
 	}

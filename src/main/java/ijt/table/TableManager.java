@@ -40,7 +40,7 @@ public class TableManager
     /**
      * The list of DataTable instances managed by the application.
      */
-    TreeMap<String, DataTable> tables = new TreeMap<String, DataTable>();
+    TreeMap<String, Table> tables = new TreeMap<String, Table>();
     
     // =============================================================
     // Creation of new handles
@@ -124,7 +124,7 @@ public class TableManager
     // =============================================================
     // Get data
 
-    public void addTable(DataTable table)
+    public void addTable(Table table)
     {
         String tableName = table.getName();
         if (tables.containsKey(tableName))
@@ -150,7 +150,7 @@ public class TableManager
         return tables.keySet();
     }
     
-    public Collection<DataTable> getTables()
+    public Collection<Table> getTables()
     {
         return tables.values();
     }

@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
-import ijt.table.gui.DataTableFrame;
+import ijt.table.gui.TableFrame;
 
 /**
  * @author David Legland
@@ -26,7 +26,7 @@ public class PlotProfileCameraman
 
         ImageProcessor image = imagePlus.getProcessor();
 
-        DataTable table = new DataTable(512, 1);
+        Table table = new Table(512, 1);
         table.setName("Cameraman-profile");
         table.setColumnNames(new String[] { "Intensity" });
         for (int i = 0; i < 512; i++)
@@ -34,7 +34,7 @@ public class PlotProfileCameraman
             table.setValue(i, 0, image.get(i, 256));
         }
 
-        JFrame frame = new DataTableFrame(table);
+        JFrame frame = new TableFrame(table);
         frame.setVisible(true);
     }
 }

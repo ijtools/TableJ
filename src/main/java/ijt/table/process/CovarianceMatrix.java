@@ -3,7 +3,7 @@
  */
 package ijt.table.process;
 
-import ijt.table.DataTable;
+import ijt.table.Table;
 import ijt.table.NumericColumn;
 
 /**
@@ -22,7 +22,7 @@ public class CovarianceMatrix
     {
     }
 
-    public DataTable process(DataTable table)
+    public Table process(Table table)
     {
         int nc = table.columnCount();
         int nr = table.rowCount();
@@ -40,7 +40,7 @@ public class CovarianceMatrix
             means[c] = cumsum / nr;
         }
         
-        DataTable covMat = DataTable.create(nc, nc);
+        Table covMat = Table.create(nc, nc);
         
         for (int i = 0; i < nc; i++)
         {

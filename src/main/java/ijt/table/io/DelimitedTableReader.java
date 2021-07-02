@@ -10,7 +10,7 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 
 import ijt.table.CategoricalColumn;
-import ijt.table.DataTable;
+import ijt.table.Table;
 import ijt.table.NumericColumn;
 
 /**
@@ -104,7 +104,7 @@ public class DelimitedTableReader implements TableReader
 	 * @see net.sci.table.io.TableReader#readTable()
 	 */
 	@Override
-	public DataTable readTable(File file) throws IOException
+	public Table readTable(File file) throws IOException
 	{
         // meta data for table
 	    
@@ -218,7 +218,7 @@ public class DelimitedTableReader implements TableReader
 		reader.close();
 		
 		// convert columns
-        DataTable table = DataTable.create(nRows, nCols);
+        Table table = Table.create(nRows, nCols);
 		
 		// convert string arrays to double values
 		for (int c = 0; c < nCols; c++)

@@ -6,8 +6,8 @@ package ijt.table.gui.action.file;
 import java.io.File;
 import java.io.IOException;
 
-import ijt.table.DataTable;
-import ijt.table.gui.DataTableFrame;
+import ijt.table.Table;
+import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 /**
@@ -18,13 +18,13 @@ public class OpenDemoTable implements TableFrameAction
 {
 
     @Override
-    public void run(DataTableFrame frame)
+    public void run(TableFrame frame)
     {
         String fileName = this.getClass().getResource("/tables/fisherIris.txt").getFile();
         System.out.println(fileName);
         File file = new File(fileName);
 
-        DataTable table;
+        Table table;
         try
         {
             table = new ijt.table.io.DelimitedTableReader().readTable(file);

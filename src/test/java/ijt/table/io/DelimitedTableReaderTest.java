@@ -12,7 +12,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import ijt.table.CategoricalColumn;
-import ijt.table.DataTable;
+import ijt.table.Table;
 import ijt.table.NumericColumn;
 
 /**
@@ -34,7 +34,7 @@ public class DelimitedTableReaderTest
         
         TableReader reader = new DelimitedTableReader();
         
-        DataTable table = reader.readTable(file);
+        Table table = reader.readTable(file);
         
         assertEquals(150, table.rowCount());
         assertEquals(5, table.columnCount());
