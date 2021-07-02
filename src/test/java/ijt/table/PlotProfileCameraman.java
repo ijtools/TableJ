@@ -26,7 +26,7 @@ public class PlotProfileCameraman
 
         ImageProcessor image = imagePlus.getProcessor();
 
-        Table table = new Table(512, 1);
+        Table table = Table.create(512, 1);
         table.setName("Cameraman-profile");
         table.setColumnNames(new String[] { "Intensity" });
         for (int i = 0; i < 512; i++)

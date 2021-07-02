@@ -10,8 +10,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
 
@@ -28,122 +26,16 @@ import ijt.table.process.SummaryStatistics;
  * @author David Legland
  *
  */
-public class Table implements Iterable<Column>
+public interface Table extends Iterable<Column>
 {
     // =============================================================
     // Static factories
     
-    public static final Table create(int nRows, int nCols)
+    public static Table create(int nRows, int nCols)
     {
-        return new Table(nRows, nCols);
+        return new DefaultTable(nRows, nCols);
     }
     
-    
-    // =============================================================
-    // Class variables
-
-    /** Number of columns in the table. */
-    int nCols;
-
-    /** Number of rows in the table. */
-    int nRows;
-
-    /** The list of columns composing this table. */
-    ArrayList<Column> columns;
-  
-    /**
-     * The name of the table (can be null).
-     */
-    String name = null;
-
-    /** 
-     * The names of the columns.
-     */
-    ArrayList<String> colNames;
-
-    /** 
-     * The names of the rows.
-     */
-    ArrayList<String> rowNames;
-
-    
-    // =============================================================
-    // Constructors
-
-    /**
-     * Creates a new data table with the given number of rows and columns.
-     * 
-     * @param nRows the number of rows
-     * @param nCols the number of columns
-     */
-    public Table(int nRows, int nCols)
-    {
-        this.nCols = nCols;
-        this.nRows = nRows;
-
-        this.columns = new ArrayList<Column>(nCols);
-        for (int c = 0; c < nCols; c++)
-            this.columns.add(new NumericColumn(nRows));
-
-        initColNames();
-        initRowNames();
-    }
-
-    public Table(double[][] data)
-    {
-        initData(data);
-        this.nCols = data.length;
-
-        initColNames();
-        initRowNames();
-    }
-
-    public Table(double[][] data, String[] colNames, String[] rowNames)
-    {
-        initData(data);
-
-        setColumnNames(colNames);
-        initRowNames();
-        setRowNames(rowNames);
-    }
-
-    /**
-     * Initializes class variables columns, nCols and nRows.
-     * 
-     * @param data the data to populate the table
-     */
-    private void initData(double[][] data)
-    {
-        // setup table size
-        this.nCols = data.length;
-        this.nRows = this.nCols > 0 ? data[0].length : -1;
-
-        // init empty numerical columns
-        this.columns = new ArrayList<Column>(nCols);
-        for (int c = 0; c < nCols; c++)
-        {
-            this.columns.add(new NumericColumn(data[c]));
-        }
-    }
-    
-    /**
-     * Initialize column names with index 1-based.
-     */
-    private void initColNames()
-    {
-        this.colNames = new ArrayList<String>(nCols);
-        for (int c = 0; c < this.nCols; c++)
-            this.colNames.add("C" + Integer.toString(c + 1));
-    }
-
-    /**
-     * Initialize row names to an empty array
-     */
-    private void initRowNames()
-    {
-        this.rowNames = new ArrayList<String>(0);
-    }
-
     
     // =============================================================
     // Global methods
@@ -151,14 +43,14 @@ public class Table implements Iterable<Column>
     /**
      * @return a table containing summary statistics for each numeric column.
      */
-    public Table summary()
+    public default Table summary()
     {
         if (!isNumeric())
         {
             throw new RuntimeException("Can not compute summary for tabe with non-numeric columns.");
         }
         
-        int nc = this.nCols;
+        int nc = this.columnCount();
         int nr = 5;
         
         Table res = Table.create(nr, nc);
@@ -177,9 +69,10 @@ public class Table implements Iterable<Column>
         res.setRowNames(new String[] {"Min.", "Mean", "Median", "SD", "Max."});
         
         // setup name of summary table
+        String name = getName();
         if (name != null && !name.isEmpty())
         {
-            res.setName(this.name + "-Summary");
+            res.setName(name + "-Summary");
         }
         else
         {
@@ -192,9 +85,9 @@ public class Table implements Iterable<Column>
     /**
      * @return true if this table contains only numeric columns.
      */
-    public boolean isNumeric()
+    public default boolean isNumeric()
     {
-        for (Column col : columns)
+        for (Column col : this)
         {
             if (!(col instanceof NumericColumn))
             {
@@ -214,10 +107,7 @@ public class Table implements Iterable<Column>
      * @param col the column index, 0-indexed
      * @return the value at the specified position
      */
-    public Object get(int row, int col)
-    {
-        return this.columns.get(col).get(row);
-    }
+    public Object get(int row, int col);
 
     /**
      * Returns the value at the specified position in the table.
@@ -226,10 +116,7 @@ public class Table implements Iterable<Column>
      * @param col the column index, 0-indexed
      * @return the value at the specified position
      */
-    public double getValue(int row, int col)
-    {
-        return this.columns.get(col).getValue(row);
-    }
+    public double getValue(int row, int col);
 
     /**
      * Returns the value at the specified position in the table.
@@ -238,11 +125,7 @@ public class Table implements Iterable<Column>
      * @param colName the name of the column
      * @return the value at the specified position
      */
-    public double getValue(int row, String colName)
-    {
-        int col = this.getColumnIndex(colName);
-        return this.columns.get(col).getValue(row);
-    }
+    public double getValue(int row, String colName);
 
     /**
      * Changes the value at the specified position
@@ -251,10 +134,7 @@ public class Table implements Iterable<Column>
      * @param row   the row index, 0-indexed
      * @param value the new value
      */
-    public void setValue(int row, int col, double value)
-    {
-        this.columns.get(col).setValue(row, value);
-    }
+    public void setValue(int row, int col, double value);
 
     /**
      * Changes the value at the specified position
@@ -263,11 +143,7 @@ public class Table implements Iterable<Column>
      * @param colName the name of the column to modify
      * @param value   the new value
      */
-    public void setValue(int row, String colName, double value)
-    {
-        int col = this.getColumnIndex(colName);
-        this.columns.get(col).setValue(row, value);
-    }
+    public void setValue(int row, String colName, double value);
 
     
     // =============================================================
@@ -276,65 +152,24 @@ public class Table implements Iterable<Column>
     /**
      * Returns the number of columns (measurements, variables) in the data table.
      */
-    public int columnCount()
-    {
-        return this.nCols;
-    }
+    public int columnCount();
 
-    public Column getColumn(int index)
-    {
-        return this.columns.get(index);
-    }
+    public Column getColumn(int index);
 
-    public void setColumn(int colIndex, Column col)
-    {
-        if (col.size() != this.nRows)
-        {
-            throw new IllegalArgumentException("Column size does not match table row number: " + col.size());
-        }
-        this.columns.set(colIndex, col);
-    }
+    public void setColumn(int colIndex, Column col);
 
     /**
      * Returns an entire column of the data table.
      */
-    public double[] getColumnValues(int col)
-    {
-        return columns.get(col).getValues();
-    }
+    public double[] getColumnValues(int col);
 
-    public String[] getColumnNames()
-    {
-        String[] names = new String[this.nCols];
-        for (int c = 0; c < this.nCols; c++)
-        {
-            names[c] = this.colNames.get(c);
-        }
-        return names;
-    }
+    public String[] getColumnNames();
     
-    public String getColumnName(int iCol)
-    {
-        return this.colNames.get(iCol);
-    }
+    public String getColumnName(int iCol);
     
-    public void setColumnNames(String[] names)
-    {
-        if (names.length != this.nCols)
-            throw new IllegalArgumentException("String array must have same length as the number of columns.");
+    public void setColumnNames(String[] names);
 
-        this.colNames.clear();
-        for (String name : names)
-            this.colNames.add(name);
-    }
-
-    public void setColumnName(int colIndex, String name)
-    {
-        if (colIndex >= this.nCols)
-            throw new IllegalArgumentException(
-                    "Index column greater than column number: " + colIndex + ">" + this.nCols);
-        this.colNames.set(colIndex, name);
-    }
+    public void setColumnName(int colIndex, String name);
 
     /**
      * Returns the index of the first column with the specified name, or -1 if there
@@ -344,42 +179,14 @@ public class Table implements Iterable<Column>
      * @return the index of the first column with the specified name, or -1 if there
      *         is no column with this name.
      */
-    public int getColumnIndex(String colName)
-    {
-        if (colName == null)
-            return -1;
-        
-        for (int c = 0; c < this.nCols; c++)
-        {
-            if (name.equals(this.colNames.get(c)))
-                return c;
-        }
-        
-        return -1;
-    }
+    public int findColumnIndex(String colName);
     
     /**
      * @return true if all columns has a valid name.
      */
-    public boolean hasColumnNames()
-    {
-//        return !this.colNames.isEmpty();
-        for (String name : this.colNames)
-        {
-            if (name == null || name.isEmpty())
-                return false;
-        }
-        
-        return true;
-    }
+    public boolean hasColumnNames();
     
-    public int addColumn(String colName, Column column)
-    {
-        this.columns.add(column);
-        this.nCols = this.columns.size();
-        this.colNames.add(colName);
-        return this.nCols - 1;
-    }
+    public int addColumn(String colName, Column column);
 
     
     // =============================================================
@@ -388,59 +195,25 @@ public class Table implements Iterable<Column>
     /**
      * Returns the number of rows (individuals, observations) in the data table.
      */
-    public int rowCount()
-    {
-        return this.nRows;
-    }
+    public int rowCount();
 
     /**
      * Returns an entire row of the data table.
      */
-    public double[] getRowValues(int row)
-    {
-        double[] res = new double[this.nCols];
-        for (int c = 0; c < this.nCols; c++)
-        {
-            res[c] = this.columns.get(c).getValue(row);
-        }
-        return res;
-    }
+    public double[] getRowValues(int row);
 
-    public String[] getRowNames()
-    {
-        return this.rowNames.toArray(new String[0]);
-    }
+    public String[] getRowNames();
 
-    public String getRowName(int iRow)
-    {
-        return this.rowNames.get(iRow);
-    }
+    public String getRowName(int iRow);
 
-    public void setRowNames(String[] names)
-    {
-        if (names.length != this.nRows)
-            throw new IllegalArgumentException("String array must have same length as the number of rows.");
+    public void setRowNames(String[] names);
 
-        this.rowNames.clear();
-        for (String name : names)
-            this.rowNames.add(name);
-    }
-
-    public void setRowName(int rowIndex, String name)
-    {
-        if (rowIndex >= this.nRows)
-            throw new IllegalArgumentException(
-                    "Row index greater than row number: " + rowIndex + ">" + this.nRows);
-        this.rowNames.set(rowIndex, name);
-    }
+    public void setRowName(int rowIndex, String name);
     
     /**
      * @return true if all columns has a valid name.
      */
-    public boolean hasRowNames()
-    {
-        return !this.rowNames.isEmpty();
-    }
+    public boolean hasRowNames();
     
 
     
@@ -450,209 +223,129 @@ public class Table implements Iterable<Column>
     /**
      * Changes the name of this data table.
      */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+    public void setName(String name);
 
     /**
      * Returns the name of this data table
      */
-    public String getName()
-    {
-        return this.name;
-    }
+    public String getName();
 
 
     // =============================================================
     // Operations on tables
 
-    public Table concatenateColumns(Table table)
+    public default Table concatenateColumns(Table table)
     {
-        if (this.nRows != table.nRows)
-            throw new IllegalArgumentException("Data tables must have the same number of rows");
+    	int nRows = this.rowCount();
+        if (this.rowCount() != table.rowCount())
+            throw new IllegalArgumentException("Tables must have the same number of rows");
 
         // allocate result
-        int newNCols = this.nCols + table.nCols;
-        Table result = new Table(nRows, newNCols);
+        int nCols1 = this.columnCount();
+        int nCols2 = table.columnCount();
+        int newNCols = nCols1 + nCols2;
+        Table result = Table.create(nRows, newNCols);
 
         // add values of this table
-        for (int col = 0; col < nCols; col++)
+        for (int col = 0; col < nCols1; col++)
         {
             result.setColumnName(col, this.getColumnName(col));
             for (int row = 0; row < nRows; row++)
             {
                 result.setValue(row, col, this.getValue(row, col));
-                result.setRowName(row, this.rowNames.get(row));
+                result.setRowName(row, this.getRowName(row));
             }
         }
 
         // add values of other table
-        for (int col = 0; col < table.nCols; col++)
+        for (int col = 0; col < nCols2; col++)
         {
-            result.setColumnName(col + nCols, this.getColumnName(col));
+            result.setColumnName(col + nCols1, this.getColumnName(col));
             for (int row = 0; row < nRows; row++)
             {
-                result.setValue(row, col + nCols, table.getValue(row, col));
+                result.setValue(row, col + nCols1, table.getValue(row, col));
             }
         }
 
         return result;
     }
 
-    public Table concatenateRows(Table table)
+    public default Table concatenateRows(Table table)
     {
-        if (this.nCols != table.nCols)
-            throw new IllegalArgumentException("Data tables must have the same number of columns");
+        int nCols1 = this.columnCount();
+        int nCols2 = table.columnCount();
+        if (nCols1 != nCols2)
+            throw new IllegalArgumentException("Tables must have the same number of columns");
 
         // allocate result
-        int newNRows = this.nRows + table.nRows;
-        Table result = new Table(newNRows, nCols);
+        int nRows1 = this.rowCount();
+        int nRows2 = table.rowCount();
+        int newNRows = nRows1 + nRows2;
+        Table result = Table.create(newNRows, nCols1);
 
-        for (int col = 0; col < nCols; col++)
+        for (int col = 0; col < nCols1; col++)
         {
             // add values of this table
             result.setColumnName(col, this.getColumnName(col));
-            for (int row = 0; row < nRows; row++)
+            for (int row = 0; row < nRows1; row++)
             {
                 result.setValue(row, col, this.getValue(row, col));
             }
             // add values of the other table
-            for (int row = 0; row < table.nRows; row++)
+            for (int row = 0; row < nRows2; row++)
             {
-                result.setValue(row + nRows, col, table.getValue(row, col));
+                result.setValue(row + nRows1, col, table.getValue(row, col));
             }
         }
 
-        for (int row = 0; row < nRows; row++)
+        for (int row = 0; row < nRows1; row++)
+        {
             result.setRowName(row, this.getRowName(row));
+        }
+        for (int row = 0; row < nRows2; row++)
+        {
+            result.setRowName(row + nRows1, this.getRowName(row));
+        }
 
         return result;
     }
 
-//    public JFrame linePlot(int colIndex)
-//    {
-//
-//        // Initialize XY series
-//        XYSeries seriesXY = new XYSeries(this.colNames[colIndex]);
-//        for (int i = 0; i < nRows; i++)
-//        {
-//            seriesXY.add(i, this.data[colIndex][i]);
-//        }
-//
-//        // add series to a data set
-//        XYSeriesCollection xyDataset = new XYSeriesCollection();
-//        xyDataset.addSeries(seriesXY);
-//
-//        String tableName = this.name == null ? "No Name" : this.name;
-//
-//        // create line chart from data set
-//        JFreeChart chart = ChartFactory.createXYLineChart(tableName, "", "", xyDataset, PlotOrientation.VERTICAL, true,
-//                true, true);
-//        chart.fireChartChanged();
-//
-//        // we put the chart into a panel
-//        ChartPanel chartPanel = new ChartPanel(chart, 500, 200, 500, 200, 500, 500, false, false, true, true, true,
-//                true);
-//
-////		this.getContentPane().add(  GuiUtil.createLineBoxPanel( chartPanel ) );
-////		this.getContentPane().add(chartPanel);
-//
-//        // default size
-//        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-//
-//        // add it to our application
-//        JFrame frame = new JFrame();
-//        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        frame.setContentPane(chartPanel);
-//        frame.pack();
-//
-//        // show !
-//        frame.setVisible(true);
-//        return frame;
-//    }
-//
-//    public JFrame linePlot(int xColIndex, int[] yColIndices)
-//    {
-//
-//        // Create the data set
-//        XYSeriesCollection xyDataset = new XYSeriesCollection();
-//
-//        // add one series for each column
-//        for (int c = 0; c < yColIndices.length; c++)
-//        {
-//            int col = yColIndices[c];
-//            // Initialize XY series
-//            XYSeries seriesXY = new XYSeries(this.colNames[col]);
-//            for (int i = 0; i < nRows; i++)
-//            {
-//                seriesXY.add(this.data[xColIndex][i], this.data[yColIndices[c]][i]);
-//            }
-//
-//            // add series to the data set
-//            xyDataset.addSeries(seriesXY);
-//        }
-//
-//        String tableName = this.name == null ? "No Name" : this.name;
-//
-//        // create line chart from data set
-//        JFreeChart chart = ChartFactory.createXYLineChart(tableName, this.colNames[xColIndex], "", xyDataset,
-//                PlotOrientation.VERTICAL, true, true, true);
-//        chart.fireChartChanged();
-//
-//        // we put the chart into a panel
-//        ChartPanel chartPanel = new ChartPanel(chart, 500, 200, 500, 200, 500, 500, false, false, true, true, true,
-//                true);
-//
-////		this.getContentPane().add(  GuiUtil.createLineBoxPanel( chartPanel ) );
-////		this.getContentPane().add(chartPanel);
-//
-//        // default size
-//        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-//
-//        // add it to our application
-//        JFrame frame = new JFrame();
-//        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        frame.setContentPane(chartPanel);
-//        frame.pack();
-//
-//        // show !
-//        frame.setVisible(true);
-//        return frame;
-//    }
-
     /**
      * Display the content of the data table to standard output.
      */
-    public void print(java.io.PrintStream stream)
+    public default void print(java.io.PrintStream stream)
     {
+    	int nRows = this.rowCount();
+    	int nCols = this.columnCount();
+    	String[] rowNames = this.getRowNames();
+    	String[] colNames = this.getColumnNames();
 
         // First display column headers
         if (this.hasColumnNames())
         {
-            if (this.rowNames != null)
+            if (rowNames != null)
                 stream.print("\t");
             
             if (nCols > 0)
-                stream.print(this.colNames.get(0));
-            for (int c = 1; c < this.nCols; c++)
+                stream.print(colNames[0]);
+            for (int c = 1; c < nCols; c++)
             {
-                stream.print("\t" + this.colNames.get(c));
+                stream.print("\t" + colNames[c]);
             }
             stream.println();
         }
 
         // Then display content of each row
-        for (int r = 0; r < this.nRows; r++)
+        for (int r = 0; r < nRows; r++)
         {
             // row header
             if (this.hasRowNames())
                 stream.print(this.getRowName(r) + "\t");
 
             // row data
-            for (Column col : columns)
+            for (int c = 0; c < nCols; c++)
             {
-                stream.print(col.get(r) + "\t");
+                stream.print(getValue(r, c) + "\t");
             }
             stream.println();
         }
@@ -661,13 +354,15 @@ public class Table implements Iterable<Column>
     /**
      * Opens a new JFrame and shows this table inside
      */
-    public JFrame show()
+    public default JFrame show()
     {
         // Need to cast to object array...
-        Object[][] dats = new Object[this.nRows][this.nCols];
-        for (int r = 0; r < this.nRows; r++)
+    	int nRows = this.rowCount();
+    	int nCols = this.columnCount();
+    	Object[][] dats = new Object[nRows][nCols];
+        for (int r = 0; r < nRows; r++)
         {
-            for (int c = 0; c < this.nCols; c++)
+            for (int c = 0; c < nCols; c++)
             {
                 dats[r][c] = this.get(r, c);
             }
@@ -700,7 +395,7 @@ public class Table implements Iterable<Column>
         return frame;
     }
 
-    public void save(String fileName)
+    public default void save(String fileName)
     {
         // Open a stream to write formatted text data
         PrintWriter writer;
@@ -713,16 +408,19 @@ public class Table implements Iterable<Column>
             throw new RuntimeException("Could not open file: " + fileName, ex);
         }
 
-        // Write header name of each column
+        int nRows = this.rowCount();
+    	int nCols = this.columnCount();
+    	
+    	// Write header name of each column
         writer.print("name");
-        for (int c = 0; c < this.nCols; c++)
+        for (int c = 0; c < nCols; c++)
         {
-            writer.print("\t" + this.colNames.get(c));
+            writer.print("\t" + this.getColumnName(c));
         }
         writer.println();
 
         // Write header name of each column
-        for (int r = 0; r < this.nRows; r++)
+        for (int r = 0; r < nRows; r++)
         {
 
             if (this.hasRowNames())
@@ -730,7 +428,7 @@ public class Table implements Iterable<Column>
             else
                 writer.print(r);
 
-            for (int c = 0; c < this.nCols; c++)
+            for (int c = 0; c < nCols; c++)
             {
                 double val = this.getValue(r, c);
                 String str = String.format(Locale.US, "%7.4f", val);
@@ -745,35 +443,6 @@ public class Table implements Iterable<Column>
     }
 
 
-    // =============================================================
-    // Implementation of Iterable<Column>
-
-    @Override
-    public Iterator<Column> iterator()
-    {
-        return new ColumnIterator();
-    }
-
-    class ColumnIterator implements Iterator<Column>
-    {
-        int index = 0;
-        
-        public ColumnIterator()
-        {
-        }
-
-        @Override
-        public boolean hasNext()
-        {
-            return index < nCols;
-        }
-
-        @Override
-        public Column next()
-        {
-            return columns.get(index++);
-        }
-    }
 
     
     // =============================================================
@@ -782,9 +451,9 @@ public class Table implements Iterable<Column>
     /**
      * Small demonstration of the usage of the DataTable class.
      */
-    public final static void main(String[] args)
+    public static void main(String[] args)
     {
-        Table table = new Table(15, 5);
+        Table table = Table.create(15, 5);
         Random randgen = new Random(156);
         for (int c = 0; c < 5; c++)
         {
@@ -799,6 +468,6 @@ public class Table implements Iterable<Column>
         table.print(System.out);
         table.show();
 //        table.linePlot(1, new int[] { 2, 3 });
-        table.save("trySave.txt");
+//        table.save("trySave.txt");
     }
 }

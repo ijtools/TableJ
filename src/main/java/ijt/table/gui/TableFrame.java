@@ -314,7 +314,7 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
     public static void main(String[] args)
     {
         // Create a basic data table
-        Table tbl = new Table(15, 5);
+        Table tbl = Table.create(15, 5);
         tbl.setColumnNames(new String[] { "length", "area", "diameter", "number", "density" });
         
         // Create the frame to display the table.
