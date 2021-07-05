@@ -47,7 +47,7 @@ public interface Table extends Iterable<Column>
     {
         if (!isNumeric())
         {
-            throw new RuntimeException("Can not compute summary for tabe with non-numeric columns.");
+            throw new RuntimeException("Can not compute summary for tables with non-numeric columns.");
         }
         
         int nc = this.columnCount();

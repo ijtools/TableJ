@@ -40,29 +40,32 @@ public class ActionRunner extends AbstractAction
     }
 
     @Override
-    public void actionPerformed(ActionEvent arg0)
+    public void actionPerformed(ActionEvent evt)
     {
-        Thread t = new Thread()
-        {
-            public void run()
-            {
-                try 
-                {
-                    action.run(frame);
-                }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace(System.err);
-                    IJ.error("Plugin Error", action.getClass().getSimpleName() + " Plugin Error");
-                }
-            }
-        };
-        
+        Thread t = new Thread(new ActionRunnable());
         t.start();
     }
 
     public TableFrameAction getAction()
     {
         return action;
+    }
+    
+    private class ActionRunnable implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            try 
+            {
+                action.run(frame);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace(System.err);
+                IJ.error("Plugin Error", action.getClass().getSimpleName() + " Plugin Error");
+            }
+        }
+        
     }
 }

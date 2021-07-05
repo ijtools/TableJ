@@ -205,9 +205,9 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
 
     private void addMenuItem(JMenu parent, String label, TableFrameAction action)
     {
-        ActionRunner runner = new ActionRunner(this, action);
-        JMenuItem item =new JMenuItem(runner);
-        item.setText(label);
+        JMenuItem item = new JMenuItem(label);
+        item.addActionListener(new ActionRunner(this, action));
+        
         parent.add(item);
     }
     
