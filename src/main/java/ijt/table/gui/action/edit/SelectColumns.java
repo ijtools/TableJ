@@ -32,7 +32,7 @@ public class SelectColumns implements TableFrameAction
         String[] colNames = table.getColumnNames();
 
         // Display dialog for choosing options
-        GenericDialog dlg = new GenericDialog("Select Columns", frame);
+        GenericDialog dlg = new GenericDialog("Select Columns", frame.getJFrame());
 
         // add one check box for each column
         int nCols2 = Math.min(nCols, 20);

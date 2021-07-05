@@ -7,10 +7,9 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Locale;
 
 import javax.swing.JFrame;
@@ -20,9 +19,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import ijt.table.Table;
 import ijt.table.NumericColumn;
 import ijt.table.RowNumberTable;
+import ijt.table.Table;
 import ijt.table.TableManager;
 import ijt.table.gui.action.edit.CorrelationMatrix;
 import ijt.table.gui.action.edit.DisplayInfo;
@@ -43,20 +42,18 @@ import ijt.table.gui.action.plot.ScatterPlot;
  * @author David Legland
  *
  */
-public class TableFrame extends JFrame implements WindowListener, ActionListener
+public class TableFrame extends BaseFrame
 {
     /**
-     * Default serial version UID.
+     * The table displayed within this frame.
      */
-    private static final long serialVersionUID = 1L;
-
     Table table;
 
     /**
      * Creates a new frame for displaying the content of the given DataTable.
      * 
      * The data table is indexed into the global table manager. Therefore the
-     * name of the table may ba modified to make sure it is unique within the
+     * name of the table may be modified to make sure it is unique within the
      * manager.
      * 
      * @param table
@@ -69,21 +66,29 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         
         // index the table into the manager
         String name = table.getName();
-        TableManager mgr = TableManager.getInstance();
-        name = mgr.createTableName(name);
+        TableManager manager = TableManager.getInstance();
+        name = manager.createTableName(name);
         table.setName(name);
-        mgr.addTable(table);
+        manager.addTable(table);
 
 
         // setup layout and menus
         setupLayout();
         setupMenu();
         updateTitle();
-        pack();
-
+        jFrame.pack();
+        putFrameMiddleScreen();
+        
         // setup listeners
-        addWindowListener(this);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jFrame.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent evt)
+            {
+                jFrame.dispose();
+            }           
+        });
     }
 
     private void setupLayout()
@@ -97,10 +102,10 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         // Create the frame containing the table
-        setPreferredSize(new Dimension(400, 300));
+        jFrame.setPreferredSize(new Dimension(400, 300));
 
         // Setup layout
-        Container panel = getContentPane();
+        Container panel = jFrame.getContentPane();
 
         JScrollPane scrollPane = new JScrollPane(jTable);
         JTable rowTable = new RowNumberTable(jTable);
@@ -203,7 +208,7 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         addMenuItem(helpMenu, "About...", new About());
         bar.add(helpMenu);
 
-        this.setJMenuBar(bar);
+        jFrame.setJMenuBar(bar);
     }
 
     private void addMenuItem(JMenu parent, String label, TableFrameAction action)
@@ -214,6 +219,24 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         parent.add(item);
     }
     
+    private void putFrameMiddleScreen()
+    {
+        // set up frame size depending on screen size
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = Math.min(400, screenSize.width - 100);
+        int height = Math.min(300, screenSize.width - 100);
+        Dimension frameSize = new Dimension(width, height);
+        this.jFrame.setSize(frameSize);
+
+        // set up frame position depending on frame size
+        int posX = (screenSize.width - width) / 4;
+        int posY = (screenSize.height - height) / 4;
+        this.jFrame.setLocation(posX, posY);
+    }
+
+
+    // ===================================================================
+    // General methods
     
     public Table getTable()
     {
@@ -222,7 +245,7 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
     
     public JFrame getJFrame()
     {
-        return this;
+        return this.jFrame;
     }
     
     public void repaint()
@@ -264,57 +287,15 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         TableFrame newFrame = new TableFrame(table);
         
         // Compute position according to position of current frame
-        Point pos = this.getLocation();
+        Point pos = this.jFrame.getLocation();
         int x = pos.x + 20;
         int y = pos.y + 20;
-        newFrame.setLocation(x, y);
+        newFrame.jFrame.setLocation(x, y);
         
         newFrame.setVisible(true);
         
         // return result
         return newFrame;
-    }
-
-    @Override
-    public void windowActivated(WindowEvent evt)
-    {
-    }
-
-    @Override
-    public void windowClosed(WindowEvent evt)
-    {
-    }
-
-    @Override
-    public void windowClosing(WindowEvent evt)
-    {
-//        System.out.println("close");
-        dispose();
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent evt)
-    {
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent evt)
-    {
-    }
-
-    @Override
-    public void windowIconified(WindowEvent evt)
-    {
-    }
-
-    @Override
-    public void windowOpened(WindowEvent evt)
-    {
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent evt)
-    {
     }
 
     /**
@@ -327,7 +308,7 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         tbl.setColumnNames(new String[] { "length", "area", "diameter", "number", "density" });
         
         // Create the frame to display the table.
-        JFrame frame = new TableFrame(tbl);
+        TableFrame frame = new TableFrame(tbl);
         frame.setVisible(true);
     }
 

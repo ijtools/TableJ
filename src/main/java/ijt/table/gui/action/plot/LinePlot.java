@@ -75,7 +75,7 @@ public class LinePlot implements TableFrameAction
         plotFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // relocate with respect to parent frame
-        Point pos0 = parentFrame.getLocation();
+        Point pos0 = parentFrame.getJFrame().getLocation();
         plotFrame.setLocation(pos0.x + 30, pos0.y + 20);
         
         // Schedule a job for the event-dispatching thread:

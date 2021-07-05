@@ -41,7 +41,7 @@ public class SaveAs implements TableFrameAction
         }
 
         // Open dialog to choose the file
-        int ret = saveWindow.showSaveDialog(frame);
+        int ret = saveWindow.showSaveDialog(frame.getJFrame());
         if (ret != JFileChooser.APPROVE_OPTION)
         {
             return;

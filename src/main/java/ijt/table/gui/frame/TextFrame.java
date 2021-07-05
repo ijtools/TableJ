@@ -5,6 +5,7 @@
 package ijt.table.gui.frame;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -36,6 +37,7 @@ public class TextFrame extends BaseFrame
             this.textLines.add(line);
         
         setupLayout();
+        locateFromParent(parent);
     }
     
     public TextFrame(JFrame parent, String title, Collection<String> textLines)
@@ -46,6 +48,7 @@ public class TextFrame extends BaseFrame
         this.textLines.addAll(textLines);
         
         setupLayout();
+        locateFromParent(parent);
     }
     
     private void setupLayout()
@@ -65,7 +68,14 @@ public class TextFrame extends BaseFrame
         // add Text area in the middle panel
         this.jFrame.add(scroll);
         
-        this.jFrame.setPreferredSize(new Dimension(400, 300));
+        this.jFrame.setPreferredSize(new Dimension(300, 200));
+        this.jFrame.pack();
+    }
+    
+    private void locateFromParent(JFrame parentFrame)
+    {
+        Point pos = parentFrame.getLocation();
+        this.jFrame.setLocation(pos.x + 30, pos.y + 30);
     }
     
     public void addText(String text)

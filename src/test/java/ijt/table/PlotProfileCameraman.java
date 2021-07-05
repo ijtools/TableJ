@@ -3,8 +3,6 @@
  */
 package ijt.table;
 
-import javax.swing.JFrame;
-
 import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
@@ -34,7 +32,7 @@ public class PlotProfileCameraman
             table.setValue(i, 0, image.get(i, 256));
         }
 
-        JFrame frame = new TableFrame(table);
+        TableFrame frame = new TableFrame(table);
         frame.setVisible(true);
     }
 }
