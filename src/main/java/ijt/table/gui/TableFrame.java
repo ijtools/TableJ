@@ -25,6 +25,7 @@ import ijt.table.NumericColumn;
 import ijt.table.RowNumberTable;
 import ijt.table.TableManager;
 import ijt.table.gui.action.edit.CorrelationMatrix;
+import ijt.table.gui.action.edit.DisplayInfo;
 import ijt.table.gui.action.edit.Rename;
 import ijt.table.gui.action.edit.SelectColumns;
 import ijt.table.gui.action.edit.Summary;
@@ -184,7 +185,9 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         bar.add(fileMenu);
 
         JMenu editMenu = new JMenu("Edit");
+        addMenuItem(editMenu, "Display Info", new DisplayInfo());
         addMenuItem(editMenu, "Rename", new Rename());
+        editMenu.addSeparator();
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Correlation Matrix", new CorrelationMatrix());
@@ -217,6 +220,10 @@ public class TableFrame extends JFrame implements WindowListener, ActionListener
         return table;
     }
     
+    public JFrame getJFrame()
+    {
+        return this;
+    }
     
     public void repaint()
     {
