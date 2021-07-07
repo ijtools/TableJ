@@ -63,7 +63,7 @@ public class CategoricalColumn extends Column implements Iterable<String>
         return this.levelLabels.toArray(new String[0]);
     }
     
-    public int levelNumber()
+    public int levelCount()
     {
         return this.levelLabels.size();
     }

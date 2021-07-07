@@ -15,7 +15,7 @@ public class CategoricalColumnTest
 {
 
     /**
-     * Test method for {@link ijt.table.CategoricalColumn#levelNumber()}.
+     * Test method for {@link ijt.table.CategoricalColumn#levelCount()}.
      */
     @Test
     public void testLevelNumber()
@@ -23,7 +23,7 @@ public class CategoricalColumnTest
         String[] levels = new String[] {"yes", "yes", "no", "no", "yes", "no"};
         CategoricalColumn col = new CategoricalColumn(levels);
         
-        int nLevels = col.levelNumber();
+        int nLevels = col.levelCount();
         
         assertEquals(2, nLevels);
     }
