@@ -1,4 +1,4 @@
-package ijt.table;
+package ijt.table.gui;
 
 import java.awt.*;
 import java.beans.*;

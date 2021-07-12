@@ -31,7 +31,7 @@ public class NumericColumnTest
     @Test
     public void testIterator()
     {
-        NumericColumn col = new NumericColumn(new double[6]);
+        NumericColumn col = NumericColumn.create(new double[6]);
 
         int count = 0;
         for (@SuppressWarnings("unused") double v : col)

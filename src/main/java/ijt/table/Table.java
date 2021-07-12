@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import ijt.table.gui.RowNumberTable;
 import ijt.table.io.DelimitedTableWriter;
 import ijt.table.process.SummaryStatistics;
 

@@ -6,6 +6,8 @@ package ijt.table;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import ijt.table.columns.DoubleColumn;
+
 
 /**
  * @author dlegland
@@ -60,7 +62,7 @@ public class DefaultTable implements Table
         this.columns = new ArrayList<Column>(nCols);
         for (int c = 0; c < nCols; c++)
         {
-            this.columns.add(new NumericColumn(nRows));
+            this.columns.add(new DoubleColumn(nRows));
         }
         
         initColNames();
@@ -100,7 +102,7 @@ public class DefaultTable implements Table
         this.columns = new ArrayList<Column>(nCols);
         for (int c = 0; c < nCols; c++)
         {
-            this.columns.add(new NumericColumn(data[c]));
+            this.columns.add(new DoubleColumn(data[c]));
         }
     }
     

@@ -245,7 +245,7 @@ public class DelimitedTableReader implements TableReader
             
             if (isNumeric)
             {
-                table.setColumn(c, new NumericColumn(values));
+                table.setColumn(c, NumericColumn.create(values));
             }
             else
             {
