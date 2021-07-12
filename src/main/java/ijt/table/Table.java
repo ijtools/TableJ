@@ -6,17 +6,15 @@ package ijt.table;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Locale;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import ijt.table.io.DelimitedTableWriter;
 import ijt.table.process.SummaryStatistics;
 
 /**
@@ -406,42 +404,8 @@ public interface Table extends Iterable<Column>
      */
     public default void write(String fileName) throws IOException
     {
-        // Open a stream to write formatted text data
-        PrintWriter writer;
-            writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-
-        int nRows = this.rowCount();
-    	int nCols = this.columnCount();
-    	
-    	// Write header name of each column
-        writer.print("name");
-        for (int c = 0; c < nCols; c++)
-        {
-            writer.print("\t" + this.getColumnName(c));
-        }
-        writer.println();
-
-        // Write header name of each column
-        for (int r = 0; r < nRows; r++)
-        {
-
-            if (this.hasRowNames())
-                writer.print(this.getRowName(r));
-            else
-                writer.print(r);
-
-            for (int c = 0; c < nCols; c++)
-            {
-                double val = this.getValue(r, c);
-                String str = String.format(Locale.US, "%7.4f", val);
-                writer.print("\t" + str);
-            }
-
-            writer.println();
-        }
-
-        // Closes the file
-        writer.close();
+        DelimitedTableWriter tw = new DelimitedTableWriter(new File(fileName), ";");
+        tw.writeTable(this);
     }
 
     
