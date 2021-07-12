@@ -394,19 +394,21 @@ public interface Table extends Iterable<Column>
         frame.setVisible(true);
         return frame;
     }
-
-    public default void save(String fileName)
+    
+    /**
+     * Writes the content of the current table into the specified file, using
+     * CSV format.
+     * 
+     * @param fileName
+     *            the name of the file to write in.
+     * @throws IOException
+     *             in case of I/O problem
+     */
+    public default void write(String fileName) throws IOException
     {
         // Open a stream to write formatted text data
         PrintWriter writer;
-        try
-        {
             writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-        }
-        catch (IOException ex)
-        {
-            throw new RuntimeException("Could not open file: " + fileName, ex);
-        }
 
         int nRows = this.rowCount();
     	int nCols = this.columnCount();
@@ -441,8 +443,6 @@ public interface Table extends Iterable<Column>
         // Closes the file
         writer.close();
     }
-
-
 
     
     // =============================================================
