@@ -10,7 +10,7 @@ import java.util.Iterator;
  * @author dlegland
  *
  */
-public class CategoricalColumn extends Column implements Iterable<String>
+public class CategoricalColumn implements Column, Iterable<String>
 {
     // =============================================================
     // Class variables
@@ -26,7 +26,6 @@ public class CategoricalColumn extends Column implements Iterable<String>
     public CategoricalColumn(int size)
     {
         this.levelIndices = new int[size];
-        // TODO: fill with -1?
         this.levelLabels = new ArrayList<String>();
     }
 
@@ -72,12 +71,22 @@ public class CategoricalColumn extends Column implements Iterable<String>
     // =============================================================
     // Implementation of Column methods
     
-//    public void copyValues(double[] values, int index);
-
     @Override
     public int size()
     {
         return levelIndices.length;
+    }
+
+    @Override
+    public Column newInstance(int nRows)
+    {
+        CategoricalColumn col = new CategoricalColumn(nRows);
+        col.levelLabels.ensureCapacity(levelLabels.size());
+        for (String label : this.levelLabels)
+        {
+            col.levelLabels.add(label);
+        }
+        return col;
     }
 
     @Override

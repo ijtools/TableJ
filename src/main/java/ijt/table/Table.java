@@ -81,6 +81,17 @@ public interface Table extends Iterable<Column>
     }
     
     /**
+     * Creates a new empty table with the same type, the same column count and
+     * names, and with the specified number of rows.
+     * 
+     * @param nRows
+     *            the number of rows of the new table
+     * @return a new table with specified number of rows and same number of
+     *         columns as this table.
+     */
+    public Table newInstance(int nRows);
+    
+    /**
      * @return true if this table contains only numeric columns.
      */
     public default boolean isNumeric()

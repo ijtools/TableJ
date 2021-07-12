@@ -59,8 +59,10 @@ public class DefaultTable implements Table
 
         this.columns = new ArrayList<Column>(nCols);
         for (int c = 0; c < nCols; c++)
+        {
             this.columns.add(new NumericColumn(nRows));
-
+        }
+        
         initColNames();
         initRowNames();
     }
@@ -120,7 +122,25 @@ public class DefaultTable implements Table
         this.rowNames = new ArrayList<String>(0);
     }
 
+
+    // =============================================================
+    // Global methods
+
+    @Override
+    public Table newInstance(int nRows)
+    {
+        int nCols = columnCount();
+        Table res = new DefaultTable(nRows, nCols);
+        for (int iCol = 0; iCol < this.columnCount(); iCol++)
+        {
+            res.setColumn(iCol, this.getColumn(iCol).newInstance(nRows));
+        }
+        res.setColumnNames(this.getColumnNames());
+        
+        return res;
+    }
     
+
     // =============================================================
     // Management of columns
 

@@ -9,7 +9,7 @@ import java.util.Iterator;
  * @author dlegland
  *
  */
-public class NumericColumn extends Column implements Iterable<Double>
+public class NumericColumn implements Column, Iterable<Double>
 {
     // =============================================================
     // Class variables
@@ -41,6 +41,12 @@ public class NumericColumn extends Column implements Iterable<Double>
     public int size()
     {
         return data.length;
+    }
+
+    @Override
+    public Column newInstance(int nRows)
+    {
+        return new NumericColumn(nRows);
     }
 
     @Override

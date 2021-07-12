@@ -9,12 +9,12 @@ package ijt.table;
  * @author dlegland
  *
  */
-public abstract class Column
+public interface Column
 {
     /**
      * @return the number of elements within this column
      */
-    public abstract int size();
+    public int size();
     
     /**
      * Returns the content of the i-th row as an Object.
@@ -23,9 +23,9 @@ public abstract class Column
      *            the row index within this column
      * @return the content at the specified row index
      */
-    public abstract Object get(int row);
+    public Object get(int row);
     
-    public abstract void set(int row, Object obj);
+    public void set(int row, Object obj);
     
     /**
      * Returns the value at the i-th row as a double.
@@ -34,13 +34,21 @@ public abstract class Column
      *            the row index within this column
      * @return the value at specified row index
      */
-    public abstract double getValue(int row);
+    public double getValue(int row);
     
-    public abstract void setValue(int row, double value);
+    public void setValue(int row, double value);
 
     
     /**
      * @return the set of values within this column as an array of double.
      */
-    public abstract double[] getValues();
+    public double[] getValues();
+    
+    /**
+     * Creates a new instance of column with the same type, with the specified number of rows.
+     *  
+     * @param nRows the number of rows of the new column
+     * @return a new Column instance with the same data type as this column.  
+     */
+    public Column newInstance(int nRows);
 }
