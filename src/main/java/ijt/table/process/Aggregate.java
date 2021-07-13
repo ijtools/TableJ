@@ -53,7 +53,7 @@ public class Aggregate
         }
         
         // populate res table from group names
-        String[] groupNames = groups.levels();
+        String[] groupNames = groups.levelNames();
         String[] rowNames = new String[nGroups];
         for (int iGroup = 0; iGroup < nGroups; iGroup++)
         {

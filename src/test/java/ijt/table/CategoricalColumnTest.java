@@ -21,7 +21,7 @@ public class CategoricalColumnTest
     public void testLevelNumber()
     {
         String[] levels = new String[] {"yes", "yes", "no", "no", "yes", "no"};
-        CategoricalColumn col = new CategoricalColumn(levels);
+        CategoricalColumn col = CategoricalColumn.create(levels);
         
         int nLevels = col.levelCount();
         
@@ -35,7 +35,7 @@ public class CategoricalColumnTest
     public void testIterator()
     {
         String[] levels = new String[] {"yes", "yes", "no", "no", "yes", "no"};
-        CategoricalColumn col = new CategoricalColumn(levels);
+        CategoricalColumn col = CategoricalColumn.create(levels);
 
         int count = 0;
         for (@SuppressWarnings("unused") String str : col)

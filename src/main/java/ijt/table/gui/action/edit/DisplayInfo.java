@@ -94,7 +94,7 @@ public class DisplayInfo implements TableFrameAction
             return "Categorical with 0 levels.";
         }
         
-        String[] levels = col.levels();
+        String[] levels = col.levelNames();
         String levelString = "[" + levels[0];
         for (int iLev = 1; iLev < Math.max(nLevels, 3); iLev++)
         {

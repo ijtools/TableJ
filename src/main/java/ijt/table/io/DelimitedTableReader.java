@@ -249,7 +249,7 @@ public class DelimitedTableReader implements TableReader
             }
             else
             {
-                table.setColumn(c, new CategoricalColumn(colData.toArray(new String[0])));
+                table.setColumn(c, CategoricalColumn.create(colData.toArray(new String[0])));
             }
 		}
 
