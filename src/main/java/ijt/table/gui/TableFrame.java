@@ -29,9 +29,11 @@ import ijt.table.gui.action.edit.SelectColumns;
 import ijt.table.gui.action.edit.Summary;
 import ijt.table.gui.action.file.Close;
 import ijt.table.gui.action.file.OpenDemoTable;
+import ijt.table.gui.action.file.OpenTable;
 import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
 import ijt.table.gui.action.plot.LinePlot;
+import ijt.table.gui.action.plot.MultiLinePlot;
 import ijt.table.gui.action.plot.ScatterPlot;
 
 /**
@@ -182,6 +184,7 @@ public class TableFrame extends BaseFrame
         JMenuBar bar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
+        addMenuItem(fileMenu, "Open Table", new OpenTable());
         addMenuItem(fileMenu, "Open Demo Table", new OpenDemoTable());
         fileMenu.addSeparator();
         addMenuItem(fileMenu, "Save As...", new SaveAs());
@@ -200,6 +203,7 @@ public class TableFrame extends BaseFrame
 
         JMenu plotMenu = new JMenu("Plot");
         addMenuItem(plotMenu, "Line Plot (Column)", new LinePlot());
+        addMenuItem(plotMenu, "Multi Line Plot (Column)", new MultiLinePlot());
         addMenuItem(plotMenu, "Scatter Plot", new ScatterPlot());
         bar.add(plotMenu);
 

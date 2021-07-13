@@ -16,6 +16,7 @@ import javax.swing.JTable;
 
 import ijt.table.gui.RowNumberTable;
 import ijt.table.io.DelimitedTableWriter;
+import ijt.table.process.Structure;
 import ijt.table.process.SummaryStatistics;
 
 /**
@@ -38,6 +39,11 @@ public interface Table extends Iterable<Column>
     
     // =============================================================
     // Global methods
+    
+    public default Table structure()
+    {
+        return new Structure().process(this);
+    }
     
     /**
      * @return a table containing summary statistics for each numeric column.
