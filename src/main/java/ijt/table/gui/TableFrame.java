@@ -21,7 +21,6 @@ import javax.swing.JTable;
 
 import ijt.table.NumericColumn;
 import ijt.table.Table;
-import ijt.table.TableManager;
 import ijt.table.gui.action.edit.CorrelationMatrix;
 import ijt.table.gui.action.edit.DisplayInfo;
 import ijt.table.gui.action.edit.MergeColumnsAction;

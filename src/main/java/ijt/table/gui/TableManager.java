@@ -1,10 +1,12 @@
 /**
  * 
  */
-package ijt.table;
+package ijt.table.gui;
 
 import java.util.Collection;
 import java.util.TreeMap;
+
+import ijt.table.Table;
 
 /**
  * Keeps a list of DataTable indexed by their names. Ensure names are unique.

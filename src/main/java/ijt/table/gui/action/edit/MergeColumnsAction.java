@@ -6,10 +6,10 @@ package ijt.table.gui.action.edit;
 import ij.IJ;
 import ij.gui.GenericDialog;
 import ijt.table.Table;
-import ijt.table.TableManager;
 import ijt.table.Tables;
 import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
+import ijt.table.gui.TableManager;
 
 
 /**

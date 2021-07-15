@@ -5,9 +5,9 @@ package ijt.table.gui.action.edit;
 
 import ij.gui.GenericDialog;
 import ijt.table.Table;
-import ijt.table.TableManager;
 import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
+import ijt.table.gui.TableManager;
 
 /**
  * @author dlegland
