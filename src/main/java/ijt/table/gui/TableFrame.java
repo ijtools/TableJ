@@ -35,6 +35,7 @@ import ijt.table.gui.action.help.About;
 import ijt.table.gui.action.plot.LinePlot;
 import ijt.table.gui.action.plot.MultiLinePlot;
 import ijt.table.gui.action.plot.ScatterPlot;
+import ijt.table.gui.action.process.CrossTableAction;
 import ijt.table.gui.action.process.KMeansAction;
 
 /**
@@ -210,6 +211,8 @@ public class TableFrame extends BaseFrame
         bar.add(plotMenu);
 
         JMenu processMenu = new JMenu("Process");
+        addMenuItem(processMenu, "Cross-Table...", new CrossTableAction());
+        processMenu.addSeparator();
         addMenuItem(processMenu, "K-Means", new KMeansAction());
         bar.add(processMenu);
         

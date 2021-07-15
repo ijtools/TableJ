@@ -45,6 +45,30 @@ public class Tables
         return res;
     }
     
+    public static final Table crossTable(CategoricalColumn col1, CategoricalColumn col2)
+    {
+        int nRows = col1.size();
+        if (col1.size() != nRows)
+        {
+            throw new RuntimeException("Both columns must have same number of rows");
+        }
+        int nLevels1 = col1.levelCount();
+        int nLevels2 = col2.levelCount();
+        
+        Table res = Table.create(nLevels1, nLevels2);
+        res.setRowNames(col1.levelNames());
+        res.setColumnNames(col2.levelNames());
+        
+        for (int iRow = 0; iRow < nRows; iRow++)
+        {
+            int level1 = (int) col1.getValue(iRow);
+            int level2 = (int) col2.getValue(iRow);
+            res.setValue(level1, level2, res.getValue(level1, level2) + 1);
+        }
+        
+        return res;
+    }
+    
     /**
      * Private constructor to prevent instantiation.
      */

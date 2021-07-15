@@ -3,6 +3,8 @@
  */
 package ijt.table;
 
+import java.util.ArrayList;
+
 import ijt.table.columns.IndexedStringColumn;
 
 /**
@@ -24,6 +26,30 @@ public interface CategoricalColumn extends Column, Iterable<String>
     	return new IndexedStringColumn(levels);
     }
     
+    /**
+     * Converts a column into a categorical table.
+     * 
+     * @param column
+     *            the column to convert.
+     * @return an instance of CategoricalColumn based on input table.
+     */
+    public static CategoricalColumn convert(Column column)
+    {
+        if (column instanceof CategoricalColumn)
+        {
+            return (CategoricalColumn) column;
+        }
+        
+        int nRows = column.size();
+        ArrayList<String> levels = new ArrayList<String>(nRows);
+        for (int iRow = 0; iRow < nRows; iRow++)
+        {
+            levels.add("" + column.getValue(iRow));
+        }
+        
+        return new IndexedStringColumn(levels.toArray(new String[] {}));
+    }
+
     
     // =============================================================
     // Management of levels

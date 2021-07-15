@@ -188,12 +188,13 @@ public interface Table extends Iterable<Column>
     public void setColumnName(int colIndex, String name);
 
     /**
-     * Returns the index of the first column with the specified name, or -1 if there
-     * is no column with this name.
+     * Returns the index of the first column with the specified name, or -1 if
+     * there is no column with this name.
      * 
-     * @param colName the name of a column.
-     * @return the index of the first column with the specified name, or -1 if there
-     *         is no column with this name.
+     * @param colName
+     *            the name of a column.
+     * @return the index of the first column with the specified name, or -1 if
+     *         there is no column with this name.
      */
     public int findColumnIndex(String colName);
     
@@ -226,6 +227,17 @@ public interface Table extends Iterable<Column>
 
     public void setRowName(int rowIndex, String name);
     
+    /**
+     * Returns the index of the first row with the specified name, or -1 if
+     * there is no row with this name.
+     * 
+     * @param rowName
+     *            the name of a row.
+     * @return the index of the first row with the specified name, or -1 if
+     *         there is no row with this name.
+     */
+    public int findRowIndex(String rowName);
+
     /**
      * @return true if all columns has a valid name.
      */

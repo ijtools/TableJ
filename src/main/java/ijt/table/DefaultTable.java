@@ -209,34 +209,17 @@ public class DefaultTable implements Table
         this.colNames.set(colIndex, name);
     }
 
-    /**
-     * Returns the index of the first column with the specified name, or -1 if there
-     * is no column with this name.
-     * 
-     * @param colName the name of a column.
-     * @return the index of the first column with the specified name, or -1 if there
-     *         is no column with this name.
-     */
     public int findColumnIndex(String colName)
     {
-        if (colName == null)
-            return -1;
-        
-        for (int c = 0; c < this.nCols; c++)
-        {
-            if (name.equals(this.colNames.get(c)))
-                return c;
-        }
-        
-        return -1;
+        return this.colNames.indexOf(colName);
     }
     
+
     /**
      * @return true if all columns has a valid name.
      */
     public boolean hasColumnNames()
     {
-//        return !this.colNames.isEmpty();
         for (String name : this.colNames)
         {
             if (name == null || name.isEmpty())
@@ -307,6 +290,11 @@ public class DefaultTable implements Table
         this.rowNames.set(rowIndex, name);
     }
     
+    public int findRowIndex(String rowName)
+    {
+        return this.rowNames.indexOf(rowName);
+    }
+
     /**
      * @return true if all columns has a valid name.
      */
