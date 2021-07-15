@@ -425,7 +425,11 @@ public interface Table extends Iterable<Column>
         DelimitedTableWriter tw = new DelimitedTableWriter(new File(fileName), ";");
         tw.writeTable(this);
     }
-
+    
+    /**
+     * @return an Iterable to the columns contained within this table.
+     */
+    public Iterable<? extends Column> columns();
     
     // =============================================================
     // Demonstration program

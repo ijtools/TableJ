@@ -14,6 +14,7 @@ import java.util.TreeMap;
  */
 public class TableManager
 {
+    // =============================================================
     // Management of a global static instance
     
     private static TableManager instance = null;
@@ -41,6 +42,7 @@ public class TableManager
      * The list of DataTable instances managed by the application.
      */
     TreeMap<String, Table> tables = new TreeMap<String, Table>();
+    
     
     // =============================================================
     // Creation of new handles
@@ -123,7 +125,25 @@ public class TableManager
 
     // =============================================================
     // Get data
-
+    
+    /**
+     * Get a table from its name, or throw an exception if the table can not be
+     * found.
+     * 
+     * @param name
+     *            the name of the table (case sensitive)
+     * @return the table indexed with the name.
+     */
+    public Table getTable(String name)
+    {
+        Table table = tables.get(name);
+        if (table == null)
+        {
+            throw new RuntimeException("Does not contain any table with name: " + name);
+        }
+        return table;
+    }
+    
     public void addTable(Table table)
     {
         String tableName = table.getName();

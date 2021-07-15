@@ -396,7 +396,19 @@ public class DefaultTable implements Table
     {
         this.columns.get(col).setValue(row, value);
     }
-
+    
+    public Iterable<Column> columns()
+    {
+        return new Iterable<Column>()
+        {
+            @Override
+            public Iterator<Column> iterator()
+            {
+                return DefaultTable.this.iterator();
+            }
+        };
+    }
+    
     /**
      * Changes the value at the specified position
      * 

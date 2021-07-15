@@ -24,6 +24,7 @@ import ijt.table.Table;
 import ijt.table.TableManager;
 import ijt.table.gui.action.edit.CorrelationMatrix;
 import ijt.table.gui.action.edit.DisplayInfo;
+import ijt.table.gui.action.edit.MergeColumnsAction;
 import ijt.table.gui.action.edit.Rename;
 import ijt.table.gui.action.edit.SelectColumns;
 import ijt.table.gui.action.edit.Summary;
@@ -197,6 +198,7 @@ public class TableFrame extends BaseFrame
         addMenuItem(editMenu, "Rename", new Rename());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
+        addMenuItem(editMenu, "Merge Columns...", new MergeColumnsAction());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Correlation Matrix", new CorrelationMatrix());
         addMenuItem(editMenu, "Summary", new Summary());
