@@ -11,8 +11,10 @@ import ijt.table.NumericColumn;
 import ijt.table.Table;
 
 /**
+ * An operator for describing the "structure" of a data table, and returning the
+ * result into a new data table.
+ * 
  * @author dlegland
- *
  */
 public class Structure
 {

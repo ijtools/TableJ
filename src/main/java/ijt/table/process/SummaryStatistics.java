@@ -8,11 +8,37 @@ import java.util.Arrays;
 import ijt.table.NumericColumn;
 
 /**
+ * A collection of summary statistics for columns of numeric tables.
+ * 
  * @author dlegland
  *
  */
 public class SummaryStatistics
 {
+    /**
+     * Computes the minimum value within a numeric column.
+     * 
+     * @param col
+     *            a numeric column
+     * @return the minimum value within column
+     */
+    public static final double min(NumericColumn col)
+    {
+        double minVal = Double.POSITIVE_INFINITY;
+        for (double value : col)
+        {
+            minVal = Math.min(minVal, value);
+        }
+        return minVal;
+    }
+
+    /**
+     * Computes the maximum value within a numeric column.
+     * 
+     * @param col
+     *            a numeric column
+     * @return the maximum value within column
+     */
     public static final double max(NumericColumn col)
     {
         double maxVal = Double.NEGATIVE_INFINITY;
@@ -23,11 +49,25 @@ public class SummaryStatistics
         return maxVal;
     }
 
+    /**
+     * Computes the mean value within a numeric column.
+     * 
+     * @param col
+     *            a numeric column
+     * @return the mean value within column
+     */
     public static final double mean(NumericColumn col)
     {
         return sum(col) / col.size();
     }
 
+    /**
+     * Computes the median value within a numeric column.
+     * 
+     * @param col
+     *            a numeric column
+     * @return the median value within column
+     */
     public static final double median(NumericColumn col)
     {
         int n = col.size();
@@ -45,16 +85,15 @@ public class SummaryStatistics
         }
     }
 
-    public static final double min(NumericColumn col)
-    {
-        double minVal = Double.POSITIVE_INFINITY;
-        for (double value : col)
-        {
-            minVal = Math.min(minVal, value);
-        }
-        return minVal;
-    }
-
+    /**
+     * Computes the standard deviation of values within a numeric column.
+     * 
+     * @see #var(NumericColumn)
+     * 
+     * @param col
+     *            a numeric column
+     * @return the standard deviation of values within column
+     */
     public static final double std(NumericColumn col)
     {
         double mean = mean(col);
@@ -64,9 +103,16 @@ public class SummaryStatistics
             double vc = value - mean;
             sumSq += vc * vc;
         }
-        return Math.sqrt(sumSq / (col.size() - 1.0));        
+        return Math.sqrt(sumSq / (col.size() - 1.0));
     }
 
+    /**
+     * Computes the sum of values within a numeric column.
+     * 
+     * @param col
+     *            a numeric column
+     * @return the sum of values within column
+     */
     public static final double sum(NumericColumn col)
     {
         double sum = 0.0;
@@ -77,6 +123,15 @@ public class SummaryStatistics
         return sum;
     }
 
+    /**
+     * Computes the variance of values within a numeric column.
+     * 
+     * @see #std(NumericColumn)
+     * 
+     * @param col
+     *            a numeric column
+     * @return the variance of values within column
+     */
     public static final double var(NumericColumn col)
     {
         double mean = mean(col);
