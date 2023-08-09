@@ -13,6 +13,7 @@ import ijt.table.Table;
 import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 import ijt.table.io.DelimitedTableReader;
+import ijt.table.io.Delimiters;
 
 /**
  * @author dlegland
@@ -20,68 +21,6 @@ import ijt.table.io.DelimitedTableReader;
  */
 public class OpenTable implements TableFrameAction
 {
-    enum Delimiter
-    {
-        TAB("Tabulation ('\t')", "\t"),
-        SEMICOLON("Semi-Colon (';')", ";"),
-        COMA("Coma (',')", ","),
-        SPACE("Space (' ')", " ");
-        
-        public String toString()
-        {
-            return this.label;
-        }
-
-        public static String[] getAllLabels()
-        {
-            int n = Delimiter.values().length;
-            String[] result = new String[n];
-
-            int i = 0;
-            for (Delimiter weight : Delimiter.values())
-                result[i++] = weight.label;
-
-            return result;
-        }
-
-        /**
-         * Determines the operation type from its label.
-         * 
-         * @param label the name of a chamfer weight 
-         * @return the Delimiter enum corresponding to the given name
-         * 
-         * @throws IllegalArgumentException
-         *             if label name is not recognized.
-         */
-        public static Delimiter fromLabel(String label)
-        {
-            if (label != null)
-                label = label.toLowerCase();
-            for (Delimiter weight : Delimiter.values())
-            {
-                String cmp = weight.label.toLowerCase();
-                if (cmp.equals(label))
-                    return weight;
-            }
-            throw new IllegalArgumentException(
-                    "Unable to parse Delimiter with label: " + label);
-        }
-
-        Delimiter(String label, String delim)
-        {
-            this.label = label;
-            this.delimiter= delim;
-        }
-        
-        public String  getDelimiter()
-        {
-            return delimiter;
-        }
-        
-        String label;
-        String delimiter;
-    }
-
     @Override
     public void run(TableFrame frame)
     {
@@ -98,7 +37,7 @@ public class OpenTable implements TableFrameAction
         // Choose some options to open the file
         GenericDialog dlg = new GenericDialog("Open Table Options");
         dlg.addCheckbox("Read Header", true);
-        dlg.addChoice("Delimiter", Delimiter.getAllLabels(), Delimiter.SEMICOLON.label);
+        dlg.addChoice("Delimiter", Delimiters.getAllLabels(), Delimiters.SEMICOLON.toString());
         
         dlg.showDialog();
         if (dlg.wasCanceled())
@@ -107,7 +46,7 @@ public class OpenTable implements TableFrameAction
         }
         
         boolean readHeader = dlg.getNextBoolean();
-        String delimiter = Delimiter.fromLabel(dlg.getNextChoice()).getDelimiter();
+        String delimiter = Delimiters.fromLabel(dlg.getNextChoice()).getDelimiter();
                 
         DelimitedTableReader reader = new DelimitedTableReader();
         reader.setReadHeader(readHeader);
