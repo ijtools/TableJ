@@ -12,10 +12,27 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<description>Data Table management for ImageJ/Fiji.</description>
 	<url>https://imagej.net/Table</url>
 	<inceptionYear>2020</inceptionYear>
+	
+	<properties>
+		<package-name>net.ijt</package-name>
+    	<!-- Use ImageJ reference java version -->
+    	<maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>
+    	<!-- Generic source encoding -->
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
+		<license.licenseName>lgpl_v3</license.licenseName>
+		<license.copyrightOwners>INRAE.</license.copyrightOwners>
+
+		<!-- NB: Deploy releases to the SciJava Maven repository. -->
+		<releaseProfiles>deploy-to-scijava</releaseProfiles>
+	</properties>
+
 	<organization>
 		<name>INRAE</name>
 		<url>http://www.inrae.fr/</url>
 	</organization>
+	
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License v3+</name>
@@ -63,15 +80,6 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<system>Travis CI</system>
 		<url>https://travis-ci.org/ijtools/ijTable</url>
 	</ciManagement>
-
-	<properties>
-		<package-name>net.ijt</package-name>
-		<license.licenseName>lgpl_v3</license.licenseName>
-		<license.copyrightOwners>INRAE.</license.copyrightOwners>
-
-		<!-- NB: Deploy releases to the SciJava Maven repository. -->
-		<releaseProfiles>deploy-to-scijava</releaseProfiles>
-	</properties>
 
 	<repositories>
 		<repository>
