@@ -14,7 +14,7 @@ import ijt.table.columns.IndexedStringColumn;
 public interface CategoricalColumn extends Column, Iterable<String>
 {
     // =============================================================
-    // Constructors
+    // static factories
     
     public static CategoricalColumn create(int size)
     {

@@ -12,7 +12,7 @@ import ijt.table.columns.DoubleColumn;
 public interface NumericColumn extends Column, Iterable<Double>
 {
     // =============================================================
-    // Constructors
+    // static factories
 
     public static NumericColumn create(int size)
     {
@@ -23,11 +23,6 @@ public interface NumericColumn extends Column, Iterable<Double>
     {
         return new DoubleColumn(data);
     }
-
-    
-    // =============================================================
-    // Constructors
-
 
     
     // =============================================================

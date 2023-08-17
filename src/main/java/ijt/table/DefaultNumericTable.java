@@ -10,12 +10,12 @@ import ijt.table.columns.DoubleColumn;
 
 
 /**
- * Default implementation for a table with columns from any type.
+ * Default implementation for a table with numeric columns.
  * 
  * @author dlegland
  *
  */
-public class DefaultTable implements Table
+public class DefaultNumericTable implements NumericTable
 {
     // =============================================================
     // Class variables
@@ -26,8 +26,8 @@ public class DefaultTable implements Table
     /** Number of rows in the table. */
     int nRows;
 
-    /** The list of columns composing this table. */
-    ArrayList<Column> columns;
+    /** The list of (numeric) columns composing this table. */
+    ArrayList<NumericColumn> columns;
   
     /**
      * The name of the table (can be null).
@@ -56,12 +56,12 @@ public class DefaultTable implements Table
      * @param nCols
      *            the number of columns
      */
-    public DefaultTable(int nRows, int nCols)
+    public DefaultNumericTable(int nRows, int nCols)
     {
         this.nCols = nCols;
         this.nRows = nRows;
 
-        this.columns = new ArrayList<Column>(nCols);
+        this.columns = new ArrayList<NumericColumn>(nCols);
         for (int c = 0; c < nCols; c++)
         {
             this.columns.add(new DoubleColumn(nRows));
@@ -71,7 +71,7 @@ public class DefaultTable implements Table
         initRowNames();
     }
 
-    public DefaultTable(double[][] data)
+    public DefaultNumericTable(double[][] data)
     {
         initData(data);
         this.nCols = data.length;
@@ -80,7 +80,7 @@ public class DefaultTable implements Table
         initRowNames();
     }
 
-    public DefaultTable(double[][] data, String[] colNames, String[] rowNames)
+    public DefaultNumericTable(double[][] data, String[] colNames, String[] rowNames)
     {
         initData(data);
 
@@ -101,7 +101,7 @@ public class DefaultTable implements Table
         this.nRows = this.nCols > 0 ? data[0].length : -1;
 
         // init empty numerical columns
-        this.columns = new ArrayList<Column>(nCols);
+        this.columns = new ArrayList<NumericColumn>(nCols);
         for (int c = 0; c < nCols; c++)
         {
             this.columns.add(new DoubleColumn(data[c]));
@@ -134,7 +134,7 @@ public class DefaultTable implements Table
     public Table newInstance(int nRows)
     {
         int nCols = columnCount();
-        Table res = new DefaultTable(nRows, nCols);
+        Table res = new DefaultNumericTable(nRows, nCols);
         for (int iCol = 0; iCol < this.columnCount(); iCol++)
         {
             res.setColumn(iCol, this.getColumn(iCol).newInstance(nRows));
@@ -156,7 +156,7 @@ public class DefaultTable implements Table
         return this.nCols;
     }
 
-    public Column getColumn(int index)
+    public NumericColumn getColumn(int index)
     {
         return this.columns.get(index);
     }
@@ -167,7 +167,11 @@ public class DefaultTable implements Table
         {
             throw new IllegalArgumentException("Column size does not match table row number: " + col.size());
         }
-        this.columns.set(colIndex, col);
+        if (!(col instanceof NumericColumn))
+        {
+            throw new IllegalArgumentException("Requires a numeric column as input");
+        }
+        this.columns.set(colIndex, (NumericColumn) col);
     }
 
     /**
@@ -233,7 +237,11 @@ public class DefaultTable implements Table
     
     public int addColumn(String colName, Column column)
     {
-        this.columns.add(column);
+        if (!(column instanceof NumericColumn))
+        {
+            throw new IllegalArgumentException("Requires a numeric column as input");
+        }
+        this.columns.add((NumericColumn) column);
         this.nCols = this.columns.size();
         this.colNames.add(colName);
         return this.nCols - 1;
@@ -387,12 +395,12 @@ public class DefaultTable implements Table
         this.columns.get(col).setValue(row, value);
     }
     
-    public Iterable<Column> columns()
+    public Iterable<NumericColumn> columns()
     {
-        return new Iterable<Column>()
+        return new Iterable<NumericColumn>()
         {
             @Override
-            public Iterator<Column> iterator()
+            public Iterator<NumericColumn> iterator()
             {
                 return new ColumnIterator();
             }
@@ -416,10 +424,7 @@ public class DefaultTable implements Table
     }
 
     
-    // =============================================================
-    // Implementation of column iterator
-
-    class ColumnIterator implements Iterator<Column>
+    class ColumnIterator implements Iterator<NumericColumn>
     {
         int index = 0;
         
@@ -434,7 +439,7 @@ public class DefaultTable implements Table
         }
 
         @Override
-        public Column next()
+        public NumericColumn next()
         {
             return columns.get(index++);
         }

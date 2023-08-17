@@ -123,7 +123,11 @@ public class KMeans
 	    int nr = table.rowCount();
 	    int np = table.columnCount();
 
-	    // small checkup
+	    // small checkups
+	    if (!table.isNumeric())
+	    {
+            throw new IllegalArgumentException("Requires a table with numeric columns only");
+	    }
 	    if (nr < np)
 	    {
 	        throw new IllegalArgumentException("Requires a table with at least as many rows as columns");

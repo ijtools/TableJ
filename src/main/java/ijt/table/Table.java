@@ -8,6 +8,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -26,7 +27,7 @@ import ijt.table.process.SummaryStatistics;
  * @author David Legland
  *
  */
-public interface Table extends Iterable<Column>
+public interface Table
 {
     // =============================================================
     // Static factories
@@ -36,7 +37,72 @@ public interface Table extends Iterable<Column>
         return new DefaultTable(nRows, nCols);
     }
     
+    /**
+     * Creates a new data table from a series of columns.
+     * 
+     * @param columns
+     *            the columns
+     * @return a new Table instance            
+     */
+    public static Table create(Column... columns)
+    {
+        int nRows = columns[0].size();
+        int nCols = columns.length;
+
+        // If all columns are numeric, should return a numeric table
+        if (Arrays.stream(columns).allMatch(col -> (col instanceof NumericColumn)))
+        {
+            NumericTable table = new DefaultNumericTable(nRows, nCols);
+            for (int c = 0; c < nCols; c++)
+            {
+                table.setColumn(c, columns[c]);
+            }
+            return table;
+        }
+        
+        Table table = new DefaultTable(nRows, nCols);
+        for (int c = 0; c < nCols; c++)
+        {
+            table.setColumn(c, columns[c]);
+        }
+        return table;
+    }
     
+    /**
+     * Creates a new data table from a series of columns.
+     * 
+     * @param rowNames
+     *            the names of the rows
+     * @param columns
+     *            the columns
+     * @return a new Table instance            
+     */
+    public static Table create(String[] rowNames, Column... columns)
+    {
+        int nRows = rowNames.length;
+        int nCols = columns.length;
+
+        // If all columns are numeric, should return a numeric table
+        if (Arrays.stream(columns).allMatch(col -> (col instanceof NumericColumn)))
+        {
+            NumericTable table = new DefaultNumericTable(nRows, nCols);
+            for (int c = 0; c < nCols; c++)
+            {
+                table.setColumn(c, columns[c]);
+            }
+            return table;
+        }
+        
+        Table table = new DefaultTable(nRows, nCols);
+        for (int c = 0; c < nCols; c++)
+        {
+            table.setColumn(c, columns[c]);
+        }
+        
+        table.setRowNames(rowNames);
+        return table;
+    }
+
     // =============================================================
     // Global methods
     
@@ -103,7 +169,7 @@ public interface Table extends Iterable<Column>
      */
     public default boolean isNumeric()
     {
-        for (Column col : this)
+        for (Column col : columns())
         {
             if (!(col instanceof NumericColumn))
             {
@@ -112,6 +178,7 @@ public interface Table extends Iterable<Column>
         }
         return true;
     }
+    
     
     // =============================================================
     // Data management
