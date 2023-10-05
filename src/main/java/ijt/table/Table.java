@@ -412,13 +412,12 @@ public interface Table
     {
     	int nRows = this.rowCount();
     	int nCols = this.columnCount();
-    	String[] rowNames = this.getRowNames();
     	String[] colNames = this.getColumnNames();
 
         // First display column headers
         if (this.hasColumnNames())
         {
-            if (rowNames != null)
+            if (hasRowNames())
                 stream.print("\t");
             
             if (nCols > 0)
@@ -434,7 +433,7 @@ public interface Table
         for (int r = 0; r < nRows; r++)
         {
             // row header
-            if (this.hasRowNames())
+            if (hasRowNames())
                 stream.print(this.getRowName(r) + "\t");
 
             // row data

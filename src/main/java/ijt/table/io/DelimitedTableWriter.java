@@ -122,7 +122,7 @@ public class DelimitedTableWriter implements TableWriter
         // print header if appropriate
 		if (colNames != null)
 		{
-		    if (rowNames != null)
+            if (table.hasRowNames())
 		    {
 	            writer.print("name" + this.delimiter);
 		    }
@@ -137,7 +137,7 @@ public class DelimitedTableWriter implements TableWriter
 		// print the content of each regular row
 		for (int r = 0; r < nr; r++)
 		{
-			if (rowNames != null)
+			if (table.hasRowNames())
 			{
 				writer.print(rowNames[r] + delimiter);
 			}

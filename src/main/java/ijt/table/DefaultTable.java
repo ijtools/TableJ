@@ -213,7 +213,16 @@ public class DefaultTable implements Table
 
     public int findColumnIndex(String colName)
     {
-        return this.colNames.indexOf(colName);
+        if (this.colNames.isEmpty())
+        {
+            throw new IllegalArgumentException("Can not retrieve column index when names are not initialized");
+        }
+        int index = this.colNames.indexOf(colName);
+        if (index < 0)
+        {
+            throw new IllegalArgumentException("Could not find index of column with name: " + colName);
+        }
+        return index;
     }
     
 
