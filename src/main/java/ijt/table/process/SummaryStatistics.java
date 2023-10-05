@@ -5,7 +5,10 @@ package ijt.table.process;
 
 import java.util.Arrays;
 
+import ijt.table.Column;
+import ijt.table.DefaultNumericTable;
 import ijt.table.NumericColumn;
+import ijt.table.Table;
 
 /**
  * A collection of summary statistics for columns of numeric tables.
@@ -143,5 +146,36 @@ public class SummaryStatistics
         }
         return sumSq / col.size();        
     }
-
+    
+    public Table process(Table table)
+    {
+        // check all columns are numeric
+        for (Column col : table.columns())
+        {
+            if (!(col instanceof NumericColumn))
+            {
+                throw new IllegalArgumentException("Input table must contain numeric columns only");
+            }
+        }
+        
+        // create result table
+        int nCols = table.columnCount();
+        Table res = new DefaultNumericTable(5, nCols);//TODO: change to a more generic constructor
+        res.setColumnNames(table.getColumnNames());
+        res.setRowNames(new String[] {"Mean", "Median", "Std.", "Min.", "Max."});
+        
+        // process each column
+        for (int iCol = 0; iCol < nCols; iCol++)
+        {
+            NumericColumn col = (NumericColumn) table.getColumn(iCol);
+            
+            res.setValue(0, iCol, mean(col));
+            res.setValue(1, iCol, median(col));
+            res.setValue(2, iCol, std(col));
+            res.setValue(3, iCol, min(col));
+            res.setValue(4, iCol, max(col));
+        }
+        
+        return res;
+    }
 }
