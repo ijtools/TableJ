@@ -3,8 +3,8 @@
  */
 package ijt.table.gui.action.file;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import ijt.table.Table;
 import ijt.table.gui.TableFrame;
@@ -20,14 +20,12 @@ public class OpenDemoTable implements TableFrameAction
     @Override
     public void run(TableFrame frame)
     {
-        String fileName = this.getClass().getResource("/tables/fisherIris.txt").getFile();
-        System.out.println(fileName);
-        File file = new File(fileName);
+        InputStream inputStream = OpenDemoTable.class.getResourceAsStream("/tables/fisherIris.txt");
 
         Table table;
         try
         {
-            table = new ijt.table.io.DelimitedTableReader().readTable(file);
+            table = new ijt.table.io.DelimitedTableReader().readTable(inputStream);
         }
         catch (IOException e)
         {
