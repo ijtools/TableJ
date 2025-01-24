@@ -13,6 +13,7 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 
 import ijt.table.CategoricalColumn;
+import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
 
@@ -22,82 +23,95 @@ import ijt.table.Table;
  */
 public class DelimitedTableReader implements TableReader
 {
-	// =============================================================
-	// Class variables
+    // =============================================================
+    // Class variables
 
-	String delimiters = " \t";
-	
-	boolean readHeader = true;
-	
-	int skipLines = 0;
-	
-	boolean readRowNames = true;
-	
-	// =============================================================
-	// Constructors
+    /**
+     * The delimiters between the tokens within the file. Default is " \t",
+     * corresponding to either space or tabulation delimiter.
+     */
+    String delimiters = " \t";
 
-	/**
-	 * Creates a new instance of DelimitedTableReader.
-	 */
-	public DelimitedTableReader()
-	{
-	}
+    /**
+     * Specifies if column header are present in the file. Default is true.
+     */
+    boolean readHeader = true;
 
-	/**
+    /**
+     * The number of lines to skip before starting reading data. Default is 0.
+     */
+    int skipLines = 0;
+
+    /**
+     * Specifies if row names are present in the file. Default is true.
+     */
+    boolean readRowNames = true;
+
+
+    // =============================================================
+    // Constructors
+
+    /**
+     * Creates a new instance of DelimitedTableReader.
+     */
+    public DelimitedTableReader()
+    {
+    }
+
+    /**
      * Creates a new instance of DelimitedTableReader, specifying the
      * delimiters.
      * 
      * @param delimiters
      *            the delimiters
      */
-	public DelimitedTableReader(String delimiters)
-	{
-		this.delimiters = delimiters;
-	}
+    public DelimitedTableReader(String delimiters)
+    {
+        this.delimiters = delimiters;
+    }
 
-	
-	// =============================================================
-	// Accessors and mutators
+    // =============================================================
+    // Accessors and mutators
 
-	public String getDelimiters()
-	{
-		return delimiters;
-	}
+    public String getDelimiters()
+    {
+        return delimiters;
+    }
 
-	public void setDelimiters(String delimiters)
-	{
-		this.delimiters = delimiters;
-	}
+    public void setDelimiters(String delimiters)
+    {
+        this.delimiters = delimiters;
+    }
 
-	public boolean isReadHeader()
-	{
-		return readHeader;
-	}
+    public boolean isReadHeader()
+    {
+        return readHeader;
+    }
 
-	public void setReadHeader(boolean readHeader)
-	{
-		this.readHeader = readHeader;
-	}
+    public void setReadHeader(boolean readHeader)
+    {
+        this.readHeader = readHeader;
+    }
 
-	public int getSkipLines()
-	{
-		return skipLines;
-	}
+    public int getSkipLines()
+    {
+        return skipLines;
+    }
 
-	public void setSkipLines(int skipLines)
-	{
-		this.skipLines = skipLines;
-	}
+    public void setSkipLines(int skipLines)
+    {
+        this.skipLines = skipLines;
+    }
 
-	public boolean isReadRowNames()
-	{
-		return readRowNames;
-	}
+    public boolean isReadRowNames()
+    {
+        return readRowNames;
+    }
 
-	public void setReadRowNames(boolean readRowNames)
-	{
-		this.readRowNames = readRowNames;
-	}
+    public void setReadRowNames(boolean readRowNames)
+    {
+        this.readRowNames = readRowNames;
+    }
 
     public Table readTable(InputStream stream) throws IOException
     {
@@ -107,7 +121,7 @@ public class DelimitedTableReader implements TableReader
         int nCols;
         
         // table data, indexed by columns first.
-        ArrayList<ArrayList<String>> columns;
+        ArrayList<ArrayList<String>> columnTokens;
         
         // the names of the columns
         String[] colNames;
@@ -118,56 +132,91 @@ public class DelimitedTableReader implements TableReader
         // convert stream to text reader that keep line number
         LineNumberReader reader = new LineNumberReader(new BufferedReader(new InputStreamReader(stream)));
         
-        // number of rows read
-        int nRows = 0;
-
         // eventually skip some lines
-        for (int r = 0; r < skipLines; r++)
-        {
-            reader.readLine(); 
-        }
+        skipHeaderLines(reader);
         
-        String delimiterRegexp = "[" + delimiters + "]+";
-
         // parse header line
         String firstLine = reader.readLine();
-        String[] tokens = firstLine.split(delimiterRegexp);
+        String[] lineTokens = splitLine(firstLine);
 
+        int columnOffset = readRowNames ? 1 : 0;
+        
+        // number of rows read
+        int nRows = 0;
+        
         // parse first line to identify number of columns 
         if (readHeader)
         {
             // first line is the header
-            nCols = tokens.length - 1;
+            nCols = lineTokens.length - columnOffset;
             colNames = new String[nCols];
             for (int i = 0; i < nCols; i++)
             {
-                colNames[i] = tokens[i + 1];
+                colNames[i] = lineTokens[i + columnOffset];
             }
         }
         else
         {
             // first line is a data line
             nRows++;
-            nCols = tokens.length;
+            nCols = lineTokens.length;
             colNames = new String[nCols];
         }
         
-        // Allocate array lists for columns
-        columns = new ArrayList<ArrayList<String>>(nCols);
+        // Allocate a new list of tokens for each column
+        columnTokens = new ArrayList<ArrayList<String>>(nCols);
         for (int c = 0; c < nCols; c++)
         {
-            columns.add(new ArrayList<String>());
+            columnTokens.add(new ArrayList<String>());
         }
         
         if (!readHeader)
         {
             // read column values as strings
-            int offset = readRowNames ? 1 : 0;
             for (int c = 0; c < nCols; c++)
             {
-                columns.get(c).add(tokens[c + offset]);
+                columnTokens.get(c).add(lineTokens[c + columnOffset]);
             }
         }
+        
+        // read regular lines containing data
+        nRows += readRegularLines(reader, columnTokens, rowNames);
+        
+        reader.close();
+        
+        // convert columns
+        Table table = Table.create(nRows, nCols);
+        
+        // convert string arrays to double values when appropriate
+        for (int c = 0; c < nCols; c++)
+        {
+            // tokens of current column
+            ArrayList<String> colData = columnTokens.get(c);
+            table.setColumn(c, createColumn(colData));
+        }
+
+        // populates meta-data
+        table.setColumnNames(colNames);
+        if (readRowNames)
+        {
+            table.setRowNames(rowNames.toArray(new String[0]));
+        }
+        
+        return table;
+    }
+    
+    private void skipHeaderLines(BufferedReader reader) throws IOException
+    {
+        for (int r = 0; r < skipLines; r++)
+        {
+            reader.readLine(); 
+        }
+    }
+    
+    private int readRegularLines(BufferedReader reader, ArrayList<ArrayList<String>> columnTokens, ArrayList<String> rowNames) throws IOException
+    {
+        int nRows = 0;
+        int nCols = columnTokens.size();
         
         // read regular lines containing data
         while (true)
@@ -180,16 +229,16 @@ public class DelimitedTableReader implements TableReader
             nRows++;
 
             // split the tokens of current line
-            tokens = line.split(delimiterRegexp);
+            String[] lineTokens = splitLine(line);
             
             // read row name
             if (readRowNames)
             {
-                rowNames.add(tokens[0]);
+                rowNames.add(lineTokens[0]);
                 // read column values as strings
                 for (int c = 0; c < nCols; c++)
                 {
-                    columns.get(c).add(tokens[c + 1]);
+                    columnTokens.get(c).add(lineTokens[c + 1]);
                 }           
             }
             else
@@ -197,57 +246,41 @@ public class DelimitedTableReader implements TableReader
                 // read column values as strings
                 for (int c = 0; c < nCols; c++)
                 {
-                    columns.get(c).add(tokens[c]);
+                    columnTokens.get(c).add(lineTokens[c]);
                 }           
             }
         }
         
-        reader.close();
-        
-        // convert columns
-        Table table = Table.create(nRows, nCols);
-        
-        // convert string arrays to double values
-        for (int c = 0; c < nCols; c++)
+        return nRows;
+    }
+    
+    private String[] splitLine(String line)
+    {
+        return line.split("[" + delimiters + "]+");
+    }
+    
+    private static final Column createColumn(ArrayList<String> colData)
+    {
+        // check if column contains only numeric values
+        double[] values = new double[colData.size()];
+        boolean isNumeric = true;
+        for (int r = 0; r < colData.size(); r++)
         {
-            // tokens of current column
-            ArrayList<String> colData = columns.get(c);
-            
-            // check if column contains only numeric values
-            double[] values = new double[nRows];
-            boolean isNumeric = true;
-            for (int r = 0; r < nRows; r++)
+            String token = colData.get(r);
+            if(token.matches(".*\\d.*"))
             {
-                String token = colData.get(r);
-                if(token.matches(".*\\d.*"))
-                {
-                    values[r] =  Double.parseDouble(token);
-                }
-                else
-                {
-                    isNumeric = false;
-                    break;
-                }
-            }
-            
-            if (isNumeric)
-            {
-                table.setColumn(c, NumericColumn.create(values));
+                values[r] = Double.parseDouble(token);
             }
             else
             {
-                table.setColumn(c, CategoricalColumn.create(colData.toArray(new String[0])));
+                isNumeric = false;
+                break;
             }
         }
-
-        // populates meta-data
-        table.setColumnNames(colNames);
-        if (readRowNames)
-        {
-            table.setRowNames(rowNames.toArray(new String[0]));
-        }
         
-        return table;
+        return isNumeric 
+                ? NumericColumn.create(values) 
+                : CategoricalColumn.create(colData.toArray(new String[0]));
     }
     
     
@@ -269,5 +302,12 @@ public class DelimitedTableReader implements TableReader
         table.setName(file.getName());
 
         return table;
+    }
+    
+    class Data
+    {
+        ArrayList<ArrayList<String>> columnTokens;
+        ArrayList<String> columnNames;
+        ArrayList<String> rowNames;
     }
 }
