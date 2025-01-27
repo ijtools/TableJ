@@ -68,6 +68,23 @@ public class IndexedStringColumn implements CategoricalColumn, Iterable<String>
         return this.levelLabels.toArray(new String[0]);
     }
     
+    @Override
+    public int getLevelIndex(int row)
+    {
+        return this.levelIndices[row];
+    }
+
+    @Override
+    public void setLevelIndex(int row, int index)
+    {
+        if (index >= levelLabels.size() || index < 0)
+        {
+            throw new IllegalArgumentException("Index must be smaller than level number");
+        }
+        this.levelIndices[row] = index;
+    }
+
+
     public int levelCount()
     {
         return this.levelLabels.size();

@@ -34,6 +34,7 @@ import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
 import ijt.table.gui.action.plot.LinePlot;
 import ijt.table.gui.action.plot.MultiLinePlot;
+import ijt.table.gui.action.plot.GroupScatterPlot;
 import ijt.table.gui.action.plot.ScatterPlot;
 import ijt.table.gui.action.process.CrossTableAction;
 import ijt.table.gui.action.process.KMeansAction;
@@ -209,6 +210,7 @@ public class TableFrame extends BaseFrame
         addMenuItem(plotMenu, "Line Plot (Column)", new LinePlot());
         addMenuItem(plotMenu, "Multi Line Plot (Column)", new MultiLinePlot());
         addMenuItem(plotMenu, "Scatter Plot", new ScatterPlot());
+        addMenuItem(plotMenu, "Group Scatter Plot", new GroupScatterPlot());
 //        plotMenu.addSeparator();
 //        addMenuItem(plotMenu, "Heat Map", new HeatMapDisplay());
         bar.add(plotMenu);

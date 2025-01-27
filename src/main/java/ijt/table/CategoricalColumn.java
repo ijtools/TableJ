@@ -56,5 +56,25 @@ public interface CategoricalColumn extends Column, Iterable<String>
     
     public String[] levelNames();
     
+    /**
+     * Returns the level index at the specified row.
+     * 
+     * @param row
+     *            the row index
+     * @return the level index at the specified row
+     */
+    public int getLevelIndex(int row);
+
+    /**
+     * Changes the level index at the specified row.
+     * 
+     * @param row
+     *            the row index
+     * @param index
+     *            the new index at the specified row
+     */
+    public void setLevelIndex(int row, int index);
+
+
     public int levelCount();
 }
