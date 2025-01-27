@@ -5,10 +5,10 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.ijtools</groupId>
-	<artifactId>Table_</artifactId>
+	<artifactId>TableJ_</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>Table</name>
+	<name>TableJ</name>
 	<description>Data Table management for ImageJ/Fiji.</description>
 	<url>https://imagej.net/Table</url>
 	<inceptionYear>2020</inceptionYear>
