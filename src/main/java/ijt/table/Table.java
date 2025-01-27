@@ -295,6 +295,23 @@ public interface Table
     public void setRowName(int rowIndex, String name);
     
     /**
+     * Returns the (optional) label associated to the row axis, or null if none
+     * is defined.
+     * 
+     * @return the (optional) label associated to the row axis, or null if none
+     *         is defined.
+     */
+    public String getRowNameLabel();
+    
+    /**
+     * Updates the label associated to the row axis.
+     * 
+     * @param label
+     *            the new label associated to row names.
+     */
+    public void setRowNameLabel(String label);
+    
+    /**
      * Returns the index of the first row with the specified name, or -1 if
      * there is no row with this name.
      * 
@@ -311,7 +328,6 @@ public interface Table
     public boolean hasRowNames();
     
 
-    
     // =============================================================
     // Management of Table meta-data
 

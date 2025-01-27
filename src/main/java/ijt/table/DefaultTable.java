@@ -44,6 +44,11 @@ public class DefaultTable implements Table
      */
     ArrayList<String> rowNames;
 
+    /**
+     * The label associated to row names axis.
+     */
+    String rowNameLabel = null;
+    
     
     // =============================================================
     // Constructors
@@ -151,16 +156,19 @@ public class DefaultTable implements Table
     /**
      * Returns the number of columns (measurements, variables) in the data table.
      */
+    @Override
     public int columnCount()
     {
         return this.nCols;
     }
 
+    @Override
     public Column getColumn(int index)
     {
         return this.columns.get(index);
     }
 
+    @Override
     public void setColumn(int colIndex, Column col)
     {
         if (col.size() != this.nRows)
@@ -173,11 +181,13 @@ public class DefaultTable implements Table
     /**
      * Returns an entire column of the data table.
      */
+    @Override
     public double[] getColumnValues(int col)
     {
         return columns.get(col).getValues();
     }
 
+    @Override
     public String[] getColumnNames()
     {
         String[] names = new String[this.nCols];
@@ -188,11 +198,13 @@ public class DefaultTable implements Table
         return names;
     }
     
+    @Override
     public String getColumnName(int iCol)
     {
         return this.colNames.get(iCol);
     }
     
+    @Override
     public void setColumnNames(String[] names)
     {
         if (names.length != this.nCols)
@@ -203,6 +215,7 @@ public class DefaultTable implements Table
             this.colNames.add(name);
     }
 
+    @Override
     public void setColumnName(int colIndex, String name)
     {
         if (colIndex >= this.nCols)
@@ -211,6 +224,7 @@ public class DefaultTable implements Table
         this.colNames.set(colIndex, name);
     }
 
+    @Override
     public int findColumnIndex(String colName)
     {
         if (this.colNames.isEmpty())
@@ -229,6 +243,7 @@ public class DefaultTable implements Table
     /**
      * @return true if all columns has a valid name.
      */
+    @Override
     public boolean hasColumnNames()
     {
         for (String name : this.colNames)
@@ -240,6 +255,7 @@ public class DefaultTable implements Table
         return true;
     }
     
+    @Override
     public int addColumn(String colName, Column column)
     {
         this.columns.add(column);
@@ -255,6 +271,7 @@ public class DefaultTable implements Table
     /**
      * Returns the number of rows (individuals, observations) in the data table.
      */
+    @Override
     public int rowCount()
     {
         return this.nRows;
@@ -263,6 +280,7 @@ public class DefaultTable implements Table
     /**
      * Returns an entire row of the data table.
      */
+    @Override
     public double[] getRowValues(int row)
     {
         double[] res = new double[this.nCols];
@@ -273,16 +291,19 @@ public class DefaultTable implements Table
         return res;
     }
 
+    @Override
     public String[] getRowNames()
     {
         return this.rowNames.toArray(new String[0]);
     }
 
+    @Override
     public String getRowName(int iRow)
     {
         return this.rowNames.get(iRow);
     }
 
+    @Override
     public void setRowNames(String[] names)
     {
         if (names.length != this.nRows)
@@ -293,6 +314,7 @@ public class DefaultTable implements Table
             this.rowNames.add(name);
     }
 
+    @Override
     public void setRowName(int rowIndex, String name)
     {
         if (rowIndex >= this.nRows)
@@ -301,6 +323,19 @@ public class DefaultTable implements Table
         this.rowNames.set(rowIndex, name);
     }
     
+    @Override
+    public String getRowNameLabel()
+    {
+        return this.rowNameLabel;
+    }
+
+    @Override
+    public void setRowNameLabel(String label)
+    {
+        this.rowNameLabel = label;
+    }
+
+    @Override
     public int findRowIndex(String rowName)
     {
         return this.rowNames.indexOf(rowName);
@@ -309,6 +344,7 @@ public class DefaultTable implements Table
     /**
      * @return true if all columns has a valid name.
      */
+    @Override
     public boolean hasRowNames()
     {
         return !this.rowNames.isEmpty();
@@ -321,6 +357,7 @@ public class DefaultTable implements Table
     /**
      * Changes the name of this data table.
      */
+    @Override
     public void setName(String name)
     {
         this.name = name;
@@ -329,6 +366,7 @@ public class DefaultTable implements Table
     /**
      * Returns the name of this data table
      */
+    @Override
     public String getName()
     {
         return this.name;
@@ -347,6 +385,7 @@ public class DefaultTable implements Table
      *            the column index, 0-indexed
      * @return the value at the specified position
      */
+    @Override
     public Object get(int row, int col)
     {
         return this.columns.get(col).get(row);
@@ -361,6 +400,7 @@ public class DefaultTable implements Table
      *            the column index, 0-indexed
      * @return the value at the specified position
      */
+    @Override
     public double getValue(int row, int col)
     {
         return this.columns.get(col).getValue(row);
@@ -375,6 +415,7 @@ public class DefaultTable implements Table
      *            the name of the column
      * @return the value at the specified position
      */
+    @Override
     public double getValue(int row, String colName)
     {
         int col = this.findColumnIndex(colName);
@@ -391,11 +432,13 @@ public class DefaultTable implements Table
      * @param value
      *            the new value
      */
+    @Override
     public void setValue(int row, int col, double value)
     {
         this.columns.get(col).setValue(row, value);
     }
     
+    @Override
     public Iterable<Column> columns()
     {
         return new Iterable<Column>()
@@ -418,6 +461,7 @@ public class DefaultTable implements Table
      * @param value
      *            the new value
      */
+    @Override
     public void setValue(int row, String colName, double value)
     {
         int col = this.findColumnIndex(colName);
