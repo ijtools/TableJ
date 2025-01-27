@@ -27,10 +27,7 @@ public class ConvertImageJTablePlugin implements PlugIn
         TextWindow[] textWindows = getTableWindows();
         String[] tableNames = getWindowNames(textWindows);
         
-        // pick an arbitrary table
-//        TextPanel tp = textWindows[0].getTextPanel();
-//        ResultsTable table = tp.getResultsTable();
-
+        // opens a dialog to choose one of the tables
         GenericDialog gd = new GenericDialog("Draw Text from Column");
         gd.addChoice("Results Table:", tableNames, tableNames[0]);
         
@@ -47,6 +44,8 @@ public class ConvertImageJTablePlugin implements PlugIn
         // determine size of new table
         int nr = ijTable.getCounter();
         int nc = ijTable.getLastColumn();
+        
+        // determine whether table has a label for rows
         boolean hasLabelColumn = ijTable.getLastColumn() == (ijTable.getHeadings().length-2);
         if (hasLabelColumn)
         {
@@ -74,6 +73,8 @@ public class ConvertImageJTablePlugin implements PlugIn
                 rowNames[r] = ijTable.getLabel(r);
             }
             table.setRowNames(rowNames);
+            
+            table.setRowNameLabel(ijTable.getHeadings()[0]);
         }
 
         // also propagates name

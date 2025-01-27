@@ -170,7 +170,8 @@ public class TableFrame extends BaseFrame
         
         if (nRowCols > 0)
         {
-            colNames[0] = "Row Names";
+            String label = table.getRowNameLabel();
+            colNames[0] = label != null ? label : "Row Names";
         }
         
         String[] baseColNames = table.getColumnNames();
