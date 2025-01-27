@@ -3,13 +3,8 @@
  */
 package ijt.table.gui.action.plot;
 
-import java.awt.Point;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
-import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
@@ -21,6 +16,7 @@ import ij.gui.GenericDialog;
 import ijt.table.Table;
 import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
+import ijt.table.gui.frame.ChartFrame;
 
 /**
  * @author dlegland
@@ -103,42 +99,7 @@ public class MultiLinePlot implements TableFrameAction
             series.setMarker(SeriesMarkers.NONE);
         }
         
-        // Create and set up the window.
-        JFrame plotFrame = new JFrame();
-        plotFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        // relocate with respect to parent frame
-        Point pos0 = parentFrame.getJFrame().getLocation();
-        plotFrame.setLocation(pos0.x + 30, pos0.y + 20);
-        
-        // Schedule a job for the event-dispatching thread:
-        // creating and showing this application's GUI.
-        try
-        {
-            javax.swing.SwingUtilities.invokeAndWait(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    // add a panel containing the chart 
-                    @SuppressWarnings({ "rawtypes", "unchecked" })
-                    XChartPanel chartPanel = new XChartPanel(chart);
-                    plotFrame.add(chartPanel);
-                    
-                    // Display the window.
-                    plotFrame.pack();
-                    plotFrame.setVisible(true);
-                }
-            });
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e)
-        {
-            e.printStackTrace();
-        }
+        ChartFrame.create(chart, "MultiLine Plot", parentFrame);
     }
     
     /**
