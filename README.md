@@ -1,6 +1,8 @@
 TableJ is a plugin for Fiji/ImageJ that provides management of data tables in a more extensive 
 way than native ImageJ does.
 
+![Screenshot of a TableJ](assets/doc/images/TableJ_overview.png)
+
 Features of TableJ include:
 * management of Tables with both numeric and categorical columns
 * display of Table instances in specific frame
