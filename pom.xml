@@ -6,7 +6,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<groupId>net.ijtools</groupId>
 	<artifactId>TableJ_</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<name>TableJ</name>
 	<description>Data Table management for ImageJ/Fiji.</description>
