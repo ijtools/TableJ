@@ -17,6 +17,8 @@ import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.internal.chartpart.Chart;
 
 import ijt.table.gui.BaseFrame;
+import ijt.table.gui.ChartFrameAction;
+import ijt.table.gui.chart.ExportChartAsImage;
 
 
 /**
@@ -69,7 +71,6 @@ public class ChartFrame extends BaseFrame
     
     // ===================================================================
     // Constructor
-    
 
     /**
      * @param title
@@ -135,6 +136,7 @@ public class ChartFrame extends BaseFrame
         JMenu fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
         
+        addActionToMenu(fileMenu, "Export As...", new ExportChartAsImage());
         JMenuItem closeItem = new JMenuItem("Close");
         closeItem.addActionListener(evt -> ChartFrame.this.close());
         fileMenu.add(closeItem);
@@ -143,5 +145,21 @@ public class ChartFrame extends BaseFrame
         menuBar.add(helpMenu);
         
         this.jFrame.setJMenuBar(menuBar);
+    }
+    
+    private JMenuItem addActionToMenu(JMenu menu, String label, ChartFrameAction action)
+    {
+        JMenuItem item = new JMenuItem(label);
+        item.addActionListener(evt -> action.run(this));
+        menu.add(item);
+        return item;
+    }
+    
+    // ===================================================================
+    // New methods
+    
+    public Chart<?,?> getChart()
+    {
+        return this.chart;
     }
 }
