@@ -96,7 +96,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 			<version>1.52o</version>
 		</dependency>
 	
-		<!-- Jama (Java Matrix package) is used for computing inertia ellipsoid --> 
+		<!-- Jama (Java Matrix package) is used for computing principal component analysis --> 
 		<!-- https://mvnrepository.com/artifact/gov.nist.math/jama -->
 		<dependency>
 			<groupId>gov.nist.math</groupId>

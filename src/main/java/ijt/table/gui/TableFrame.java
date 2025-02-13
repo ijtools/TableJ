@@ -38,6 +38,7 @@ import ijt.table.gui.action.plot.MultiLinePlot;
 import ijt.table.gui.action.plot.ScatterPlot;
 import ijt.table.gui.action.process.CrossTableAction;
 import ijt.table.gui.action.process.KMeansAction;
+import ijt.table.gui.action.process.PrincipalComponentAnalysisAction;
 
 /**
  * Display the contents of a DataTable object into a JTable embedded into a
@@ -230,6 +231,7 @@ public class TableFrame extends BaseFrame
 
         JMenu processMenu = new JMenu("Process");
         addMenuItem(processMenu, "Cross-Table...", new CrossTableAction());
+        addMenuItem(processMenu, "Principal Component Analysis", new PrincipalComponentAnalysisAction());
         processMenu.addSeparator();
         addMenuItem(processMenu, "K-Means", new KMeansAction());
         bar.add(processMenu);
