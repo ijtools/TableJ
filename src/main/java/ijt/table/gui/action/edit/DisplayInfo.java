@@ -26,7 +26,7 @@ public class DisplayInfo implements TableFrameAction
         }
         
         Table tableStructure = table.structure();
-        frame.createNewTableFrame(tableStructure);
+        TableFrame.create(tableStructure, frame);
     }
     
     public boolean isAvailable(TableFrame frame)

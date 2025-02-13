@@ -66,7 +66,7 @@ public class OpenTable implements TableFrameAction
         table.setName(file.getName());
         
         // add the new frame to the GUI
-        frame.createNewTableFrame(table);
+        TableFrame.create(table, frame);
     }
 
 }

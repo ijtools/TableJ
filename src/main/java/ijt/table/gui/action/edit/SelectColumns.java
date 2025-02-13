@@ -88,6 +88,6 @@ public class SelectColumns implements TableFrameAction
         res.setName(baseName + "-colSel");
         
         // add the new frame to the GUI
-        frame.createNewTableFrame(res);
+        TableFrame.create(res, frame);
     }
 }

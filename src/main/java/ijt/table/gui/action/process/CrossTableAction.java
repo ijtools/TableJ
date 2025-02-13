@@ -13,8 +13,9 @@ import ijt.table.gui.TableFrameAction;
 
 
 /**
+ * Computes the cross-table of two Categorical columns within a table.
+ * 
  * @author dlegland
- *
  */
 public class CrossTableAction implements TableFrameAction
 {
@@ -23,9 +24,9 @@ public class CrossTableAction implements TableFrameAction
      * @see imago.gui.Plugin#run(imago.gui.ImagoFrame, java.lang.String)
      */
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(TableFrame frame)
     {
-        Table table = parentFrame.getTable();
+        Table table = frame.getTable();
         String[] colNames = table.getColumnNames();
 
         GenericDialog gd = new GenericDialog("Cross Table");
@@ -58,6 +59,6 @@ public class CrossTableAction implements TableFrameAction
         Table res = Tables.crossTable((CategoricalColumn) col1, (CategoricalColumn) col2);
         
         // add the new frame to the GUI
-        parentFrame.createNewTableFrame(res);
+        TableFrame.create(res, frame);
     }
 }

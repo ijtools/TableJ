@@ -51,6 +51,6 @@ public class MergeColumnsAction implements TableFrameAction
         Table res = Tables.mergeColumns(table1,  table2);
         
         // add the new frame to the GUI
-        frame.createNewTableFrame(res);
+        TableFrame.create(res, frame);
     }
 }

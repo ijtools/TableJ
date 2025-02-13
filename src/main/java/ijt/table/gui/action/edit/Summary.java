@@ -26,7 +26,7 @@ public class Summary implements TableFrameAction
         }
         
         Table res = table.summary();
-        frame.createNewTableFrame(res);
+        TableFrame.create(res, frame);
     }
     
     public boolean isAvailable(TableFrame frame)

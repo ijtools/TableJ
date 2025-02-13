@@ -52,12 +52,36 @@ public class TableFrame extends BaseFrame
     /**
      * Creates a Frame that displays a table, and make it visible.
      * 
-     * @param table the table to display in the frame
+     * @param table
+     *            the table to display in the frame
      * @return a new instance of TableFrame.
      */
     public static final TableFrame create(Table table)
     {
         TableFrame frame = new TableFrame(table);
+        frame.setVisible(true);
+        return frame;
+    }
+    
+    /**
+     * Creates a Frame that displays a table, and make it visible.
+     * 
+     * @param table
+     *            the table to display in the frame
+     * @param parentFrame
+     *            another frame used to initialize the position of the new frame
+     * @return a new instance of TableFrame.
+     */
+    public static final TableFrame create(Table table, BaseFrame parentFrame)
+    {
+        TableFrame frame = new TableFrame(table);
+
+        // Compute position according to position of current frame
+        Point pos = parentFrame.jFrame.getLocation();
+        int x = pos.x + 20;
+        int y = pos.y + 20;
+        frame.jFrame.setLocation(x, y);
+        
         frame.setVisible(true);
         return frame;
     }
@@ -303,33 +327,6 @@ public class TableFrame extends BaseFrame
         setTitle(title);
     }
     
-    
-    /**
-     * Creates a new frame to display the input data table, and initializes it
-     * with from this frame.
-     * 
-     * @param table
-     *            the table to display in the new frame.
-     * @return the new table frame.
-     */
-
-    public TableFrame createNewTableFrame(Table table)
-    {
-        // creates the frame
-        TableFrame newFrame = new TableFrame(table);
-        
-        // Compute position according to position of current frame
-        Point pos = this.jFrame.getLocation();
-        int x = pos.x + 20;
-        int y = pos.y + 20;
-        newFrame.jFrame.setLocation(x, y);
-        
-        newFrame.setVisible(true);
-        
-        // return result
-        return newFrame;
-    }
-
     /**
      * A simple main function to quickly test GUI on a toy example.
      */

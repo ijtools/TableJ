@@ -25,15 +25,16 @@ public class PrincipalComponentAnalysisAction implements TableFrameAction
      * @see imago.gui.Plugin#run(imago.gui.ImagoFrame, java.lang.String)
      */
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(TableFrame frame)
     {
-        Table table = parentFrame.getTable();
+        Table table = frame.getTable();
         
+        // Compute result of principal component analysis
         PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis().fit(table);
         
         // add new frames to the GUI
-        TableFrame.create(pca.eigenValues());
-        TableFrame.create(pca.loadings());
-        TableFrame.create(pca.scores());
+        TableFrame.create(pca.eigenValues(), frame);
+        TableFrame.create(pca.loadings(), frame);
+        TableFrame.create(pca.scores(), frame);
     }
 }

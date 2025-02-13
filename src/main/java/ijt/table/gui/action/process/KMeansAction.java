@@ -10,15 +10,18 @@ import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 /**
+ * Applies k-means algorithms to the observations represented by rows of the
+ * current data table.
+ * 
  * @author dlegland
  *
  */
 public class KMeansAction implements TableFrameAction
 {
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(TableFrame frame)
     {
-        Table table = parentFrame.getTable();
+        Table table = frame.getTable();
 
         GenericDialog gd = new GenericDialog("KMeans");
         gd.addNumericField("Cluster number", 3, 0);
@@ -40,16 +43,18 @@ public class KMeansAction implements TableFrameAction
             tableName = "Data";
         }
         
+        // compute class centroids using k-means
         KMeans kmeans = new KMeans(nClusters);
         kmeans.fit(table);
         
+        // associate original data points to classes
         Table clusterIndices = kmeans.predict(table);
-        TableFrame clusterFrame = parentFrame.createNewTableFrame(clusterIndices);
+        TableFrame clusterFrame = TableFrame.create(clusterIndices, frame);
         
         if (showCentroids)
         {
             Table centroids = kmeans.centroids(); 
-            clusterFrame.createNewTableFrame(centroids);
+            TableFrame.create(centroids, clusterFrame);
         }
     }
     

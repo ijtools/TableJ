@@ -26,7 +26,7 @@ public class CorrelationMatrix implements TableFrameAction
         }
         
         Table res = new ijt.table.process.CorrelationMatrix().process(table);
-        frame.createNewTableFrame(res);
+        TableFrame.create(res, frame);
     }
     
     public boolean isAvailable(TableFrame frame)

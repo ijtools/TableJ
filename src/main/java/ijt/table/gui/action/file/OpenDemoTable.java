@@ -11,8 +11,10 @@ import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 
 /**
+ * Opens a demo data table, containing Fisher's iris data (150 observations, 4
+ * numerical features, 1 categorical column).
+ * 
  * @author dlegland
- *
  */
 public class OpenDemoTable implements TableFrameAction
 {
@@ -36,7 +38,7 @@ public class OpenDemoTable implements TableFrameAction
         table.setName("fisherIris");
         
         // add the new frame to the GUI
-        frame.createNewTableFrame(table);
+        TableFrame.create(table, frame);
     }
 
 }
