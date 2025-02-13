@@ -32,9 +32,9 @@ import ijt.table.gui.action.file.OpenDemoTable;
 import ijt.table.gui.action.file.OpenTable;
 import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
+import ijt.table.gui.action.plot.GroupScatterPlot;
 import ijt.table.gui.action.plot.LinePlot;
 import ijt.table.gui.action.plot.MultiLinePlot;
-import ijt.table.gui.action.plot.GroupScatterPlot;
 import ijt.table.gui.action.plot.ScatterPlot;
 import ijt.table.gui.action.process.CrossTableAction;
 import ijt.table.gui.action.process.KMeansAction;
@@ -48,6 +48,19 @@ import ijt.table.gui.action.process.KMeansAction;
  */
 public class TableFrame extends BaseFrame
 {
+    /**
+     * Creates a Frame that displays a table, and make it visible.
+     * 
+     * @param table the table to display in the frame
+     * @return a new instance of TableFrame.
+     */
+    public static final TableFrame create(Table table)
+    {
+        TableFrame frame = new TableFrame(table);
+        frame.setVisible(true);
+        return frame;
+    }
+    
     /**
      * The table displayed within this frame.
      */
