@@ -21,7 +21,6 @@ import javax.swing.JTable;
 
 import ijt.table.NumericColumn;
 import ijt.table.Table;
-import ijt.table.gui.action.edit.CorrelationMatrix;
 import ijt.table.gui.action.edit.DisplayInfo;
 import ijt.table.gui.action.edit.MergeColumnsAction;
 import ijt.table.gui.action.edit.Rename;
@@ -36,6 +35,7 @@ import ijt.table.gui.action.plot.GroupScatterPlot;
 import ijt.table.gui.action.plot.LinePlot;
 import ijt.table.gui.action.plot.MultiLinePlot;
 import ijt.table.gui.action.plot.ScatterPlot;
+import ijt.table.gui.action.process.CorrelationMatrix;
 import ijt.table.gui.action.process.CrossTableAction;
 import ijt.table.gui.action.process.KMeansAction;
 import ijt.table.gui.action.process.PrincipalComponentAnalysisAction;
@@ -240,7 +240,6 @@ public class TableFrame extends BaseFrame
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
         addMenuItem(editMenu, "Merge Columns...", new MergeColumnsAction());
         editMenu.addSeparator();
-        addMenuItem(editMenu, "Correlation Matrix", new CorrelationMatrix());
         addMenuItem(editMenu, "Summary", new Summary());
         bar.add(editMenu);
 
@@ -254,8 +253,10 @@ public class TableFrame extends BaseFrame
         bar.add(plotMenu);
 
         JMenu processMenu = new JMenu("Process");
-        addMenuItem(processMenu, "Cross-Table...", new CrossTableAction());
+        addMenuItem(processMenu, "Correlation Matrix", new CorrelationMatrix());
         addMenuItem(processMenu, "Principal Component Analysis", new PrincipalComponentAnalysisAction());
+        processMenu.addSeparator();
+        addMenuItem(processMenu, "Cross-Table...", new CrossTableAction());
         processMenu.addSeparator();
         addMenuItem(processMenu, "K-Means", new KMeansAction());
         bar.add(processMenu);

@@ -1,8 +1,10 @@
 /**
  * 
  */
-package ijt.table.gui.action.edit;
+package ijt.table.gui.action.process;
 
+import ijt.table.Column;
+import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
@@ -24,6 +26,15 @@ public class CorrelationMatrix implements TableFrameAction
         {
             return;
         }
+        // Check all columns are numeric
+        for (Column column : table.columns())
+        {
+            if (!(column instanceof NumericColumn))
+            {
+                throw new IllegalArgumentException("Requires table with numeric columns only");
+            }
+        }
+
         
         Table res = new ijt.table.process.CorrelationMatrix().process(table);
         TableFrame.create(res, frame);

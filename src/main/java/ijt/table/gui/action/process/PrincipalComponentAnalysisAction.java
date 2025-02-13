@@ -3,6 +3,8 @@
  */
 package ijt.table.gui.action.process;
 
+import ijt.table.Column;
+import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
@@ -28,6 +30,14 @@ public class PrincipalComponentAnalysisAction implements TableFrameAction
     public void run(TableFrame frame)
     {
         Table table = frame.getTable();
+        // Check all columns are numeric
+        for (Column column : table.columns())
+        {
+            if (!(column instanceof NumericColumn))
+            {
+                throw new IllegalArgumentException("Requires table with numeric columns only");
+            }
+        }
         
         // Compute result of principal component analysis
         PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis().fit(table);
