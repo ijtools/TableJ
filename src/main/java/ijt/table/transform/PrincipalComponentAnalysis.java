@@ -321,8 +321,8 @@ public class PrincipalComponentAnalysis
         }
 
         // setup meta data
-        res.setColumnNames(this.loadings.getColumnNames());
-        res.setRowNames(table.getRowNames());
+        if(loadings.hasColumnNames()) res.setColumnNames(this.loadings.getColumnNames());
+        if(table.hasRowNames()) res.setRowNames(table.getRowNames());
         res.setName(table.getName() + "-PCA");
 
         return res;
@@ -355,7 +355,7 @@ public class PrincipalComponentAnalysis
         
         // setup meta data
         res.setRowNames(new String[] {"mean", "variance"});
-        res.setColumnNames(this.loadings.getRowNames());
+        if(loadings.hasRowNames()) res.setColumnNames(this.loadings.getRowNames());
         res.setName("PCA reference");
         
         return res;

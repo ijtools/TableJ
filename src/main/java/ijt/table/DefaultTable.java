@@ -190,12 +190,7 @@ public class DefaultTable implements Table
     @Override
     public String[] getColumnNames()
     {
-        String[] names = new String[this.nCols];
-        for (int c = 0; c < this.nCols; c++)
-        {
-            names[c] = this.colNames.get(c);
-        }
-        return names;
+        return this.colNames.stream().toArray(String[]::new);
     }
     
     @Override
@@ -207,6 +202,12 @@ public class DefaultTable implements Table
     @Override
     public void setColumnNames(String[] names)
     {
+        if (names == null)
+        {
+            this.colNames.clear();
+            return;
+        }
+        
         if (names.length != this.nCols)
             throw new IllegalArgumentException("String array must have same length as the number of columns.");
 
@@ -241,7 +242,7 @@ public class DefaultTable implements Table
     
 
     /**
-     * @return true if all columns has a valid name.
+     * @return true if all columns have a valid name.
      */
     @Override
     public boolean hasColumnNames()
@@ -306,6 +307,12 @@ public class DefaultTable implements Table
     @Override
     public void setRowNames(String[] names)
     {
+        if (names == null)
+        {
+            this.rowNames.clear();
+            return;
+        }
+        
         if (names.length != this.nRows)
             throw new IllegalArgumentException("String array must have same length as the number of rows.");
 

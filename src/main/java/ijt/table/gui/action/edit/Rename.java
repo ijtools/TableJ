@@ -48,8 +48,8 @@ public class Rename implements TableFrameAction
         table.setName(newName);
         mgr.addTable(table);
         
-        // to update title display
-        frame.repaint();
+        // refresh name if frame title
+        frame.updateTitle();
     }
     
     public boolean isAvailable(TableFrame frame)

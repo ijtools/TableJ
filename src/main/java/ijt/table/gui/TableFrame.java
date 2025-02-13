@@ -21,6 +21,7 @@ import javax.swing.JTable;
 
 import ijt.table.NumericColumn;
 import ijt.table.Table;
+import ijt.table.gui.action.edit.ClearRowNames;
 import ijt.table.gui.action.edit.DisplayInfo;
 import ijt.table.gui.action.edit.MergeColumnsAction;
 import ijt.table.gui.action.edit.Rename;
@@ -113,6 +114,8 @@ public class TableFrame extends BaseFrame
         table.setName(name);
         manager.addTable(table);
 
+        // Create the frame containing the table
+        jFrame.setPreferredSize(new Dimension(400, 300));
 
         // setup layout and menus
         setupLayout();
@@ -135,16 +138,8 @@ public class TableFrame extends BaseFrame
 
     private void setupLayout()
     {
-        // Convert table data into necessary format
-        Object[][] data = convertTableToObjectArray(table);
-        String[] colNames = computeDisplayColNames(table);
-        
         // Create JTable instance
-        JTable jTable = new JTable(data, colNames);
-        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-        // Create the frame containing the table
-        jFrame.setPreferredSize(new Dimension(400, 300));
+        JTable jTable = computeJTable(table);
 
         // Setup layout
         Container panel = jFrame.getContentPane();
@@ -154,12 +149,24 @@ public class TableFrame extends BaseFrame
         scrollPane.setRowHeaderView(rowTable);
         scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, rowTable.getTableHeader());
 
-        // panel.add(table.getTableHeader(), BorderLayout.NORTH);
         panel.add(jTable.getTableHeader(), BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
     }
     
-    private Object[][] convertTableToObjectArray(Table table)
+    private static final JTable computeJTable(Table table)
+    {
+        // Convert table data into necessary format
+        Object[][] data = convertTableToObjectArray(table);
+        String[] colNames = computeDisplayColNames(table);
+        
+        // Create JTable instance
+        JTable jTable = new JTable(data, colNames);
+        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        return jTable;
+    }
+    
+    private static final Object[][] convertTableToObjectArray(Table table)
     {
         // table size
         int nRows = table.rowCount();
@@ -197,7 +204,7 @@ public class TableFrame extends BaseFrame
         return data;
     }
     
-    private String[] computeDisplayColNames(Table table)
+    private static final String[] computeDisplayColNames(Table table)
     {
         int nCols = table.columnCount();
 
@@ -236,6 +243,7 @@ public class TableFrame extends BaseFrame
         JMenu editMenu = new JMenu("Edit");
         addMenuItem(editMenu, "Display Info", new DisplayInfo());
         addMenuItem(editMenu, "Rename", new Rename());
+        addMenuItem(editMenu, "Clear Row Names", new ClearRowNames());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
         addMenuItem(editMenu, "Merge Columns...", new MergeColumnsAction());
@@ -280,8 +288,8 @@ public class TableFrame extends BaseFrame
     {
         // set up frame size depending on screen size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = Math.min(400, screenSize.width - 100);
-        int height = Math.min(300, screenSize.width - 100);
+        int width = Math.min(600, screenSize.width - 100);
+        int height = Math.min(400, screenSize.width - 100);
         Dimension frameSize = new Dimension(width, height);
         this.jFrame.setSize(frameSize);
 
@@ -307,10 +315,26 @@ public class TableFrame extends BaseFrame
     
     public void repaint()
     {
+        // recompute display of table
+        JTable jTable = computeJTable(table);
+
+        // Setup layout
+        Container panel = jFrame.getContentPane();
+        panel.removeAll();
+
+        JScrollPane scrollPane = new JScrollPane(jTable);
+        JTable rowTable = new RowNumberTable(jTable);
+        scrollPane.setRowHeaderView(rowTable);
+        scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, rowTable.getTableHeader());
+
+        panel.add(jTable.getTableHeader(), BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.validate();
+        
         super.repaint();
+        
         updateTitle();
     }
-    
     
     public void updateTitle()
     {
