@@ -93,7 +93,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
-			<version>1.52o</version>
+			<version>1.54m</version>
 		</dependency>
 	
 		<!-- Jama (Java Matrix package) is used for computing principal component analysis --> 
@@ -117,7 +117,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<dependency>
 		    <groupId>org.knowm.xchart</groupId>
 		    <artifactId>xchart</artifactId>
-	    	<version>3.8.0</version>
+	    	<version>3.8.8</version>
 	    </dependency>
 	   
 	</dependencies>
