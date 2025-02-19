@@ -11,6 +11,7 @@ import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.ChartTheme;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
+import ij.IJ;
 import ij.gui.GenericDialog;
 import ijt.table.CategoricalColumn;
 import ijt.table.NumericColumn;
@@ -28,22 +29,29 @@ import ijt.table.gui.frame.ChartFrame;
  */
 public class GroupScatterPlot implements TableFrameAction
 {
-    String[] markerTypes = new String[] {"Circle", "Cross", "Diamond", "Plus", "Square", "Triangle Up", "Triangle Down"};
-    
     @Override
     public void run(TableFrame parentFrame)
     {
         Table table = parentFrame.getTable();
-        String[] catColNames = getCategoricalColumnNames(table);
+        if (table.columnCount() < 3)
+        {
+        	IJ.error("Requires a table with at least three colums", "Table error");
+        	return;
+        }
 
-        
+        String[] catColNames = getCategoricalColumnNames(table);
+        if (catColNames.length == 0)
+        {
+        	IJ.error("Requires a table with at least one categorical column", "Table error");
+        	return;
+        }
+
         // Create dialog
-        GenericDialog gd = new GenericDialog("Line Plot");
+        GenericDialog gd = new GenericDialog("Group Scatter Plot");
         String[] colNames = table.getColumnNames();
         gd.addChoice("X-Axis Column:", colNames, colNames[0]);
-        gd.addChoice("Y-Axis Column:", colNames, colNames[0]);
+        gd.addChoice("Y-Axis Column:", colNames, colNames[1]);
         gd.addChoice("Grouping Column:", catColNames, catColNames[0]);
-//        gd.addChoice("Marker_Type", markerTypes, markerTypes[0]);
         gd.addNumericField("Marker_Size", 10, 0);
         
         gd.showDialog();
@@ -56,7 +64,6 @@ public class GroupScatterPlot implements TableFrameAction
         int xColIndex = gd.getNextChoiceIndex();
         int yColIndex = gd.getNextChoiceIndex();
         String groupColName = gd.getNextChoice();
-//        int markerTypeIndex = gd.getNextChoiceIndex();
         int markerSize = (int) gd.getNextNumber();
 
         

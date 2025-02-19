@@ -9,7 +9,6 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.LegendPosition;
-import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import ij.IJ;
 import ij.gui.GenericDialog;
@@ -20,13 +19,14 @@ import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.frame.ChartFrame;
 
 /**
+ * Creates a plot of the individuals within a table, where each row is
+ * represented by a marker whose position is given by the value from two
+ * numerical columns.
+ * 
  * @author dlegland
- *
  */
 public class ScatterPlot implements TableFrameAction
 {
-    String[] markerTypes = new String[] {"Circle", "Cross", "Diamond", "Plus", "Square", "Triangle Up", "Triangle Down"};
-    
     @Override
     public void run(TableFrame parentFrame)
     {
@@ -50,7 +50,7 @@ public class ScatterPlot implements TableFrameAction
         GenericDialog gd = new GenericDialog("Line Plot");
         gd.addChoice("X-Axis Column:", colNames, colNames[0]);
         gd.addChoice("Y-Axis Column:", colNames, colNames[1]);
-        gd.addChoice("Marker_Type", markerTypes, markerTypes[0]);
+        gd.addChoice("Marker_Type", MarkerType.getAllLabels(), MarkerType.CIRCLE.toString());
         gd.addNumericField("Marker_Size", 10, 0);
         gd.addChoice("Display Labels:", colNames2, colNames2[0]);
         
@@ -63,7 +63,7 @@ public class ScatterPlot implements TableFrameAction
         // parse user choices
         int xColIndex = gd.getNextChoiceIndex();
         int yColIndex = gd.getNextChoiceIndex();
-        int markerTypeIndex = gd.getNextChoiceIndex();
+        MarkerType markerType = MarkerType.fromLabel(gd.getNextChoice());
         int markerSize = (int) gd.getNextNumber();
         int displayLabelIndex = gd.getNextChoiceIndex();
 
@@ -84,16 +84,7 @@ public class ScatterPlot implements TableFrameAction
         double[] xData = table.getColumnValues(xColIndex);
         double[] yData = table.getColumnValues(yColIndex);
         XYSeries series = chart.addSeries(tableName, xData, yData);
-        switch (markerTypeIndex)
-        {
-            case 0: series.setMarker(SeriesMarkers.CIRCLE); break;
-            case 1: series.setMarker(SeriesMarkers.CROSS); break;
-            case 2: series.setMarker(SeriesMarkers.DIAMOND); break;
-            case 3: series.setMarker(SeriesMarkers.PLUS); break;
-            case 4: series.setMarker(SeriesMarkers.SQUARE); break;
-            case 5: series.setMarker(SeriesMarkers.TRIANGLE_UP); break;
-            case 6: series.setMarker(SeriesMarkers.TRIANGLE_DOWN); break;
-        }
+        markerType.setupSeries(series);
         
         // Optional display of labels
         if (displayLabelIndex > 0)
