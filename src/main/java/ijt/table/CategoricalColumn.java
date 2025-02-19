@@ -77,4 +77,10 @@ public interface CategoricalColumn extends Column, Iterable<String>
 
 
     public int levelCount();
+    
+    @Override
+    public default String getString(int rowIndex)
+    {
+    	return levelNames()[getLevelIndex(rowIndex)];
+    }
 }

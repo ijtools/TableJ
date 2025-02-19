@@ -37,17 +37,6 @@ public class DoubleColumn implements NumericColumn, Iterable<Double>
     }
 
     
-    // =============================================================
-    // Implementation of Column methods
-    
-    //    public void copyValues(double[] values, int index);
-
-    @Override
-    public int size()
-    {
-        return data.length;
-    }
-
     @Override
     public Column newInstance(int nRows)
     {
@@ -97,8 +86,23 @@ public class DoubleColumn implements NumericColumn, Iterable<Double>
         return this.data;
     }
 
-    
+
     // =============================================================
+	// Implementation of Column methods
+	
+    @Override
+    public String getString(int rowIndex)
+    {
+    	return Double.toString(data[rowIndex]);
+    }
+	
+	@Override
+	public int size()
+	{
+	    return data.length;
+	}
+
+	// =============================================================
     // Implementation of Iterable interface
 
     @Override

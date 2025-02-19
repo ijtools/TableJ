@@ -167,6 +167,11 @@ public class IndexedStringColumn implements CategoricalColumn, Iterable<String>
         return res;
     }
 
+    @Override
+    public String getString(int rowIndex)
+    {
+    	return levelLabels.get(levelIndices[rowIndex]);
+    }
 
     // =============================================================
     // Implementation of Iterable methods
