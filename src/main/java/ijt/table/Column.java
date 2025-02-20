@@ -48,6 +48,21 @@ public interface Column
     public String getString(int row);
     
     /**
+     * Returns the name of this column.
+     * 
+     * @return the name of this column.
+     */
+    public String getName();
+
+    /**
+     * Changes the name of this column (optional operation).
+     * 
+     * @param newName
+     *            The new name of the column.
+     */
+    public void setName(String newName);
+    
+    /**
 	 * @return the number of elements within this column
 	 */
 	public int size();

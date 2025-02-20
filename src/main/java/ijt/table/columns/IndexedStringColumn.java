@@ -16,27 +16,36 @@ import ijt.table.Column;
  * @author dlegland
  *
  */
-public class IndexedStringColumn implements CategoricalColumn, Iterable<String>
+public class IndexedStringColumn extends AbstractColumn implements CategoricalColumn, Iterable<String>
 {
     // =============================================================
     // Class variables
     
+    /**
+     * The array of level indices for each row. Values range from 0 to the the
+     * number of levels minus one.
+     */
     int[] levelIndices;
     
+    /**
+     * The different levels, or categories, within this column.
+     */
     ArrayList<String> levelLabels;
     
     
     // =============================================================
     // Constructors
     
-    public IndexedStringColumn(int size)
+    public IndexedStringColumn(String name, int size)
     {
+        super(name);
         this.levelIndices = new int[size];
         this.levelLabels = new ArrayList<String>();
     }
 
-    public IndexedStringColumn(String[] levels)
+    public IndexedStringColumn(String name, String[] levels)
     {
+        super(name);
         int size = levels.length;
         
         this.levelIndices = new int[size];
@@ -57,6 +66,16 @@ public class IndexedStringColumn implements CategoricalColumn, Iterable<String>
         }
         
         this.levelLabels = uniqueLevels;
+    }
+    
+    public IndexedStringColumn(int size)
+    {
+        this("", size);
+    }
+
+    public IndexedStringColumn(String[] levels)
+    {
+        this("", levels);
     }
     
     

@@ -14,29 +14,47 @@ import ijt.table.NumericColumn;
  * @author dlegland
  *
  */
-public class DoubleColumn implements NumericColumn, Iterable<Double>
+public class DoubleColumn extends AbstractColumn implements NumericColumn, Iterable<Double>
 {
     // =============================================================
     // Class variables
     
+    /**
+     * The numerical data contained within this column.
+     */
     double[] data;
     
     
     // =============================================================
     // Constructors
 
+    public DoubleColumn(String name, int size)
+    {
+        super(name);
+        this.data = new double[size];
+    }
+    
+    public DoubleColumn(String name, double[] data)
+    {
+        super(name);
+        this.data = new double[data.length];
+        System.arraycopy(data, 0, this.data, 0, data.length);
+    }
+    
     public DoubleColumn(int size)
     {
-        this.data = new double[size];
+        this("", size);
     }
     
     public DoubleColumn(double[] data)
     {
-        this.data = new double[data.length];
-        System.arraycopy(data, 0, this.data, 0, data.length);
+        this("", data);
     }
 
     
+    // =============================================================
+    // Methods
+
     @Override
     public Column newInstance(int nRows)
     {
@@ -131,4 +149,5 @@ public class DoubleColumn implements NumericColumn, Iterable<Double>
             return data[index++];
         }
     }
+
 }
