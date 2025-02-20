@@ -120,14 +120,10 @@ public class IndexedStringColumn extends AbstractColumn implements CategoricalCo
     }
 
     @Override
-    public Column newInstance(int nRows)
+    public Column newInstance(String name, int nRows)
     {
-        IndexedStringColumn col = new IndexedStringColumn(nRows);
-        col.levelLabels.ensureCapacity(levelLabels.size());
-        for (String label : this.levelLabels)
-        {
-            col.levelLabels.add(label);
-        }
+        IndexedStringColumn col = new IndexedStringColumn(name, nRows);
+        col.levelLabels.addAll(this.levelLabels);
         return col;
     }
 

@@ -3,11 +3,9 @@
  */
 package ijt.table;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 
 import ijt.table.columns.DoubleColumn;
 
@@ -36,11 +34,6 @@ public class DefaultTable implements Table
      * The name of the table (can be null).
      */
     String name = null;
-
-    /** 
-     * The names of the columns.
-     */
-    ArrayList<String> colNames;
 
     /** 
      * The names of the rows.
@@ -110,20 +103,24 @@ public class DefaultTable implements Table
 
         // init empty numerical columns
         this.columns = new ArrayList<Column>(nCols);
+        String[] colNames = initColNames();
         for (int c = 0; c < nCols; c++)
         {
-            this.columns.add(new DoubleColumn(data[c]));
+            this.columns.add(new DoubleColumn(colNames[c], data[c]));
         }
     }
     
     /**
      * Initialize column names with index 1-based.
      */
-    private void initColNames()
+    private String[] initColNames()
     {
-        this.colNames = new ArrayList<String>(nCols);
+        String[] colNames = new String[nCols];
         for (int c = 0; c < this.nCols; c++)
-            this.colNames.add("C" + Integer.toString(c + 1));
+        {
+            colNames[c] = "C" + Integer.toString(c + 1);
+        }
+        return colNames;
     }
 
     /**
@@ -145,7 +142,8 @@ public class DefaultTable implements Table
         Table res = new DefaultTable(nRows, nCols);
         for (int iCol = 0; iCol < this.columnCount(); iCol++)
         {
-            res.setColumn(iCol, this.getColumn(iCol).newInstance(nRows));
+            Column col = this.getColumn(iCol);
+            res.setColumn(iCol, col.newInstance(col.getName(), nRows));
         }
         res.setColumnNames(this.getColumnNames());
         
@@ -193,13 +191,13 @@ public class DefaultTable implements Table
     @Override
     public String[] getColumnNames()
     {
-        return this.colNames.stream().toArray(String[]::new);
+        return columns.stream().map(c -> c.getName()).toArray(String[]::new);
     }
     
     @Override
     public String getColumnName(int iCol)
     {
-        return this.colNames.get(iCol);
+        return this.columns.get(iCol).getName();
     }
     
     @Override
@@ -207,16 +205,17 @@ public class DefaultTable implements Table
     {
         if (names == null)
         {
-            this.colNames.clear();
+            columns.stream().forEach(col -> col.setName(""));
             return;
         }
         
         if (names.length != this.nCols)
             throw new IllegalArgumentException("String array must have same length as the number of columns.");
 
-        this.colNames.clear();
-        for (String name : names)
-            this.colNames.add(name);
+        for (int i = 0; i < columns.size(); i++)
+        {
+            columns.get(i).setName(names[i]);
+        }
     }
 
     @Override
@@ -225,24 +224,18 @@ public class DefaultTable implements Table
         if (colIndex >= this.nCols)
             throw new IllegalArgumentException(
                     "Index column greater than column number: " + colIndex + ">" + this.nCols);
-        this.colNames.set(colIndex, name);
+        this.columns.get(colIndex).setName(name);
     }
 
     @Override
     public int findColumnIndex(String colName)
     {
-        if (this.colNames.isEmpty())
+        for (int i = 0; i < columns.size(); i++)
         {
-            throw new IllegalArgumentException("Can not retrieve column index when names are not initialized");
+            if (colName.equals(columns.get(i).getName())) return i;
         }
-        int index = this.colNames.indexOf(colName);
-        if (index < 0)
-        {
-            throw new IllegalArgumentException("Could not find index of column with name: " + colName);
-        }
-        return index;
+        throw new IllegalArgumentException("Could not find index of column with name: " + colName);
     }
-    
 
     /**
      * @return true if all columns have a valid name.
@@ -250,8 +243,9 @@ public class DefaultTable implements Table
     @Override
     public boolean hasColumnNames()
     {
-        for (String name : this.colNames)
+        for (Column col : columns)
         {
+            String name = col.getName();
             if (name == null || name.isEmpty())
                 return false;
         }
@@ -260,11 +254,11 @@ public class DefaultTable implements Table
     }
     
     @Override
-    public int addColumn(String colName, Column column)
+    public int addColumn(String colName, Column column) // TODO: update
     {
         this.columns.add(column);
         this.nCols = this.columns.size();
-        this.colNames.add(colName);
+//        this.colNames.add(colName);
         return this.nCols - 1;
     }
 
@@ -451,20 +445,7 @@ public class DefaultTable implements Table
     @Override
     public Collection<Column> columns()
     {
-        return new AbstractCollection<Column>()
-        {
-            @Override
-            public int size()
-            {
-                return nCols;
-            }
-            
-            @Override
-            public Iterator<Column> iterator()
-            {
-                return Collections.unmodifiableList(columns).iterator();
-            }
-        };
+        return Collections.unmodifiableList(columns);
     }
     
     /**

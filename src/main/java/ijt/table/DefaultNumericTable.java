@@ -38,11 +38,6 @@ public class DefaultNumericTable implements NumericTable
     String name = null;
 
     /** 
-     * The names of the columns.
-     */
-    ArrayList<String> colNames;
-
-    /** 
      * The names of the rows.
      */
     ArrayList<String> rowNames;
@@ -110,20 +105,33 @@ public class DefaultNumericTable implements NumericTable
 
         // init empty numerical columns
         this.columns = new ArrayList<NumericColumn>(nCols);
+        String[] colNames = initColNames();
         for (int c = 0; c < nCols; c++)
         {
-            this.columns.add(new DoubleColumn(data[c]));
+            this.columns.add(new DoubleColumn(colNames[c], data[c]));
         }
     }
     
+//    /**
+//     * Initialize column names with index 1-based.
+//     */
+//    private void initColNames()
+//    {
+//        this.colNames = new ArrayList<String>(nCols);
+//        for (int c = 0; c < this.nCols; c++)
+//            this.colNames.add("C" + Integer.toString(c + 1));
+//    }
     /**
      * Initialize column names with index 1-based.
      */
-    private void initColNames()
+    private String[] initColNames()
     {
-        this.colNames = new ArrayList<String>(nCols);
+        String[] colNames = new String[nCols];
         for (int c = 0; c < this.nCols; c++)
-            this.colNames.add("C" + Integer.toString(c + 1));
+        {
+            colNames[c] = "C" + Integer.toString(c + 1);
+        }
+        return colNames;
     }
 
     /**
@@ -145,7 +153,8 @@ public class DefaultNumericTable implements NumericTable
         Table res = new DefaultNumericTable(nRows, nCols);
         for (int iCol = 0; iCol < this.columnCount(); iCol++)
         {
-            res.setColumn(iCol, this.getColumn(iCol).newInstance(nRows));
+            Column col = this.getColumn(iCol);
+            res.setColumn(iCol, col.newInstance(col.getName(), nRows));
         }
         res.setColumnNames(this.getColumnNames());
         
@@ -197,29 +206,31 @@ public class DefaultNumericTable implements NumericTable
     @Override
     public String[] getColumnNames()
     {
-        String[] names = new String[this.nCols];
-        for (int c = 0; c < this.nCols; c++)
-        {
-            names[c] = this.colNames.get(c);
-        }
-        return names;
+        return columns.stream().map(c -> c.getName()).toArray(String[]::new);
     }
     
     @Override
     public String getColumnName(int iCol)
     {
-        return this.colNames.get(iCol);
+        return this.columns.get(iCol).getName();
     }
     
     @Override
     public void setColumnNames(String[] names)
     {
+        if (names == null)
+        {
+            columns.stream().forEach(col -> col.setName(""));
+            return;
+        }
+        
         if (names.length != this.nCols)
             throw new IllegalArgumentException("String array must have same length as the number of columns.");
 
-        this.colNames.clear();
-        for (String name : names)
-            this.colNames.add(name);
+        for (int i = 0; i < columns.size(); i++)
+        {
+            columns.get(i).setName(names[i]);
+        }
     }
 
     @Override
@@ -228,13 +239,17 @@ public class DefaultNumericTable implements NumericTable
         if (colIndex >= this.nCols)
             throw new IllegalArgumentException(
                     "Index column greater than column number: " + colIndex + ">" + this.nCols);
-        this.colNames.set(colIndex, name);
+        this.columns.get(colIndex).setName(name);
     }
 
     @Override
     public int findColumnIndex(String colName)
     {
-        return this.colNames.indexOf(colName);
+        for (int i = 0; i < columns.size(); i++)
+        {
+            if (colName.equals(columns.get(i).getName())) return i;
+        }
+        throw new IllegalArgumentException("Could not find index of column with name: " + colName);
     }
     
 
@@ -244,8 +259,9 @@ public class DefaultNumericTable implements NumericTable
     @Override
     public boolean hasColumnNames()
     {
-        for (String name : this.colNames)
+        for (Column col : columns)
         {
+            String name = col.getName();
             if (name == null || name.isEmpty())
                 return false;
         }
@@ -254,7 +270,7 @@ public class DefaultNumericTable implements NumericTable
     }
     
     @Override
-    public int addColumn(String colName, Column column)
+    public int addColumn(String colName, Column column) // TODO: Update
     {
         if (!(column instanceof NumericColumn))
         {
@@ -262,7 +278,7 @@ public class DefaultNumericTable implements NumericTable
         }
         this.columns.add((NumericColumn) column);
         this.nCols = this.columns.size();
-        this.colNames.add(colName);
+//        this.colNames.add(colName);
         return this.nCols - 1;
     }
 

@@ -68,10 +68,14 @@ public interface Column
 	public int size();
 
 	/**
-     * Creates a new instance of column with the same type, with the specified number of rows.
-     *  
-     * @param nRows the number of rows of the new column
-     * @return a new Column instance with the same data type as this column.  
+     * Creates a new instance of column with the same type, with the specified
+     * number of rows.
+     * 
+     * @param name
+     *            the name of the new column
+     * @param nRows
+     *            the number of rows of the new column
+     * @return a new Column instance with the same data type as this column.
      */
-    public Column newInstance(int nRows);
+    public Column newInstance(String name, int nRows);
 }
