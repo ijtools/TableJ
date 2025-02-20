@@ -26,6 +26,7 @@ import ijt.table.gui.action.edit.DisplayInfo;
 import ijt.table.gui.action.edit.MergeColumnsAction;
 import ijt.table.gui.action.edit.Rename;
 import ijt.table.gui.action.edit.SelectColumns;
+import ijt.table.gui.action.edit.SelectRows;
 import ijt.table.gui.action.edit.Summary;
 import ijt.table.gui.action.file.Close;
 import ijt.table.gui.action.file.OpenDemoTable;
@@ -247,6 +248,7 @@ public class TableFrame extends BaseFrame
         editMenu.addSeparator();
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
         addMenuItem(editMenu, "Merge Columns...", new MergeColumnsAction());
+        addMenuItem(editMenu, "Select Rows...", new SelectRows());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Summary", new Summary());
         bar.add(editMenu);
