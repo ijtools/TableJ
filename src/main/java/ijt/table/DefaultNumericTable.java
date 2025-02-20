@@ -3,7 +3,10 @@
  */
 package ijt.table;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import ijt.table.columns.DoubleColumn;
@@ -438,14 +441,20 @@ public class DefaultNumericTable implements NumericTable
     }
     
     @Override
-    public Iterable<NumericColumn> columns()
+    public Collection<NumericColumn> columns()
     {
-        return new Iterable<NumericColumn>()
+        return new AbstractCollection<NumericColumn>()
         {
+            @Override
+            public int size()
+            {
+                return nCols;
+            }
+            
             @Override
             public Iterator<NumericColumn> iterator()
             {
-                return new ColumnIterator();
+                return Collections.unmodifiableList(columns).iterator();
             }
         };
     }

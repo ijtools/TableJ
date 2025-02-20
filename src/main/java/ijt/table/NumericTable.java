@@ -3,6 +3,8 @@
  */
 package ijt.table;
 
+import java.util.Collection;
+
 /**
  * A specialization of the Table interface that contains only numeric columns.
  * 
@@ -16,5 +18,5 @@ public interface NumericTable extends Table
 
     public NumericColumn getColumn(int index);
     
-    public Iterable<? extends NumericColumn> columns();
+    public Collection<? extends NumericColumn> columns();
 }

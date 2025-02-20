@@ -3,7 +3,10 @@
  */
 package ijt.table;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import ijt.table.columns.DoubleColumn;
@@ -432,10 +435,10 @@ public class DefaultTable implements Table
     /**
      * Changes the value at the specified position
      * 
-     * @param col
-     *            the column index, 0-indexed
      * @param row
      *            the row index, 0-indexed
+     * @param col
+     *            the column index, 0-indexed
      * @param value
      *            the new value
      */
@@ -446,14 +449,20 @@ public class DefaultTable implements Table
     }
     
     @Override
-    public Iterable<Column> columns()
+    public Collection<Column> columns()
     {
-        return new Iterable<Column>()
+        return new AbstractCollection<Column>()
         {
+            @Override
+            public int size()
+            {
+                return nCols;
+            }
+            
             @Override
             public Iterator<Column> iterator()
             {
-                return new ColumnIterator();
+                return Collections.unmodifiableList(columns).iterator();
             }
         };
     }
@@ -473,30 +482,5 @@ public class DefaultTable implements Table
     {
         int col = this.findColumnIndex(colName);
         this.columns.get(col).setValue(row, value);
-    }
-
-    
-    // =============================================================
-    // Implementation of column iterator
-
-    class ColumnIterator implements Iterator<Column>
-    {
-        int index = 0;
-        
-        public ColumnIterator()
-        {
-        }
-
-        @Override
-        public boolean hasNext()
-        {
-            return index < nCols;
-        }
-
-        @Override
-        public Column next()
-        {
-            return columns.get(index++);
-        }
     }
 }

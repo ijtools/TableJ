@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -521,9 +522,9 @@ public interface Table
     }
     
     /**
-     * @return an Iterable to the columns contained within this table.
+     * @return a Collection of the columns contained within this table.
      */
-    public Iterable<? extends Column> columns();
+    public Collection<? extends Column> columns();
     
     // =============================================================
     // Demonstration program
