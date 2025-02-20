@@ -16,14 +16,14 @@ public interface CategoricalColumn extends Column, Iterable<String>
     // =============================================================
     // static factories
     
-    public static CategoricalColumn create(int size)
+    public static CategoricalColumn create(String name, int size)
     {
-        return new IndexedStringColumn(size);
+        return new IndexedStringColumn(name, size);
     }
 
-    public static CategoricalColumn create(String[] levels)
+    public static CategoricalColumn create(String name, String[] levels)
     {
-    	return new IndexedStringColumn(levels);
+    	return new IndexedStringColumn(name, levels);
     }
     
     /**
@@ -47,7 +47,7 @@ public interface CategoricalColumn extends Column, Iterable<String>
             levels.add("" + column.getValue(iRow));
         }
         
-        return new IndexedStringColumn(levels.toArray(new String[] {}));
+        return new IndexedStringColumn(column.getName(), levels.toArray(new String[] {}));
     }
 
     

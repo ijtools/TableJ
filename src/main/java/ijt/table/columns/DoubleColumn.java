@@ -5,7 +5,6 @@ package ijt.table.columns;
 
 import java.util.Iterator;
 
-import ijt.table.Column;
 import ijt.table.NumericColumn;
 
 /**
@@ -40,23 +39,13 @@ public class DoubleColumn extends AbstractColumn implements NumericColumn, Itera
         this.data = new double[data.length];
         System.arraycopy(data, 0, this.data, 0, data.length);
     }
-    
-    public DoubleColumn(int size)
-    {
-        this("", size);
-    }
-    
-    public DoubleColumn(double[] data)
-    {
-        this("", data);
-    }
 
     
     // =============================================================
     // Methods
 
     @Override
-    public Column newInstance(String name, int nRows)
+    public DoubleColumn newInstance(String name, int nRows)
     {
         return new DoubleColumn(name, nRows);
     }

@@ -63,12 +63,12 @@ public class DefaultTable implements Table
         this.nRows = nRows;
 
         this.columns = new ArrayList<Column>(nCols);
+        String[] colNames = defaultColNames(nCols);
         for (int c = 0; c < nCols; c++)
         {
-            this.columns.add(new DoubleColumn(nRows));
+            this.columns.add(new DoubleColumn(colNames[c], nRows));
         }
         
-        initColNames();
         initRowNames();
     }
 
@@ -77,7 +77,6 @@ public class DefaultTable implements Table
         initData(data);
         this.nCols = data.length;
 
-        initColNames();
         initRowNames();
     }
 
@@ -103,7 +102,7 @@ public class DefaultTable implements Table
 
         // init empty numerical columns
         this.columns = new ArrayList<Column>(nCols);
-        String[] colNames = initColNames();
+        String[] colNames = defaultColNames(nCols);
         for (int c = 0; c < nCols; c++)
         {
             this.columns.add(new DoubleColumn(colNames[c], data[c]));
@@ -113,10 +112,10 @@ public class DefaultTable implements Table
     /**
      * Initialize column names with index 1-based.
      */
-    private String[] initColNames()
+    private static final String[] defaultColNames(int nCols)
     {
         String[] colNames = new String[nCols];
-        for (int c = 0; c < this.nCols; c++)
+        for (int c = 0; c < nCols; c++)
         {
             colNames[c] = "C" + Integer.toString(c + 1);
         }

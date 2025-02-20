@@ -192,11 +192,11 @@ public class DelimitedTableReader implements TableReader
         {
             // tokens of current column
             ArrayList<String> colData = columnTokens.get(c);
-            table.setColumn(c, createColumn(colData));
+            table.setColumn(c, createColumn(colNames[c], colData));
         }
 
         // populates meta-data
-        table.setColumnNames(colNames);
+//        table.setColumnNames(colNames);
         if (readRowNames)
         {
             table.setRowNames(rowNames.toArray(new String[0]));
@@ -259,7 +259,7 @@ public class DelimitedTableReader implements TableReader
         return line.split("[" + delimiters + "]+");
     }
     
-    private static final Column createColumn(ArrayList<String> colData)
+    private static final Column createColumn(String colName, ArrayList<String> colData)
     {
         // check if column contains only numeric values
         double[] values = new double[colData.size()];
@@ -279,8 +279,8 @@ public class DelimitedTableReader implements TableReader
         }
         
         return isNumeric 
-                ? NumericColumn.create(values) 
-                : CategoricalColumn.create(colData.toArray(new String[0]));
+                ? NumericColumn.create(colName, values) 
+                : CategoricalColumn.create(colName, colData.toArray(new String[0]));
     }
     
     

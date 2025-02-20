@@ -30,7 +30,7 @@ public class Structure
         Table res = Table.create(nCols, 0);
         res.setName(table.getName() + "-Structure");
         
-        res.addColumn("Name", CategoricalColumn.create(table.getColumnNames()));
+        res.addColumn("Name", CategoricalColumn.create("Name", table.getColumnNames()));
         
         String[] colTypes = new String[nCols];
         String[] colDesc = new String[nCols];
@@ -48,8 +48,8 @@ public class Structure
                 colDesc[i] = summaryCategorical((CategoricalColumn) column);
             }
         }
-        res.addColumn("Type", CategoricalColumn.create(colTypes));
-        res.addColumn("Desc.", CategoricalColumn.create(colDesc));
+        res.addColumn("Type", CategoricalColumn.create("Type", colTypes));
+        res.addColumn("Desc.", CategoricalColumn.create("Desc.", colDesc));
         
         return res;
     }

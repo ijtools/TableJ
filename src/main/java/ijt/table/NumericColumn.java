@@ -14,14 +14,14 @@ public interface NumericColumn extends Column, Iterable<Double>
     // =============================================================
     // static factories
 
-    public static NumericColumn create(int size)
+    public static NumericColumn create(String name, int size)
     {
-        return new DoubleColumn(size);
+        return new DoubleColumn(name, size);
     }
     
-    public static NumericColumn create(double[] data)
+    public static NumericColumn create(String name, double[] data)
     {
-        return new DoubleColumn(data);
+        return new DoubleColumn(name, data);
     }
 
     
@@ -37,4 +37,7 @@ public interface NumericColumn extends Column, Iterable<Double>
      * @return the value at specified row index
      */
     public double getValue(int row);
+    
+    
+    public NumericColumn newInstance(String name, int nRows);
 }

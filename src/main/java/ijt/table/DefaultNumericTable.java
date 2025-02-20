@@ -65,12 +65,12 @@ public class DefaultNumericTable implements NumericTable
         this.nRows = nRows;
 
         this.columns = new ArrayList<NumericColumn>(nCols);
+        String[] colNames = defaultColNames(nCols);
         for (int c = 0; c < nCols; c++)
         {
-            this.columns.add(new DoubleColumn(nRows));
+            this.columns.add(new DoubleColumn(colNames[c], nRows));
         }
         
-        initColNames();
         initRowNames();
     }
 
@@ -79,7 +79,6 @@ public class DefaultNumericTable implements NumericTable
         initData(data);
         this.nCols = data.length;
 
-        initColNames();
         initRowNames();
     }
 
@@ -105,29 +104,20 @@ public class DefaultNumericTable implements NumericTable
 
         // init empty numerical columns
         this.columns = new ArrayList<NumericColumn>(nCols);
-        String[] colNames = initColNames();
+        String[] colNames = defaultColNames(nCols);
         for (int c = 0; c < nCols; c++)
         {
             this.columns.add(new DoubleColumn(colNames[c], data[c]));
         }
     }
     
-//    /**
-//     * Initialize column names with index 1-based.
-//     */
-//    private void initColNames()
-//    {
-//        this.colNames = new ArrayList<String>(nCols);
-//        for (int c = 0; c < this.nCols; c++)
-//            this.colNames.add("C" + Integer.toString(c + 1));
-//    }
     /**
      * Initialize column names with index 1-based.
      */
-    private String[] initColNames()
+    private static final String[] defaultColNames(int nCols)
     {
         String[] colNames = new String[nCols];
-        for (int c = 0; c < this.nCols; c++)
+        for (int c = 0; c < nCols; c++)
         {
             colNames[c] = "C" + Integer.toString(c + 1);
         }
@@ -278,7 +268,6 @@ public class DefaultNumericTable implements NumericTable
         }
         this.columns.add((NumericColumn) column);
         this.nCols = this.columns.size();
-//        this.colNames.add(colName);
         return this.nCols - 1;
     }
 

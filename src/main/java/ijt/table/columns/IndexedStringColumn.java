@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import ijt.table.CategoricalColumn;
-import ijt.table.Column;
 
 /**
  * A column of strings that stores the list of strings, and the string index for
@@ -68,16 +67,6 @@ public class IndexedStringColumn extends AbstractColumn implements CategoricalCo
         this.levelLabels = uniqueLevels;
     }
     
-    public IndexedStringColumn(int size)
-    {
-        this("", size);
-    }
-
-    public IndexedStringColumn(String[] levels)
-    {
-        this("", levels);
-    }
-    
     
     // =============================================================
     // Management of levels
@@ -120,7 +109,7 @@ public class IndexedStringColumn extends AbstractColumn implements CategoricalCo
     }
 
     @Override
-    public Column newInstance(String name, int nRows)
+    public IndexedStringColumn newInstance(String name, int nRows)
     {
         IndexedStringColumn col = new IndexedStringColumn(name, nRows);
         col.levelLabels.addAll(this.levelLabels);
