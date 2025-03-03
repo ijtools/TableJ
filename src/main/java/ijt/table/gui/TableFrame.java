@@ -38,6 +38,7 @@ import ijt.table.gui.action.plot.LinePlot;
 import ijt.table.gui.action.plot.MultiLinePlot;
 import ijt.table.gui.action.plot.PlotTableColumnHistogram;
 import ijt.table.gui.action.plot.ScatterPlot;
+import ijt.table.gui.action.process.ApplyFunctionToColumn;
 import ijt.table.gui.action.process.CorrelationMatrix;
 import ijt.table.gui.action.process.CrossTableAction;
 import ijt.table.gui.action.process.KMeansAction;
@@ -266,6 +267,8 @@ public class TableFrame extends BaseFrame
         bar.add(plotMenu);
 
         JMenu processMenu = new JMenu("Process");
+        addMenuItem(processMenu, "Data Transformation...", new ApplyFunctionToColumn());
+        processMenu.addSeparator();
         addMenuItem(processMenu, "Correlation Matrix", new CorrelationMatrix());
         addMenuItem(processMenu, "Principal Component Analysis", new PrincipalComponentAnalysisAction());
         processMenu.addSeparator();
