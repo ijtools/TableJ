@@ -21,7 +21,7 @@ import ijt.table.gui.TableFrameAction;
  * condition on the values contained in one of the columns. Returns a new table,
  * with the same number of columns.
  */
-public class SelectRows implements TableFrameAction
+public class FilterRows implements TableFrameAction
 {
     @Override
     public void run(TableFrame frame)
@@ -37,7 +37,7 @@ public class SelectRows implements TableFrameAction
         String[] colNames = table.getColumnNames();
 
         // Display dialog for choosing options
-        GenericDialog dlg = new GenericDialog("Select Table Rows");
+        GenericDialog dlg = new GenericDialog("Filter Table Rows");
         dlg.addChoice("Column", colNames, colNames[0]);
         dlg.addChoice("Operation", RelationalOperator.getAllLabels(), RelationalOperator.GT.toString());
         dlg.addNumericField("Value", 0.0, 2);
@@ -89,7 +89,7 @@ public class SelectRows implements TableFrameAction
         {
             tableName = "data";
         }
-        res.setName(tableName + "-rowSel");
+        res.setName(tableName + "-rowFilt");
         
         // compute new row names
         if (table.hasRowNames())
