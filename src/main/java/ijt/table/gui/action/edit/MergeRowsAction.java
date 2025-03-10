@@ -13,12 +13,12 @@ import ijt.table.gui.TableManager;
 
 
 /**
- * Merge two tables with same number of rows, by concatenating them
- * "horizontally".
+ * Merge two tables with same number of columns, by concatenating them
+ * "vertically".
  * 
  * @author dlegland
  */
-public class MergeColumnsAction implements TableFrameAction
+public class MergeRowsAction implements TableFrameAction
 {
 
     /* (non-Javadoc)
@@ -36,7 +36,7 @@ public class MergeColumnsAction implements TableFrameAction
         }
         
         // Display dialog for choosing options
-        GenericDialog dlg = new GenericDialog("Merge Table Columns", frame.getJFrame());
+        GenericDialog dlg = new GenericDialog("Merge Table Rows", frame.getJFrame());
         dlg.addChoice("First Table", tableNames, tableNames[0]);
         dlg.addChoice("Second Table", tableNames, tableNames[0]);
         dlg.showDialog();
@@ -50,13 +50,14 @@ public class MergeColumnsAction implements TableFrameAction
         // concatenate the tables
         Table table1 = manager.getTable(dlg.getNextChoice());
         Table table2 = manager.getTable(dlg.getNextChoice());
-        if (table1.rowCount() != table2.rowCount())
+        
+        if (table1.columnCount() != table2.columnCount())
         {
-            IJ.error("Table Size Error", "Data tables have different number of rows");
+            IJ.error("Table Size Error", "Data tables have different number of columns");
             return;
         }
         
-        Table res = Tables.mergeColumns(table1,  table2);
+        Table res = Tables.mergeRows(table1,  table2);
         
         // add the new frame to the GUI
         TableFrame.create(res, frame);
