@@ -22,28 +22,46 @@ import ijt.table.process.Structure;
 import ijt.table.process.SummaryStatistics;
 
 /**
- * A simple plain table for storing measurement results. 
- * Methods access data by row indexing first.
+ * General interface for manipulation of data tables.
  * 
- * @author David Legland
- *
+ * Data are organized by columns, and each column can be identified by its name.
+ * Columns have different types: numeric or categorical. Other types may be
+ * added in the future.
+ * 
+ * Table should ideally be able to manage any type of column, but specific
+ * implementations may be limited to specific column types. For example, several
+ * operators (PCA, KMeans...) requires table to contain only numeric columns.
+ * 
+ * Table interface also provides methods to access specific values, using
+ * <code>(row, column)</code> indexing.
+ * 
+ * @author dlegland
  */
 public interface Table
 {
     // =============================================================
     // Static factories
     
+    /**
+     * Creates a new instance of Table with the specified dimensions.
+     * 
+     * @param nRows
+     *            the number of rows of the new table
+     * @param nCols
+     *            the number of columns of the new table
+     * @return a new Table instance
+     */
     public static Table create(int nRows, int nCols)
     {
         return new DefaultTable(nRows, nCols);
     }
     
     /**
-     * Creates a new data table from a series of columns.
+     * Creates a new instance of Table, based on the specified columns.
      * 
      * @param columns
-     *            the columns
-     * @return a new Table instance            
+     *            the columns composing the new table
+     * @return a new Table instance
      */
     public static Table create(Column... columns)
     {
@@ -103,16 +121,31 @@ public interface Table
         table.setRowNames(rowNames);
         return table;
     }
+    
 
     // =============================================================
     // Global methods
     
+    /**
+     * Returns a new Table containing for each column a short description of
+     * column values.
+     * 
+     * @see ijt.table.process.Structure
+     * 
+     * @return a new Table with as many rows as the number of columns in this
+     *         table.
+     */
     public default Table structure()
     {
         return new Structure().process(this);
     }
     
     /**
+     * Computes a new summary table, containing for each column a selection of
+     * summary statistics.
+     * 
+     * @see ijt.table.process.SummaryStatistics
+     * 
      * @return a table containing summary statistics for each numeric column.
      */
     public default Table summary()
