@@ -46,7 +46,6 @@ public class ListSelectionDialog
     {
         Frame frame = JOptionPane.getFrameForComponent(frameComp);
         ListSelectionDialog dialog = new ListSelectionDialog(frame, labelText, dlgTitle, values);
-        dialog.setVisible(true);
         return dialog.selectedIndices;  
     }
 
@@ -85,7 +84,7 @@ public class ListSelectionDialog
         // create control buttons
         okButton = new JButton("OK");
         okButton.addActionListener(evt -> {
-            selectedIndices = list.getSelectedIndices();
+            this.selectedIndices = list.getSelectedIndices();
             setVisible(false);
         });
         cancelButton = new JButton("Cancel");
@@ -105,7 +104,7 @@ public class ListSelectionDialog
         JPanel listPanel = new JPanel(new BorderLayout());
         listPanel.add(new JLabel("Choose Columns:"), BorderLayout.NORTH);
         listPanel.add(listScroller, BorderLayout.CENTER);
-        listPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        listPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.add(listPanel, BorderLayout.CENTER);
         
         // lay out the buttons from left to right.
