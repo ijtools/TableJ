@@ -3,8 +3,8 @@
  */
 package ijt.table.process;
 
-import ijt.table.Table;
 import ijt.table.NumericColumn;
+import ijt.table.Table;
 
 /**
  * Compute the covariance matrix of a numeric table, and returns the result in a

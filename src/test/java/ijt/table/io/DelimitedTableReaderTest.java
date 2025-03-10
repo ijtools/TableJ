@@ -12,8 +12,8 @@ import java.io.IOException;
 import org.junit.Test;
 
 import ijt.table.CategoricalColumn;
-import ijt.table.Table;
 import ijt.table.NumericColumn;
+import ijt.table.Table;
 
 /**
  * @author dlegland
