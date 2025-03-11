@@ -3,11 +3,13 @@
  */
 package ijt.table.gui.action.plot;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.knowm.xchart.HeatMapChart;
 import org.knowm.xchart.HeatMapChartBuilder;
+import org.knowm.xchart.style.HeatMapStyler;
 
 import ijt.table.Table;
 import ijt.table.gui.TableFrame;
@@ -71,50 +73,25 @@ public class HeatMapDisplay implements TableFrameAction
                 .title(tableName)
                 .build();
 
-        chart.getStyler().setPlotContentSize(1);
-        chart.getStyler().setShowValue(true);
+        Color[] rangeColors = {
+                new Color(  0,   0, 196), 
+                new Color(  0, 127, 255), 
+                new Color(127, 196, 255), 
+                new Color(255, 255, 255), 
+                new Color(255, 127, 127), 
+                new Color(255,   0,   0), 
+                new Color(196,   0,   0)
+                };
+        HeatMapStyler styler = chart.getStyler(); 
+        styler.setRangeColors(rangeColors);
+        styler.setMin(-1);
+        styler.setMax(+1);
+        styler.setPlotContentSize(1);
+        styler.setShowValue(true);
+        styler.setHeatMapValueDecimalPattern("#0.000;-#0.000");
         chart.addSeries("Basic HeatMap", xData, yData, heatData);
-//        HeatMapSeries heatMapSeries = chart.addSeries("heatMap", xData, yData, heatData);
         
         ChartFrame.create(chart, "HeatMap", parentFrame);
-
-
-//        // Create and set up the window.
-//        JFrame plotFrame = new JFrame();
-//        plotFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//
-//        // relocate with respect to parent frame
-//        Point pos0 = parentFrame.getJFrame().getLocation();
-//        plotFrame.setLocation(pos0.x + 30, pos0.y + 20);
-//        
-//        // Schedule a job for the event-dispatching thread:
-//        // creating and showing this application's GUI.
-//        try
-//        {
-//            javax.swing.SwingUtilities.invokeAndWait(new Runnable()
-//            {
-//                @Override
-//                public void run()
-//                {
-//                    // add a panel containing the chart 
-//                    @SuppressWarnings({ "rawtypes", "unchecked" })
-//                    XChartPanel chartPanel = new XChartPanel(chart);
-//                    plotFrame.add(chartPanel);
-//                    
-//                    // Display the window.
-//                    plotFrame.pack();
-//                    plotFrame.setVisible(true);
-//                }
-//            });
-//        }
-//        catch (InterruptedException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        catch (InvocationTargetException e)
-//        {
-//            e.printStackTrace();
-//        }
     }
     
     public boolean isAvailable(TableFrame frame)

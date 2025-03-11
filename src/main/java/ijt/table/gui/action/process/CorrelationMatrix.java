@@ -34,7 +34,6 @@ public class CorrelationMatrix implements TableFrameAction
                 throw new IllegalArgumentException("Requires table with numeric columns only");
             }
         }
-
         
         Table res = new ijt.table.process.CorrelationMatrix().process(table);
         TableFrame.create(res, frame);

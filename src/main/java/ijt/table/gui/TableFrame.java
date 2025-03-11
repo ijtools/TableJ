@@ -35,6 +35,7 @@ import ijt.table.gui.action.file.OpenTable;
 import ijt.table.gui.action.file.SaveAs;
 import ijt.table.gui.action.help.About;
 import ijt.table.gui.action.plot.GroupScatterPlot;
+import ijt.table.gui.action.plot.HeatMapDisplay;
 import ijt.table.gui.action.plot.LinePlot;
 import ijt.table.gui.action.plot.MultiLinePlot;
 import ijt.table.gui.action.plot.PlotTableColumnHistogram;
@@ -265,8 +266,8 @@ public class TableFrame extends BaseFrame
         addMenuItem(plotMenu, "Group Scatter Plot", new GroupScatterPlot());
         plotMenu.addSeparator();
         addMenuItem(plotMenu, "Column Histogram", new PlotTableColumnHistogram());
-//        plotMenu.addSeparator();
-//        addMenuItem(plotMenu, "Heat Map", new HeatMapDisplay());
+        plotMenu.addSeparator();
+        addMenuItem(plotMenu, "Heat Map", new HeatMapDisplay());
         bar.add(plotMenu);
 
         JMenu processMenu = new JMenu("Process");

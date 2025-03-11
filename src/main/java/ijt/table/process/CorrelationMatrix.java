@@ -15,7 +15,7 @@ import ijt.table.Table;
 public class CorrelationMatrix 
 {
     /**
-     * 
+     * Default empty constructor.
      */
     public CorrelationMatrix()
     {
@@ -49,6 +49,7 @@ public class CorrelationMatrix
         corrMat.setColumnNames(table.getColumnNames());
         corrMat.setRowNames(table.getColumnNames());
         
+        corrMat.setName(table.getName() + "-corr");
         return corrMat;
     }  
 }
