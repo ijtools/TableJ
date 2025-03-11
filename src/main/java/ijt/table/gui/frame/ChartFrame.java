@@ -3,6 +3,7 @@
  */
 package ijt.table.gui.frame;
 
+import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -12,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.internal.chartpart.Chart;
@@ -19,7 +21,6 @@ import org.knowm.xchart.internal.chartpart.Chart;
 import ijt.table.gui.BaseFrame;
 import ijt.table.gui.ChartFrameAction;
 import ijt.table.gui.chart.ExportChartAsImage;
-
 
 /**
  * A frame that displays a chart, together with few options in a menu.
@@ -68,6 +69,9 @@ public class ChartFrame extends BaseFrame
      */
     Chart<?,?> chart;
     
+    JPanel mainPanel;
+    @SuppressWarnings({ "rawtypes"})
+    XChartPanel chartPanel = null;
     
     // ===================================================================
     // Constructor
@@ -97,25 +101,29 @@ public class ChartFrame extends BaseFrame
             }           
         });
         
-        // Schedule a job for the event-dispatching thread:
-        // creating and showing this application's GUI.
+        
+        Runnable runnable = new Runnable()
+        {
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
+            public void run()
+            {
+                // add a panel containing the chart 
+                chartPanel = new XChartPanel(chart);
+                jFrame.add(chartPanel);
+                
+                // Display the window.
+                jFrame.pack();
+                jFrame.setVisible(true);
+            }
+        };
+        
         try
         {
-            javax.swing.SwingUtilities.invokeAndWait(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    // add a panel containing the chart 
-                    @SuppressWarnings({ "rawtypes", "unchecked" })
-                    XChartPanel chartPanel = new XChartPanel(chart);
-                    jFrame.add(chartPanel);
-                    
-                    // Display the window.
-                    jFrame.pack();
-                    jFrame.setVisible(true);
-                }
-            });
+            if (EventQueue.isDispatchThread())
+                runnable.run();
+            else
+                EventQueue.invokeAndWait(runnable);
         }
         catch (InterruptedException e)
         {
@@ -161,5 +169,22 @@ public class ChartFrame extends BaseFrame
     public Chart<?,?> getChart()
     {
         return this.chart;
+    }
+    
+    /**
+     * Replaces the chart in this frame by the specified Chart instance.
+     * 
+     * @param chart
+     *            the new Chart to display.
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public void setChart(Chart<?,?> chart)
+    {
+        this.chart = chart;
+        
+        // replace chart panel in current frame
+        jFrame.remove(this.chartPanel);
+        this.chartPanel = new XChartPanel(chart);
+        jFrame.add(chartPanel);
     }
 }
