@@ -45,6 +45,12 @@ public class DoubleColumn extends AbstractColumn implements NumericColumn, Itera
     // Methods
 
     @Override
+    public NumericColumn newInstance(String name, double[] values)
+    {
+        return new DoubleColumn(name, values);
+    }
+
+    @Override
     public DoubleColumn newInstance(String name, int nRows)
     {
         return new DoubleColumn(name, nRows);

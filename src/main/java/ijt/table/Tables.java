@@ -154,7 +154,7 @@ public class Tables
         double[] values = new double[n1 + n2];
         System.arraycopy(col1.getValues(), 0, values, 0, n1);
         System.arraycopy(col2.getValues(), 0, values, n1, n2);
-        return NumericColumn.create(col1.getName(), values); // TODO: implement NumericColumn.newInstance();
+        return col1.newInstance(col1.getName(), values);
     }
     
     private static final CategoricalColumn mergeCategoricalColumns(CategoricalColumn col1, CategoricalColumn col2)
@@ -170,7 +170,7 @@ public class Tables
         {
             values[n1 + i] = col2.getString(i);
         }
-        return CategoricalColumn.create(col1.getName(), values); // TODO: implement CategoricalColumn.newInstance();
+        return CategoricalColumn.create(col1.getName(), values);
     }
     
     public static final Table crossTable(CategoricalColumn col1, CategoricalColumn col2)
