@@ -58,6 +58,7 @@ public class SelectColumns implements TableFrameAction
         if (table.hasRowNames())
         {
             res.setRowNames(table.getRowNames());
+            res.setRowNameLabel(table.getRowNameLabel());
         }
         res.setName(baseName + "-colSel");
         

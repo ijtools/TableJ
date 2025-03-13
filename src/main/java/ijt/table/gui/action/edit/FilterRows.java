@@ -94,12 +94,11 @@ public class FilterRows implements TableFrameAction
         // compute new row names
         if (table.hasRowNames())
         {
-            String[] names = new String[rowIndices.size()];
-            for (int i = 0; i < rowIndices.size(); i++)
-            {
-                names[i] = table.getRowName(rowIndices.get(i));
-            }
-            res.setRowNames(names);
+            String[] newRowNames = rowIndices.stream()
+                    .map(idx -> table.getRowName(idx))
+                    .toArray(String[]::new);
+            res.setRowNames(newRowNames);
+            res.setRowNameLabel(table.getRowNameLabel());
         }
         
         // add the new frame to the GUI

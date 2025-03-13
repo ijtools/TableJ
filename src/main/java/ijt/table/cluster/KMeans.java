@@ -241,6 +241,13 @@ public class KMeans
             res.setValue(i, 0, classes[i]);
         }
 
+        // keep row axis meta-data
+        if (table.hasRowNames())
+        {
+            res.setRowNames(table.getRowNames());
+            res.setRowNameLabel(table.getRowNameLabel());
+        }
+        
         return res;
 	}
 	

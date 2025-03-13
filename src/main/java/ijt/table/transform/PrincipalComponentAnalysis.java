@@ -326,7 +326,11 @@ public class PrincipalComponentAnalysis
 
         // setup meta data
         if(loadings.hasColumnNames()) res.setColumnNames(this.loadings.getColumnNames());
-        if(table.hasRowNames()) res.setRowNames(table.getRowNames());
+        if (table.hasRowNames())
+        {
+            res.setRowNames(table.getRowNames());
+            res.setRowNameLabel(table.getRowNameLabel());
+        }
         res.setName(table.getName() + "-PCA");
 
         return res;

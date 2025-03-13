@@ -25,19 +25,11 @@ public class Tables
      */
     public static final Table mergeColumns(Table firstTable, Table... others)
     {
-        int nRows = firstTable.rowCount();
-        // initialize result
-        Table res = Table.create(nRows, 0);
-        if (firstTable.hasRowNames())
-        {
-            res.setRowNames(firstTable.getRowNames());
-        }
-                
-        // first table
-        for (int iCol = 0; iCol < firstTable.columnCount(); iCol++)
-        {
-            res.addColumn(firstTable.getColumnName(iCol), firstTable.getColumn(iCol));
-        }
+        // create growable collection of columns
+        ArrayList<Column> columns = new ArrayList<Column>();
+        
+        // process first table
+        columns.addAll(firstTable.columns());
         String name = "mergeColumns(" + firstTable.getName();
         
         // add columns of other tables
@@ -48,13 +40,20 @@ public class Tables
                 throw new RuntimeException("Table \"" + table.getName() + "\" has different number of rows.");
             }
             
-            for (int iCol = 0; iCol < table.columnCount(); iCol++)
-            {
-                res.addColumn(table.getColumnName(iCol), table.getColumn(iCol));
-            }
+            columns.addAll(table.columns());
             name += ", " + table.getName();
         }
         
+        // concatenate columns in a new table
+        Table res = Table.create(columns.toArray(new Column[0]));
+        
+        // propagate meta data from first table
+        if (firstTable.hasRowNames())
+        {
+            res.setRowNames(firstTable.getRowNames());
+            res.setRowNameLabel(firstTable.getRowNameLabel());
+        }
+                
         name += ")";
         res.setName(name);
         
