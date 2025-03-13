@@ -35,6 +35,10 @@ public class SelectColumns implements TableFrameAction
                 "Choose Columns:", 
                 "Select Columns", 
                 colNames);
+        if (columnIndices == null || columnIndices.length == 0)
+        {
+            return;
+        }
         
         // Default name for table
         String baseName = table.getName();
