@@ -126,18 +126,6 @@ public class PlotTableColumnHistogram implements TableFrameAction
         return chart.addSeries(name, xData, yData);
     }
     
-    private static final double[] valueRange(NumericColumn column)
-    {
-        double vmin = Double.POSITIVE_INFINITY;
-        double vmax = Double.NEGATIVE_INFINITY;
-        for (double v : column)
-        {
-            vmin = Math.min(vmin, v);
-            vmax = Math.max(vmax, v);
-        }
-        return new double[] { vmin, vmax };
-    }
-
     public boolean isAvailable(TableFrame frame)
     {
         return frame.getTable() != null;
@@ -205,14 +193,12 @@ public class PlotTableColumnHistogram implements TableFrameAction
                 int colIndex = numColInds[selIndex];
                 currentColumn = (NumericColumn) table.getColumn(colIndex);
                 
-                double[] range = valueRange(currentColumn);
-                minValueTextField.setText(String.format(Locale.ENGLISH, "%5.2f", range[0]));
-                maxValueTextField.setText(String.format(Locale.ENGLISH, "%5.2f", range[1]));
+                setMinMaxValueTextFields();
             });
             
-            double[] range = valueRange(currentColumn);
-            minValueTextField = new JTextField(String.format(Locale.ENGLISH, "%5.2f", range[0]));
-            maxValueTextField = new JTextField(String.format(Locale.ENGLISH, "%5.2f", range[1]));
+            minValueTextField = new JTextField();
+            maxValueTextField = new JTextField();
+            setMinMaxValueTextFields();
             binNumberTextField = new JTextField("20");
             
             // create control buttons
@@ -245,6 +231,13 @@ public class PlotTableColumnHistogram implements TableFrameAction
             });
             closeButton = new JButton("Close");
             closeButton.addActionListener(evt -> setVisible(false));
+        }
+        
+        private void setMinMaxValueTextFields()
+        {
+            double[] range = currentColumn.valueRange();
+            minValueTextField.setText(String.format(Locale.ENGLISH, "%5.2f", range[0]));
+            maxValueTextField.setText(String.format(Locale.ENGLISH, "%5.2f", range[1]));
         }
         
         private int[] computeIndexOfNumericColumns(Table table)

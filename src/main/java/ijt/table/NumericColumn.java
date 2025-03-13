@@ -27,6 +27,30 @@ public interface NumericColumn extends Column, Iterable<Double>
 
     
     // =============================================================
+    // New methods
+    
+    /**
+     * Returns the range of values within this numeric column, as an array of
+     * doubles with two values. First value corresponds to minimum value in
+     * column, second value to maximum.
+     * 
+     * @return a new array with two values corresponding to the minimum and the
+     *         maximum.
+     */
+    public default double[] valueRange()
+    {
+        double vmin = Double.POSITIVE_INFINITY;
+        double vmax = Double.NEGATIVE_INFINITY;
+        for (double v : this)
+        {
+            vmin = Math.min(vmin,  v);
+            vmax = Math.max(vmax,  v);
+        }
+        return new double[] {vmin, vmax};
+    }
+    
+ 
+    // =============================================================
     // Implementation of Column methods
  
     /**
