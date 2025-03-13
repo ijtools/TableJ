@@ -3,6 +3,7 @@
  */
 package ijt.table.columns;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ijt.table.NumericColumn;
@@ -93,10 +94,15 @@ public class DoubleColumn extends AbstractColumn implements NumericColumn, Itera
         data[row] = value;
     }
 
+    /**
+     * Returns a defensive copy of the values within this column.
+     * 
+     * @return an array of double containing the values within this column.
+     */
     @Override
     public double[] getValues()
     {
-        return this.data;
+        return Arrays.copyOf(this.data, this.data.length);
     }
 
 

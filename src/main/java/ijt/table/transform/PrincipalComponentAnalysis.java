@@ -5,6 +5,7 @@ package ijt.table.transform;
 
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
+import ij.gui.GenericDialog;
 import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
@@ -75,6 +76,9 @@ public class PrincipalComponentAnalysis
                 throw new IllegalArgumentException("Requires table with numeric columns only");
             }
         }
+        
+        GenericDialog dlg = new GenericDialog("Principal Component Analysis");
+        dlg.addCheckbox("Scale Variables", true);
         
         // get table name
         String name = table.getName();
