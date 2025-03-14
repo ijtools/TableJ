@@ -22,6 +22,7 @@ import javax.swing.JTable;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.action.edit.ClearRowNames;
+import ijt.table.gui.action.edit.ConvertNumericColumnToCategorical;
 import ijt.table.gui.action.edit.DisplayInfo;
 import ijt.table.gui.action.edit.FilterRows;
 import ijt.table.gui.action.edit.MergeColumnsAction;
@@ -251,6 +252,7 @@ public class TableFrame extends BaseFrame
         editMenu.addSeparator();
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
         addMenuItem(editMenu, "Merge Columns...", new MergeColumnsAction());
+        addMenuItem(editMenu, "Convert Numeric Column to Categorical", new ConvertNumericColumnToCategorical());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Select Rows...", new FilterRows());
         addMenuItem(editMenu, "Merge Rows...", new MergeRowsAction());
