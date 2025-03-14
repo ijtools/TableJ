@@ -89,6 +89,7 @@ public class HeatMapDisplay implements TableFrameAction
         styler.setPlotContentSize(1);
         styler.setShowValue(true);
         styler.setHeatMapValueDecimalPattern("#0.000;-#0.000");
+        styler.setXAxisLabelRotation(45);
         chart.addSeries("Basic HeatMap", xData, yData, heatData);
         
         ChartFrame.create(chart, "HeatMap", parentFrame);
