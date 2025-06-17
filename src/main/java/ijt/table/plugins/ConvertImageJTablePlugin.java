@@ -43,21 +43,35 @@ public class ConvertImageJTablePlugin implements PlugIn
         
         // determine size of new table
         int nr = ijTable.getCounter();
-        int nc = ijTable.getLastColumn();
-        
+         
         // determine whether table has a label for rows
-        boolean hasLabelColumn = ijTable.getLastColumn() == (ijTable.getHeadings().length-2);
-        if (hasLabelColumn)
+        String[] headings = ijTable.getHeadings();
+        int nc = headings.length;
+        
+        boolean hasRowLabel = ijTable.getLastColumn() == (headings.length - 2);
+        if (hasRowLabel)
         {
-            nc++;
+            nc = nc - 1;
         }
         
         // convert IJ table into data table
         Table table = Table.create(nr, nc);
         for (int c = 0; c < nc; c++)
         {
-            table.setColumnName(c, ijTable.getColumnHeading(c));
-            double[] values = ijTable.getColumnAsDoubles(c);
+            // choose the adequate column (use column headings)
+            String colName = headings[c];
+            if (hasRowLabel)
+            {
+                colName = headings[c + 1];
+            }
+            
+            // update target column
+            table.setColumnName(c, colName);
+            double[] values = ijTable.getColumn(colName);
+            if (values == null)
+            {
+                throw new RuntimeException("Could not read values of column " + colName + " in table: " + ijTable.getTitle());
+            }
             for (int r = 0; r < nr; r++)
             {
                 table.setValue(r, c, values[r]);
@@ -65,7 +79,7 @@ public class ConvertImageJTablePlugin implements PlugIn
         }
         
         // check row names
-        if (hasLabelColumn)
+        if (hasRowLabel)
         {
             String[] rowNames = new String[nr];
             for (int r = 0; r < nr; r++)
@@ -73,8 +87,7 @@ public class ConvertImageJTablePlugin implements PlugIn
                 rowNames[r] = ijTable.getLabel(r);
             }
             table.setRowNames(rowNames);
-            
-            table.setRowNameLabel(ijTable.getHeadings()[0]);
+            table.setRowNameLabel(headings[0]);
         }
 
         // also propagates name

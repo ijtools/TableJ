@@ -255,7 +255,7 @@ public class TableFrame extends BaseFrame
         addMenuItem(editMenu, "Merge Columns...", new MergeColumnsAction());
         addMenuItem(editMenu, "Convert Numeric Column to Categorical", new ConvertNumericColumnToCategorical());
         editMenu.addSeparator();
-        addMenuItem(editMenu, "Select Rows...", new FilterRows());
+        addMenuItem(editMenu, "Filter Rows...", new FilterRows());
         addMenuItem(editMenu, "Merge Rows...", new MergeRowsAction());
         addMenuItem(editMenu, "Clear Row Names", new ClearRowNames());
         editMenu.addSeparator();
