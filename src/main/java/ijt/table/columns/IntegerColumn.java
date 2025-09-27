@@ -86,7 +86,7 @@ public class IntegerColumn extends AbstractColumn implements NumericColumn
     @Override
     public Object get(int row)
     {
-        return Double.valueOf(data[row]);
+        return Integer.valueOf(data[row]);
     }
 
     @Override

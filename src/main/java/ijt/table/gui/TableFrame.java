@@ -13,13 +13,16 @@ import java.awt.event.WindowEvent;
 import java.util.Locale;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
-import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.action.edit.ClearRowNames;
 import ijt.table.gui.action.edit.ConvertNumericColumnToCategorical;
@@ -163,77 +166,28 @@ public class TableFrame extends BaseFrame
     
     private static final JTable computeJTable(Table table)
     {
-        // Convert table data into necessary format
-        Object[][] data = convertTableToObjectArray(table);
-        String[] colNames = computeDisplayColNames(table);
+//        // Convert table data into necessary format
+//        Object[][] data = convertTableToObjectArray(table);
+//        String[] colNames = computeDisplayColNames(table);
+//        
+//        // Create JTable instance
+//        JTable jTable = new JTable(data, colNames);
+//        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//        
+//        return jTable;
+//    }
+//    private static final JTable createJTable(Table table)
+//    {
+        // convert table to TableModel
+        TableModel model = createModel(table);
+        JTable jtable = new JTable(model);
         
-        // Create JTable instance
-        JTable jTable = new JTable(data, colNames);
-        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        // some setup
+        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) jtable.getTableHeader().getDefaultRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        jtable.getTableHeader().setPreferredSize(new Dimension(jtable.getColumnModel().getTotalColumnWidth(), 32));
         
-        return jTable;
-    }
-    
-    private static final Object[][] convertTableToObjectArray(Table table)
-    {
-        // table size
-        int nRows = table.rowCount();
-        int nCols = table.columnCount();
-        
-        // number of columns for displaying row name (either 0 or 1)
-        int nRowCols = table.hasRowNames() ? 1 : 0;
-        
-        // allocate memory
-        Object[][] data = new Object[nRows][nRowCols + nCols];
-        
-        // eventually add row names
-        if (nRowCols > 0)
-        {
-            for (int r = 0; r < nRows; r++)
-            {
-                data[r][0] = table.getRowName(r);
-            }
-        }
-        
-        // fill up data
-        for (int c = 0; c < nCols; c++)
-        {
-            if (table.getColumn(c) instanceof NumericColumn)
-            {
-                for (int r = 0; r < nRows; r++)
-                    data[r][c + nRowCols] = table.getValue(r, c);
-            }
-            else
-            {
-                for (int r = 0; r < nRows; r++)
-                    data[r][c + nRowCols] = table.get(r, c);
-            }
-        }
-        return data;
-    }
-    
-    private static final String[] computeDisplayColNames(Table table)
-    {
-        int nCols = table.columnCount();
-
-        // number of columns for displaying row name (either 0 or 1)
-        int nRowCols = table.hasRowNames() ? 1 : 0;
-        
-        String[] colNames = new String[nCols + nRowCols];
-        
-        if (nRowCols > 0)
-        {
-            String label = table.getRowNameLabel();
-            colNames[0] = label != null ? label : "Row Names";
-        }
-        
-        String[] baseColNames = table.getColumnNames();
-        for (int c = 0; c < nCols; c++)
-        {
-            colNames[c + nRowCols] = baseColNames[c];
-        }
-        
-        return colNames;
+        return jtable;
     }
 
     private void setupMenu()
@@ -370,6 +324,65 @@ public class TableFrame extends BaseFrame
         
         setTitle(title);
     }
+    
+    // ===================================================================
+    // Utility methods
+
+    private static final TableModel createModel(Table table)
+    {
+        // table size
+        int nRows = table.rowCount();
+        int nCols = table.columnCount();
+
+        // If row names are specified, add another column as first column
+        int columnOffset = table.hasRowNames() ? 1 : 0;
+        int nCols2 = nCols + columnOffset;
+        
+        // set up name of row columns
+        String[] colNames = new String[nCols2];
+        if (table.hasRowNames())
+        {
+            colNames[0] = "Row Names";
+            String rowNameLabel = table.getRowNameLabel();
+            if (!isBlankString(rowNameLabel))
+            {
+                colNames[0] = rowNameLabel;
+            }
+        }
+        
+        for (int iCol = 0; iCol < table.columnCount(); iCol++)
+        {
+            String colName = table.getColumnName(iCol);
+            colNames[iCol + columnOffset] = colName;
+        }
+        
+        // Convert numeric values to table of objects
+        Object[][] data = new Object[nRows][nCols2];
+        for (int iRow = 0; iRow < nRows; iRow++)
+        {
+            Object[] row = data[iRow];
+            
+            if (table.hasRowNames())
+            {
+                row[0] = table.getRowName(iRow);
+            }
+            for (int iCol = 0; iCol < nCols; iCol++)
+            {
+                row[iCol + columnOffset] = table.get(iRow, iCol);
+            }
+            data[iRow] = row;
+        };
+        
+        // create model
+        return new DefaultTableModel(data, colNames);
+    }
+    
+    private static final boolean isBlankString(String str)
+    {
+        if (str == null) return true;
+        return str.isBlank();
+    }
+
     
     /**
      * A simple main function to quickly test GUI on a toy example.
