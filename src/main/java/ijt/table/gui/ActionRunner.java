@@ -26,17 +26,26 @@ public class ActionRunner extends AbstractAction
     /**
      * The frame from which the acton is run.
      */
-    TableFrame frame;
+    BaseFrame frame;
     
     /**
      * The action to run.
      */
-    TableFrameAction action;
+    FramePlugin action;
     
-    public ActionRunner(TableFrame frame, TableFrameAction action)
+    String optionsString;
+    
+    
+    public ActionRunner(BaseFrame frame, FramePlugin action)
+    {
+        this(frame, action, "");
+    }
+
+    public ActionRunner(BaseFrame frame, FramePlugin action, String optionsString)
     {
         this.frame = frame;
         this.action = action;
+        this.optionsString = optionsString;
     }
 
     @Override
@@ -46,7 +55,7 @@ public class ActionRunner extends AbstractAction
         t.start();
     }
 
-    public TableFrameAction getAction()
+    public FramePlugin getAction()
     {
         return action;
     }
@@ -58,7 +67,7 @@ public class ActionRunner extends AbstractAction
         {
             try 
             {
-                action.run(frame);
+                action.run(frame, optionsString);
             }
             catch (Exception ex)
             {

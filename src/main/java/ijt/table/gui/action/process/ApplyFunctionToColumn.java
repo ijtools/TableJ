@@ -26,6 +26,7 @@ import javax.swing.ListSelectionModel;
 import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
 import ijt.table.gui.TableFrame;
 import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.action.file.OpenDemoTable;
@@ -40,7 +41,7 @@ public class ApplyFunctionToColumn implements TableFrameAction
     @Override
     public void run(TableFrame frame)
     {
-        Table table = frame.getTable();
+        Table table = ((TableFrame) frame).getTable();
         new CustomDialog(frame, "Feature Transform", table);
     }
     
@@ -54,7 +55,7 @@ public class ApplyFunctionToColumn implements TableFrameAction
 
     static class CustomDialog
     {
-        TableFrame refFrame;
+        BaseFrame refFrame;
         Table table;
         
         String[] numColNames; 
@@ -67,7 +68,7 @@ public class ApplyFunctionToColumn implements TableFrameAction
         JComboBox<String> resultsComboBox;
         JButton okButton = new JButton("OK");
         
-        public CustomDialog(TableFrame refFrame, String dlgTitle, Table refTable)
+        public CustomDialog(BaseFrame refFrame, String dlgTitle, Table refTable)
         {
             this.dlg = new JDialog(refFrame.getJFrame(), dlgTitle, false);
             this.refFrame = refFrame;

@@ -4,8 +4,9 @@
 package ijt.table.gui.action.edit;
 
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * Display some information on the table into a new text frame.
@@ -13,13 +14,14 @@ import ijt.table.gui.TableFrameAction;
  * @author dlegland
  *
  */
-public class DisplayInfo implements TableFrameAction
+public class DisplayInfo implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         if (table == null)
         {
             return;
@@ -29,8 +31,10 @@ public class DisplayInfo implements TableFrameAction
         TableFrame.create(tableStructure, frame);
     }
     
-    public boolean isAvailable(TableFrame frame)
+    
+    public boolean isAvailable(BaseFrame frame)
     {
-        return frame.getTable() != null;
+        if (!(frame instanceof TableFrame)) return false;
+        return ((TableFrame) frame).getTable() != null;
     }
 }

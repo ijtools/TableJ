@@ -203,7 +203,7 @@ public class TableFrame extends BaseFrame
         bar.add(fileMenu);
 
         JMenu editMenu = new JMenu("Edit");
-        addMenuItem(editMenu, "Display Info", new DisplayInfo());
+        addPlugin(editMenu, DisplayInfo.class, "", "Display Info");
         addMenuItem(editMenu, "Rename", new Rename());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
@@ -249,6 +249,22 @@ public class TableFrame extends BaseFrame
         jFrame.setJMenuBar(bar);
     }
 
+    private JMenuItem addPlugin(JMenu menu, Class<? extends FramePlugin> itemClass, String optionsString, String label)
+    {
+        // retrieve plugin
+        FramePlugin plugin = PluginManager.getInstance().retrievePlugin(itemClass);
+        if (plugin == null) return null;
+        
+        // setup menu item
+        JMenuItem item = new JMenuItem(label);
+//        item.setIcon(this.emptyIcon);
+//        item.setMargin(new Insets(0, 0, 0, 0));
+        item.addActionListener(new ActionRunner(this, plugin));
+        item.setEnabled(plugin.isAvailable(this));
+        menu.add(item);
+        return item;
+    }
+    
     private void addMenuItem(JMenu parent, String label, TableFrameAction action)
     {
         JMenuItem item = new JMenuItem(label);
