@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import ijt.table.CategoricalColumn;
 import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
@@ -34,7 +32,7 @@ import ijt.table.gui.action.file.OpenDemoTable;
 /**
  * 
  */
-public class ConvertNumericColumnToCategorical implements TableFrameAction
+public class ConvertNumericColumnToInteger implements TableFrameAction
 {
 
     @Override
@@ -62,7 +60,6 @@ public class ConvertNumericColumnToCategorical implements TableFrameAction
         // widgets
         JDialog dlg;
 
-//        JComboBox<String> transformComboBox;
         JList<String> list;
         JComboBox<String> resultsComboBox;
         JButton okButton = new JButton("OK");
@@ -184,7 +181,7 @@ public class ConvertNumericColumnToCategorical implements TableFrameAction
                 {
                     int colIndex = table.findColumnIndex(this.numColNames[inds[i]]);
                     NumericColumn col = (NumericColumn) table.getColumn(colIndex);
-                    CategoricalColumn col2 = convert(col);
+                    IntegerColumn col2 = convert(col);
                     table.setColumn(colIndex, col2);
                 }
                 refFrame.repaint();
@@ -226,25 +223,26 @@ public class ConvertNumericColumnToCategorical implements TableFrameAction
         }
     }
     
-    private static final CategoricalColumn convert(NumericColumn col)
+    private static final IntegerColumn convert(NumericColumn col)
     {
         if (col instanceof IntegerColumn)
         {
             return convertIntegerColumn((IntegerColumn) col);
         }
+        int n = col.size();
+        int[] data = new int[col.size()];
+        for (int i = 0; i < n; i ++)
+        {
+            // add 0.5 for rounding
+            data[i] = (int) (col.getValue(i) + 0.5);
+        }
         
-        String[] labels = Arrays.stream(col.getValues())
-                .mapToObj(v -> Double.toString(v))
-                .toArray(String[]::new);
-        return CategoricalColumn.create(col.getName(), labels); 
+        return NumericColumn.create(col.getName(), data); 
     }
 
-    private static final CategoricalColumn convertIntegerColumn(IntegerColumn col)
+    private static final IntegerColumn convertIntegerColumn(IntegerColumn col)
     {
-        String[] labels = Arrays.stream(col.getIntValues())
-                .mapToObj(v -> Integer.toString(v))
-                .toArray(String[]::new);
-        return CategoricalColumn.create(col.getName(), labels); 
+        return NumericColumn.create(col.getName(), col.getIntValues()); 
     }
 
     public static void main(String... args) throws IOException

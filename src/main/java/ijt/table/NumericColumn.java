@@ -4,6 +4,7 @@
 package ijt.table;
 
 import ijt.table.columns.DoubleColumn;
+import ijt.table.columns.IntegerColumn;
 
 /**
  * A Table column that contains only numerical values.
@@ -23,6 +24,11 @@ public interface NumericColumn extends Column, Iterable<Double>
     public static NumericColumn create(String name, double[] data)
     {
         return new DoubleColumn(name, data);
+    }
+
+    public static IntegerColumn create(String name, int[] data)
+    {
+        return new IntegerColumn(name, data);
     }
 
     

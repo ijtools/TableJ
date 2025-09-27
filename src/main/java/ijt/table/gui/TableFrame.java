@@ -23,6 +23,7 @@ import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.action.edit.ClearRowNames;
 import ijt.table.gui.action.edit.ConvertNumericColumnToCategorical;
+import ijt.table.gui.action.edit.ConvertNumericColumnToInteger;
 import ijt.table.gui.action.edit.DisplayInfo;
 import ijt.table.gui.action.edit.FilterRows;
 import ijt.table.gui.action.edit.MergeColumnsAction;
@@ -254,6 +255,7 @@ public class TableFrame extends BaseFrame
         addMenuItem(editMenu, "Select Columns...", new SelectColumns());
         addMenuItem(editMenu, "Merge Columns...", new MergeColumnsAction());
         addMenuItem(editMenu, "Convert Numeric Column to Categorical", new ConvertNumericColumnToCategorical());
+        addMenuItem(editMenu, "Convert Numeric Column to Integer", new ConvertNumericColumnToInteger());
         editMenu.addSeparator();
         addMenuItem(editMenu, "Filter Rows...", new FilterRows());
         addMenuItem(editMenu, "Merge Rows...", new MergeRowsAction());
