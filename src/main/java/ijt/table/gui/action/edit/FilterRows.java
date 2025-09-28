@@ -13,18 +13,19 @@ import ijt.table.CategoricalColumn;
 import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * Select rows of a table based on the values within a table, based on a logical
  * condition on the values contained in one of the columns. Returns a new table,
  * with the same number of columns.
  */
-public class FilterRows implements TableFrameAction
+public class FilterRows implements FramePlugin
 {
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
         // Get the data table
         if (!(frame instanceof TableFrame))

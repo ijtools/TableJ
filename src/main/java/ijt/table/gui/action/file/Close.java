@@ -3,21 +3,17 @@
  */
 package ijt.table.gui.action.file;
 
-import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 
 /**
- * @author dlegland
- *
+ * Closes the current frame.
  */
-public class Close implements TableFrameAction
+public class Close implements FramePlugin
 {
-
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        System.out.println("close frame...");
         frame.getJFrame().dispose();
     }
-
 }

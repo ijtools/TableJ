@@ -27,19 +27,19 @@ import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.action.file.OpenDemoTable;
 import ijt.table.process.SummaryStatistics;
 
 /**
  * 
  */
-public class ApplyFunctionToColumn implements TableFrameAction
+public class ApplyFunctionToColumn implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
         Table table = ((TableFrame) frame).getTable();
         new CustomDialog(frame, "Feature Transform", table);

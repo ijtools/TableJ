@@ -13,21 +13,23 @@ import java.util.Locale;
 import javax.swing.JFileChooser;
 
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * @author dlegland
  *
  */
-public class SaveAs implements TableFrameAction
+public class SaveAs implements FramePlugin
 {
     private JFileChooser saveWindow = null;
     
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         if (table == null)
         {
             return;
@@ -100,4 +102,9 @@ public class SaveAs implements TableFrameAction
         writer.close();
     }
 
+    public boolean isAvailable(BaseFrame frame)
+    {
+        if (!(frame instanceof TableFrame)) return false;
+        return ((TableFrame) frame).getTable() != null;
+    }
 }

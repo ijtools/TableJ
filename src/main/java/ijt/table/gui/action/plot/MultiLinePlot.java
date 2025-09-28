@@ -14,21 +14,23 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import ij.gui.GenericDialog;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.frame.ChartFrame;
 
 /**
  * @author dlegland
  *
  */
-public class MultiLinePlot implements TableFrameAction
+public class MultiLinePlot implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = parentFrame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         int nCols = table.columnCount();
 
         GenericDialog dlg = new GenericDialog("Multi Line Plot");
@@ -99,7 +101,7 @@ public class MultiLinePlot implements TableFrameAction
             series.setMarker(SeriesMarkers.NONE);
         }
         
-        ChartFrame.create(chart, "MultiLine Plot", parentFrame);
+        ChartFrame.create(chart, "MultiLine Plot", frame);
     }
     
     /**

@@ -16,8 +16,9 @@ import ij.gui.GenericDialog;
 import ijt.table.CategoricalColumn;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.frame.ChartFrame;
 
 /**
@@ -27,12 +28,13 @@ import ijt.table.gui.frame.ChartFrame;
  * @author dlegland
  *
  */
-public class GroupScatterPlot implements TableFrameAction
+public class GroupScatterPlot implements FramePlugin
 {
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = parentFrame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         if (table.columnCount() < 3)
         {
         	IJ.error("Requires a table with at least three colums", "Table error");
@@ -117,7 +119,7 @@ public class GroupScatterPlot implements TableFrameAction
             chart.addSeries(levelNames[i], xarr, yarr);
         }
 
-        ChartFrame.create(chart, "Group Scatter Plot", parentFrame);
+        ChartFrame.create(chart, "Group Scatter Plot", frame);
     }
     
     private String[] getCategoricalColumnNames(Table table)

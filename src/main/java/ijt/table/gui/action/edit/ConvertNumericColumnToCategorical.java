@@ -27,20 +27,22 @@ import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.columns.IntegerColumn;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.action.file.OpenDemoTable;
 
 /**
  * 
  */
-public class ConvertNumericColumnToCategorical implements TableFrameAction
+public class ConvertNumericColumnToCategorical implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         new CustomDialog(frame, "Convert To Categorical Column", table);
     }
     
@@ -54,7 +56,7 @@ public class ConvertNumericColumnToCategorical implements TableFrameAction
 
     static class CustomDialog
     {
-        TableFrame refFrame;
+        BaseFrame refFrame;
         Table table;
         
         String[] numColNames; 
@@ -67,7 +69,7 @@ public class ConvertNumericColumnToCategorical implements TableFrameAction
         JComboBox<String> resultsComboBox;
         JButton okButton = new JButton("OK");
         
-        public CustomDialog(TableFrame refFrame, String dlgTitle, Table refTable)
+        public CustomDialog(BaseFrame refFrame, String dlgTitle, Table refTable)
         {
             this.dlg = new JDialog(refFrame.getJFrame(), dlgTitle, false);
             this.refFrame = refFrame;

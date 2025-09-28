@@ -4,8 +4,9 @@
 package ijt.table.gui.action.edit;
 
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * Clear the row names of the current table.
@@ -13,13 +14,14 @@ import ijt.table.gui.TableFrameAction;
  * @author dlegland
  *
  */
-public class ClearRowNames implements TableFrameAction
+public class ClearRowNames implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         if (table == null)
         {
             return;

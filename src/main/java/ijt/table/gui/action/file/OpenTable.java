@@ -10,8 +10,9 @@ import javax.swing.JFileChooser;
 
 import ij.gui.GenericDialog;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.io.DelimitedTableReader;
 import ijt.table.io.Delimiters;
 
@@ -19,10 +20,10 @@ import ijt.table.io.Delimiters;
  * @author dlegland
  *
  */
-public class OpenTable implements TableFrameAction
+public class OpenTable implements FramePlugin
 {
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
         // Open a FileChooser to select the table file
         final JFileChooser fc = new JFileChooser();

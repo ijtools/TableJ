@@ -14,8 +14,9 @@ import ij.IJ;
 import ij.gui.GenericDialog;
 import ijt.table.Column;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.frame.ChartFrame;
 
 /**
@@ -25,12 +26,13 @@ import ijt.table.gui.frame.ChartFrame;
  * 
  * @author dlegland
  */
-public class ScatterPlot implements TableFrameAction
+public class ScatterPlot implements FramePlugin
 {
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = parentFrame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         if (table.columnCount() < 2)
         {
         	IJ.error("Requires a table with at least two colums", "Table error");
@@ -96,7 +98,7 @@ public class ScatterPlot implements TableFrameAction
 			}
         }
         
-        ChartFrame.create(chart, "Scatter Plot", parentFrame);
+        ChartFrame.create(chart, "Scatter Plot", frame);
     }
     
     private static final String[] computeDisplayLabelsOptionStrings(Table table)

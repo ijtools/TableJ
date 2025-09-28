@@ -6,8 +6,9 @@ package ijt.table.gui.action.process;
 import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * Computes correlation matrix of columns within a data table.
@@ -15,13 +16,14 @@ import ijt.table.gui.TableFrameAction;
  * @author dlegland
  *
  */
-public class CorrelationMatrix implements TableFrameAction
+public class CorrelationMatrix implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         if (table == null)
         {
             return;

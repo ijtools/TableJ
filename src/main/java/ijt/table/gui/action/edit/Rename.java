@@ -5,21 +5,23 @@ package ijt.table.gui.action.edit;
 
 import ij.gui.GenericDialog;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.TableManager;
 
 /**
  * @author dlegland
  *
  */
-public class Rename implements TableFrameAction
+public class Rename implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         if (table == null)
         {
             return;
@@ -49,7 +51,7 @@ public class Rename implements TableFrameAction
         mgr.addTable(table);
         
         // refresh name if frame title
-        frame.updateTitle();
+        ((TableFrame) frame).updateTitle();
     }
     
     public boolean isAvailable(TableFrame frame)

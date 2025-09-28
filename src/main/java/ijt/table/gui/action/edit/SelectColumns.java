@@ -4,8 +4,9 @@
 package ijt.table.gui.action.edit;
 
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.dialogs.ListSelectionDialog;
 
 
@@ -15,16 +16,17 @@ import ijt.table.gui.dialogs.ListSelectionDialog;
  * 
  * @author dlegland
  */
-public class SelectColumns implements TableFrameAction
+public class SelectColumns implements FramePlugin
 {
 
     /* (non-Javadoc)
      * @see imago.gui.Plugin#run(imago.gui.ImagoFrame, java.lang.String)
      */
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
 
         // get general info from table
         int nRows = table.rowCount();

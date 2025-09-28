@@ -12,21 +12,23 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import ij.gui.GenericDialog;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.frame.ChartFrame;
 
 /**
  * @author dlegland
  *
  */
-public class LinePlot implements TableFrameAction
+public class LinePlot implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = parentFrame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
 
         GenericDialog gd = new GenericDialog("Line Plot");
         String[] colNames = table.getColumnNames();
@@ -66,7 +68,7 @@ public class LinePlot implements TableFrameAction
         series.setMarker(SeriesMarkers.NONE);
 
         
-        ChartFrame.create(chart, "Line Plot", parentFrame);
+        ChartFrame.create(chart, "Line Plot", frame);
 
 //        // Create and set up the window.
 //        JFrame plotFrame = new JFrame();

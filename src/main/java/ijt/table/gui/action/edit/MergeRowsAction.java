@@ -7,8 +7,9 @@ import ij.IJ;
 import ij.gui.GenericDialog;
 import ijt.table.Table;
 import ijt.table.Tables;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.TableManager;
 
 
@@ -18,14 +19,14 @@ import ijt.table.gui.TableManager;
  * 
  * @author dlegland
  */
-public class MergeRowsAction implements TableFrameAction
+public class MergeRowsAction implements FramePlugin
 {
 
     /* (non-Javadoc)
      * @see imago.gui.Plugin#run(imago.gui.ImagoFrame, java.lang.String)
      */
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
         TableManager manager = TableManager.getInstance();
         String[] tableNames = manager.getTableNames().toArray(new String[] {});

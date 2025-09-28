@@ -6,8 +6,9 @@ package ijt.table.gui.action.process;
 import ij.gui.GenericDialog;
 import ijt.table.Table;
 import ijt.table.cluster.KMeans;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * Applies k-means algorithms to the observations represented by rows of the
@@ -16,12 +17,13 @@ import ijt.table.gui.TableFrameAction;
  * @author dlegland
  *
  */
-public class KMeansAction implements TableFrameAction
+public class KMeansAction implements FramePlugin
 {
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
 
         GenericDialog gd = new GenericDialog("KMeans");
         gd.addNumericField("Cluster number", 3, 0);

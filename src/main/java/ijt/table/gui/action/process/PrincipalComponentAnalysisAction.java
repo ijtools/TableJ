@@ -45,9 +45,10 @@ import ij.gui.GenericDialog;
 import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.RowNumberTable;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.action.file.OpenDemoTable;
 import ijt.table.gui.frame.ChartFrame;
 import ijt.table.transform.PrincipalComponentAnalysis;
@@ -61,15 +62,16 @@ import ijt.table.transform.PrincipalComponentAnalysis;
  * 
  * @author dlegland
  */
-public class PrincipalComponentAnalysisAction implements TableFrameAction
+public class PrincipalComponentAnalysisAction implements FramePlugin
 {
     /* (non-Javadoc)
      * @see imago.gui.Plugin#run(imago.gui.ImagoFrame, java.lang.String)
      */
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         // Check all columns are numeric
         for (Column column : table.columns())
         {
@@ -89,7 +91,7 @@ public class PrincipalComponentAnalysisAction implements TableFrameAction
     private static class PcaDialog
     {
         
-        TableFrame refFrame;
+        BaseFrame refFrame;
         Table table;
         
         int maxComponents;
@@ -106,7 +108,7 @@ public class PrincipalComponentAnalysisAction implements TableFrameAction
         JTable eigenValuesTable = null;
 
         
-        public PcaDialog(TableFrame refFrame, String dlgTitle, Table refTable)
+        public PcaDialog(BaseFrame refFrame, String dlgTitle, Table refTable)
         {
             this.dlg = new JDialog(refFrame.getJFrame(), dlgTitle, false);
             this.refFrame = refFrame;

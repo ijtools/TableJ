@@ -34,8 +34,9 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import ijt.table.NumericColumn;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.action.file.OpenDemoTable;
 import ijt.table.gui.frame.ChartFrame;
 
@@ -48,12 +49,13 @@ import ijt.table.gui.frame.ChartFrame;
  * @author dlegland
  *
  */
-public class PlotTableColumnHistogram implements TableFrameAction
+public class PlotTableColumnHistogram implements FramePlugin
 {
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         
         new HistogramDialog(frame, "Column Values Histogram", table);
     }
@@ -137,7 +139,7 @@ public class PlotTableColumnHistogram implements TableFrameAction
      */
     private static class HistogramDialog
     {
-        TableFrame refFrame;
+        BaseFrame refFrame;
         Table table;
         
         /**
@@ -159,7 +161,7 @@ public class PlotTableColumnHistogram implements TableFrameAction
         
         ChartFrame chartFrame = null;
         
-        public HistogramDialog(TableFrame refFrame, String dlgTitle, Table refTable)
+        public HistogramDialog(BaseFrame refFrame, String dlgTitle, Table refTable)
         {
             this.dlg = new JDialog(refFrame.getJFrame(), dlgTitle, false);
             this.refFrame = refFrame;

@@ -8,8 +8,9 @@ import ijt.table.CategoricalColumn;
 import ijt.table.Column;
 import ijt.table.Table;
 import ijt.table.Tables;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 
 /**
@@ -17,16 +18,17 @@ import ijt.table.gui.TableFrameAction;
  * 
  * @author dlegland
  */
-public class CrossTableAction implements TableFrameAction
+public class CrossTableAction implements FramePlugin
 {
 
     /* (non-Javadoc)
      * @see imago.gui.Plugin#run(imago.gui.ImagoFrame, java.lang.String)
      */
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         String[] colNames = table.getColumnNames();
 
         GenericDialog gd = new GenericDialog("Cross Table");

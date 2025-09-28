@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * Opens a demo data table, containing Fisher's iris data (150 observations, 4
@@ -16,11 +17,11 @@ import ijt.table.gui.TableFrameAction;
  * 
  * @author dlegland
  */
-public class OpenDemoTable implements TableFrameAction
+public class OpenDemoTable implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
         InputStream inputStream = OpenDemoTable.class.getResourceAsStream("/tables/fisherIris.txt");
 

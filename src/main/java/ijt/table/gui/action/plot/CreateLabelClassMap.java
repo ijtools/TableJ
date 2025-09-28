@@ -18,15 +18,16 @@ import ij.process.ImageProcessor;
 import ijt.table.CategoricalColumn;
 import ijt.table.Column;
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 
 /**
  * Generate a color image from 1) a label map and 2) a data table with row names
  * corresponding to labels, and a categorical column corresponding to the class
  * to display.
  */
-public class CreateLabelClassMap implements TableFrameAction
+public class CreateLabelClassMap implements FramePlugin
 {
     /**
      * 
@@ -36,9 +37,10 @@ public class CreateLabelClassMap implements TableFrameAction
     }
 
     @Override
-    public void run(TableFrame frame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = frame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
         
         // create the list of image names
         int[] indices = WindowManager.getIDList();

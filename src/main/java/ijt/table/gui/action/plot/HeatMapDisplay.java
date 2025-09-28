@@ -12,8 +12,9 @@ import org.knowm.xchart.HeatMapChartBuilder;
 import org.knowm.xchart.style.HeatMapStyler;
 
 import ijt.table.Table;
+import ijt.table.gui.BaseFrame;
+import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
-import ijt.table.gui.TableFrameAction;
 import ijt.table.gui.frame.ChartFrame;
 
 /**
@@ -24,13 +25,14 @@ import ijt.table.gui.frame.ChartFrame;
  * @author dlegland
  *
  */
-public class HeatMapDisplay implements TableFrameAction
+public class HeatMapDisplay implements FramePlugin
 {
 
     @Override
-    public void run(TableFrame parentFrame)
+    public void run(BaseFrame frame, String options)
     {
-        Table table = parentFrame.getTable();
+        if (!(frame instanceof TableFrame)) return;
+        Table table = ((TableFrame) frame).getTable();
 
         // Default name for table
         String tableName = table.getName();
@@ -92,7 +94,7 @@ public class HeatMapDisplay implements TableFrameAction
         styler.setXAxisLabelRotation(45);
         chart.addSeries("Basic HeatMap", xData, yData, heatData);
         
-        ChartFrame.create(chart, "HeatMap", parentFrame);
+        ChartFrame.create(chart, "HeatMap", frame);
     }
     
     public boolean isAvailable(TableFrame frame)
