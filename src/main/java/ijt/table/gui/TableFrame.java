@@ -349,7 +349,7 @@ public class TableFrame extends BaseFrame
     private static final boolean isBlankString(String str)
     {
         if (str == null) return true;
-        return str.isBlank();
+        return str.trim().isEmpty();
     }
 
     
