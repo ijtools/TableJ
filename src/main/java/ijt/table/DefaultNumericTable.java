@@ -260,11 +260,11 @@ public class DefaultNumericTable implements NumericTable
     }
     
     @Override
-    public int addColumn(String colName, Column column) // TODO: Update
+    public int addColumn(String colName, Column column)
     {
         if (!(column instanceof NumericColumn))
         {
-            throw new IllegalArgumentException("Requires a numeric column as input");
+            column = NumericColumn.convert(column);
         }
         this.columns.add((NumericColumn) column);
         this.nCols = this.columns.size();

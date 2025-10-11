@@ -27,11 +27,13 @@ public interface CategoricalColumn extends Column, Iterable<String>
     }
     
     /**
-     * Converts a column into a categorical table.
+     * Converts an arbitrary column into a categorical column. If the input
+     * column is already an instance of CategoricalColumn, it is simply
+     * returned.
      * 
      * @param column
      *            the column to convert.
-     * @return an instance of CategoricalColumn based on input table.
+     * @return an instance of CategoricalColumn based on the input column.
      */
     public static CategoricalColumn convert(Column column)
     {

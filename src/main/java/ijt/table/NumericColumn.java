@@ -30,6 +30,24 @@ public interface NumericColumn extends Column, Iterable<Double>
     {
         return new IntegerColumn(name, data);
     }
+    
+    /**
+     * Converts an arbitrary column into a numeric column. If the input column
+     * is already an instance of NumericColumn, it is simply returned.
+     * 
+     * @param column
+     *            the column to convert.
+     * @return an instance of CategoricalColumn based on input table.
+     */
+    public static NumericColumn convert(Column column)
+    {
+        if (column instanceof NumericColumn)
+        {
+            return (NumericColumn) column;
+        }
+        
+        return NumericColumn.create(column.getName(), column.getValues());
+    }
 
     
     // =============================================================
