@@ -4,7 +4,7 @@
 package ijt.table.plugins;
 
 import java.awt.Frame;
-import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import ij.WindowManager;
 import ij.gui.GenericDialog;
@@ -28,8 +28,8 @@ public class ConvertImageJTablePlugin implements PlugIn
         String[] tableNames = getWindowNames(textWindows);
         
         // opens a dialog to choose one of the tables
-        GenericDialog gd = new GenericDialog("Draw Text from Column");
-        gd.addChoice("Results Table:", tableNames, tableNames[0]);
+        GenericDialog gd = new GenericDialog("Convert ResultsTable");
+        gd.addChoice("Table to convert:", tableNames, tableNames[0]);
         
         // wait for user choice
         gd.showDialog();
@@ -108,21 +108,11 @@ public class ConvertImageJTablePlugin implements PlugIn
     {
         Frame[] frames = WindowManager.getNonImageWindows();
         
-        ArrayList<TextWindow> windows = new ArrayList<TextWindow>(frames.length);
-        
-        for (Frame frame : frames) 
-        {
-            if (frame instanceof TextWindow) 
-            {
-                TextWindow tw = (TextWindow) frame;
-                if (tw.getTextPanel().getResultsTable() != null) 
-                {
-                    windows.add(tw);
-                }
-            }
-        }
-        
-        return windows.toArray(new TextWindow[0]);
+        return Stream.of(frames)
+            .filter(frame -> frame instanceof TextWindow)
+            .map(frame -> (TextWindow) frame)
+            .filter(tw -> tw.getTextPanel().getResultsTable() != null)
+            .toArray(TextWindow[]::new);
     }
     
     public static final String[] getWindowNames(TextWindow[] textWindows)
