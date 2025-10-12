@@ -3,12 +3,12 @@
  */
 package ijt.table.gui.action.file;
 
+import java.awt.FileDialog;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFileChooser;
-
 import ij.gui.GenericDialog;
+import ij.io.OpenDialog;
 import ijt.table.Table;
 import ijt.table.gui.BaseFrame;
 import ijt.table.gui.FramePlugin;
@@ -17,37 +17,42 @@ import ijt.table.io.DelimitedTableReader;
 import ijt.table.io.Delimiters;
 
 /**
- * @author dlegland
- *
+ * Opens a dialog to choose a file, and another one to choose import options of
+ * delimiter-separated values file.
  */
 public class OpenTable implements FramePlugin
 {
+    private static String lastOpenDir = OpenDialog.getDefaultDirectory();
+
     @Override
     public void run(BaseFrame frame, String options)
     {
-        // Open a FileChooser to select the table file
-        final JFileChooser fc = new JFileChooser();
-        int returnVal = fc.showOpenDialog(frame.getJFrame());
+        // Open a FileDialog to select the table file
+        FileDialog dlg = new FileDialog(frame.getJFrame(), "Choose a file", FileDialog.LOAD);
+        dlg.setDirectory(lastOpenDir);
+        dlg.setVisible(true);
 
-        if (returnVal == JFileChooser.CANCEL_OPTION)
-        {
-            return;
-        }
-        File file = fc.getSelectedFile();
+        String fileName = dlg.getFile();
+        if (fileName == null) return;
+        String dir = dlg.getDirectory();
+        
+        // convert to file, and store last open directory
+        File file = new File(dir, fileName);
+        lastOpenDir = file.toPath().getParent().toString();
 
         // Choose some options to open the file
-        GenericDialog dlg = new GenericDialog("Open Table Options");
-        dlg.addCheckbox("Read Header", true);
-        dlg.addChoice("Delimiter", Delimiters.getAllLabels(), Delimiters.SEMICOLON.toString());
+        GenericDialog gd = new GenericDialog("Open Table Options");
+        gd.addCheckbox("Read Header", true);
+        gd.addChoice("Delimiter", Delimiters.getAllLabels(), Delimiters.SEMICOLON.toString());
         
-        dlg.showDialog();
-        if (dlg.wasCanceled())
+        gd.showDialog();
+        if (gd.wasCanceled())
         {
             return;
         }
         
-        boolean readHeader = dlg.getNextBoolean();
-        String delimiter = Delimiters.fromLabel(dlg.getNextChoice()).getDelimiter();
+        boolean readHeader = gd.getNextBoolean();
+        String delimiter = Delimiters.fromLabel(gd.getNextChoice()).getDelimiter();
                 
         DelimitedTableReader reader = new DelimitedTableReader();
         reader.setReadHeader(readHeader);
@@ -64,8 +69,8 @@ public class OpenTable implements FramePlugin
             return;
         }
         
-        table.setName(file.getName());
-        
+        table.setName(fileName);
+
         // add the new frame to the GUI
         TableFrame.create(table, frame);
     }
