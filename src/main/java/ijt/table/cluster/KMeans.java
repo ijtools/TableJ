@@ -5,6 +5,7 @@ package ijt.table.cluster;
 
 import java.util.Random;
 
+import ijt.table.CategoricalColumn;
 import ijt.table.Table;
 
 /**
@@ -229,17 +230,21 @@ public class KMeans
                             nc, this.centroids.length));
 	    }
 	    
-        // performs initial allocation
-        int[] classes = findClassIndices(table, this.centroids, new int[nr]);
-        
-        // Create result table
-        Table res = Table.create(nr, 1);
-        res.setColumnNames(new String[]{"Class"});
-        res.setName(table.getName() + "-KM" + this.nClasses + "_predict");
-        for (int i = 0; i < nr; i++)
+        // Create array of level names
+        int ng = this.centroids.length;
+        String[] classNames = new String[ng];
+        for (int g = 0; g < ng; g++)
         {
-            res.setValue(i, 0, classes[i]);
+            classNames[g] = "class" + (g+1);
         }
+        
+        // Create result Column
+        int[] classIndices = findClassIndices(table, this.centroids, new int[nr]);
+        CategoricalColumn classColumn = CategoricalColumn.create("Class", classIndices, classNames);
+                
+        // Create result table
+        Table res = Table.create(classColumn);
+        res.setName(table.getName() + "-KM" + this.nClasses + "_predict");
 
         // keep row axis meta-data
         if (table.hasRowNames())

@@ -3,10 +3,12 @@
  */
 package ijt.table.gui.action.plot;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.ChartTheme;
 import org.knowm.xchart.style.Styler.LegendPosition;
@@ -97,6 +99,9 @@ public class GroupScatterPlot implements FramePlugin
             tableName = "Data";
         }
         
+        // retrieve group colors
+        Color[] groupColors = groupCol.levelColors();
+        
         // Create the Chart
         XYChart chart = new XYChartBuilder()
                 .width(600)
@@ -114,9 +119,13 @@ public class GroupScatterPlot implements FramePlugin
         String[] levelNames = groupCol.levelNames();
         for (int i = 0; i < nGroups; i++)
         {
-            double[] xarr = xData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
-            double[] yarr = yData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
-            chart.addSeries(levelNames[i], xarr, yarr);
+            if (!xData.get(i).isEmpty())
+            {
+                double[] xarr = xData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
+                double[] yarr = yData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
+                XYSeries series = chart.addSeries(levelNames[i], xarr, yarr);
+                series.setMarkerColor(groupColors[i]);
+            }
         }
 
         ChartFrame.create(chart, "Group Scatter Plot", frame);
@@ -136,9 +145,6 @@ public class GroupScatterPlot implements FramePlugin
         }
         
         String[] catColNames = new String[ncc];
-//        String[] catColNames = new String[ncc+1];
-//        catColNames[0] = "None";
-        
         int icc = 0;
         for (int iCol = 0; iCol < nCols; iCol++)
         {
