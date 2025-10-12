@@ -162,6 +162,8 @@ public class TableFrame extends BaseFrame
         addPlugin(fileMenu, ijt.table.gui.action.file.OpenDemoTable.class, "", "Open Demo Table");
         fileMenu.addSeparator();
         addPlugin(fileMenu, ijt.table.gui.action.file.SaveAs.class, "", "Save As...");
+        addPlugin(fileMenu, ijt.table.gui.action.file.ConvertToResultsTable.class, "", "Convert to ResultsTable");
+        fileMenu.addSeparator();
         addPlugin(fileMenu, ijt.table.gui.action.file.Close.class, "", "Close");
         bar.add(fileMenu);
 
