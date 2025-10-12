@@ -127,11 +127,7 @@ public interface Table
     
     public static boolean hasOnlyNumericColumns(Table table)
     {
-        for (Column col : table.columns())
-        {
-            if (!(col instanceof NumericColumn)) return false;
-        }
-        return true;
+        return table.columns().stream().allMatch(col -> col instanceof NumericColumn);
     }
     
 

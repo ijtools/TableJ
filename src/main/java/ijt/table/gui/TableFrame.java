@@ -115,6 +115,8 @@ public class TableFrame extends BaseFrame
             @Override
             public void windowClosing(WindowEvent evt)
             {
+                String tableName = table.getName();
+                manager.removeTable(tableName);
                 jFrame.dispose();
             }           
         });
