@@ -188,8 +188,6 @@ public class TableFrame extends BaseFrame
         addPlugin(plotMenu, ijt.table.gui.action.plot.PlotTableColumnHistogram.class, "", "Column Histogram");
         plotMenu.addSeparator();
         addPlugin(plotMenu, ijt.table.gui.action.plot.HeatMapDisplay.class, "", "Heat Map");
-        plotMenu.addSeparator();
-        addPlugin(plotMenu, ijt.table.gui.action.plot.CreateLabelClassMap.class, "", "Create Label Image Class Map");
         bar.add(plotMenu);
 
         JMenu processMenu = new JMenu("Process");
@@ -201,6 +199,8 @@ public class TableFrame extends BaseFrame
         addPlugin(processMenu, ijt.table.gui.action.process.CrossTableAction.class, "", "Cross-Table...");
         processMenu.addSeparator();
         addPlugin(processMenu, ijt.table.gui.action.process.KMeansAction.class, "", "K-Means");
+        processMenu.addSeparator();
+        addPlugin(processMenu, ijt.table.gui.action.plot.CreateLabelClassMap.class, "", "Create Label Image Class Map");
         bar.add(processMenu);
         
         JMenu helpMenu = new JMenu("Help");
