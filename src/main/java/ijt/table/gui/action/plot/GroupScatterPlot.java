@@ -11,7 +11,6 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.ChartTheme;
-import org.knowm.xchart.style.Styler.LegendPosition;
 
 import ij.IJ;
 import ij.gui.GenericDialog;
@@ -57,6 +56,7 @@ public class GroupScatterPlot implements FramePlugin
         gd.addChoice("Y-Axis Column:", colNames, colNames[1]);
         gd.addChoice("Grouping Column:", catColNames, catColNames[0]);
         gd.addNumericField("Marker_Size", 10, 0);
+        gd.addChoice("Legend_Location", LegendLocation.getAllLabels(), LegendLocation.NORTH_EAST.toString());
         
         gd.showDialog();
         if (gd.wasCanceled())
@@ -69,6 +69,7 @@ public class GroupScatterPlot implements FramePlugin
         int yColIndex = gd.getNextChoiceIndex();
         String groupColName = gd.getNextChoice();
         int markerSize = (int) gd.getNextNumber();
+        LegendLocation legendLocation = LegendLocation.fromLabel(gd.getNextChoice());
 
         
         NumericColumn colX = (NumericColumn) table.getColumn(xColIndex);
@@ -113,19 +114,19 @@ public class GroupScatterPlot implements FramePlugin
         
         // Additional chart style
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Scatter);
-        chart.getStyler().setLegendPosition(LegendPosition.InsideNE);
+        chart.getStyler().setLegendPosition(legendLocation.position());
         chart.getStyler().setMarkerSize(markerSize);
         
         String[] levelNames = groupCol.levelNames();
         for (int i = 0; i < nGroups; i++)
         {
-            if (!xData.get(i).isEmpty())
-            {
-                double[] xarr = xData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
-                double[] yarr = yData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
-                XYSeries series = chart.addSeries(levelNames[i], xarr, yarr);
-                series.setMarkerColor(groupColors[i]);
-            }
+            // do not display anything for empty groups
+            if (xData.get(i).isEmpty()) continue;
+            
+            double[] xarr = xData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
+            double[] yarr = yData.get(i).stream().mapToDouble(Double::doubleValue).toArray();
+            XYSeries series = chart.addSeries(levelNames[i], xarr, yarr);
+            series.setMarkerColor(groupColors[i]);
         }
 
         ChartFrame.create(chart, "Group Scatter Plot", frame);
@@ -133,28 +134,10 @@ public class GroupScatterPlot implements FramePlugin
     
     private String[] getCategoricalColumnNames(Table table)
     {
-        int nCols = table.columnCount();
-        
-        int ncc = 0;
-        for (int iCol = 0; iCol < nCols; iCol++)
-        {
-            if (table.getColumn(iCol) instanceof CategoricalColumn)
-            {
-                ncc++;
-            }
-        }
-        
-        String[] catColNames = new String[ncc];
-        int icc = 0;
-        for (int iCol = 0; iCol < nCols; iCol++)
-        {
-            if (table.getColumn(iCol) instanceof CategoricalColumn)
-            {
-                catColNames[icc++] = table.getColumnName(iCol);
-            }
-        }
-        
-        return catColNames;
+        return table.columns().stream()
+                .filter(col -> col instanceof CategoricalColumn)
+                .map(col -> col.getName())
+                .toArray(String[]::new);
     }
         
     public boolean isAvailable(TableFrame frame)
