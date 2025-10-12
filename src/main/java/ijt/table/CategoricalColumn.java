@@ -3,6 +3,7 @@
  */
 package ijt.table;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import ijt.table.columns.IndexedStringColumn;
@@ -24,6 +25,11 @@ public interface CategoricalColumn extends Column, Iterable<String>
     public static CategoricalColumn create(String name, String[] levels)
     {
     	return new IndexedStringColumn(name, levels);
+    }
+    
+    public static CategoricalColumn create(String name, int[] indices, String[] levelNames)
+    {
+        return new IndexedStringColumn(name, indices, levelNames);
     }
     
     /**
@@ -55,6 +61,17 @@ public interface CategoricalColumn extends Column, Iterable<String>
     
     // =============================================================
     // Management of levels
+    
+    public default Color[] levelColors()
+    {
+        int n = levelCount();
+        Color[] res = new Color[n];
+        for (int i = 0; i < n; i++)
+        {
+            res[i] = Color.WHITE;
+        }
+        return res;
+    }
     
     public String[] levelNames();
     
