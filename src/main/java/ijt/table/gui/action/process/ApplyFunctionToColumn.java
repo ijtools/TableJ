@@ -221,11 +221,11 @@ public class ApplyFunctionToColumn implements FramePlugin
                     int colIndex = table.findColumnIndex(this.numColNames[inds[i]]);
                     NumericColumn col = (NumericColumn) table.getColumn(colIndex);
                     newColumns[i] = transformer.process(col);
-                    
-                  Table res = Table.create(newColumns);
-                  res.setName(table.getName() + "-" + transformer.name());
-                  TableFrame.create(res, refFrame);
                 }
+
+                Table res = Table.create(newColumns);
+                res.setName(table.getName() + "-" + transformer.name());
+                TableFrame.create(res, refFrame);
             }
         }
     }
