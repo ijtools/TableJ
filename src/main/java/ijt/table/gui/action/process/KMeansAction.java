@@ -62,7 +62,8 @@ public class KMeansAction implements FramePlugin
     
     public boolean isAvailable(TableFrame frame)
     {
-        return frame.getTable() != null;
+        Table table = frame.getTable();
+        if (table == null) return false;
+        return Table.hasOnlyNumericColumns(table);
     }
-
 }

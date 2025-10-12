@@ -9,10 +9,9 @@ import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
 
 /**
- * Computes several summary statistics of a data table.
+ * Computes several summary statistics of a data table. Requires the table to
+ * contain only numeric columns.
  * 
- * @author dlegland
- *
  */
 public class Summary implements FramePlugin
 {
@@ -33,6 +32,8 @@ public class Summary implements FramePlugin
     
     public boolean isAvailable(TableFrame frame)
     {
-        return frame.getTable() != null;
+        Table table = frame.getTable();
+        if (table == null) return false;
+        return Table.hasOnlyNumericColumns(table);
     }
 }

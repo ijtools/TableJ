@@ -42,7 +42,6 @@ import org.knowm.xchart.style.Styler.LegendPosition;
 import org.knowm.xchart.style.XYStyler;
 
 import ij.gui.GenericDialog;
-import ijt.table.Column;
 import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.BaseFrame;
@@ -73,12 +72,9 @@ public class PrincipalComponentAnalysisAction implements FramePlugin
         if (!(frame instanceof TableFrame)) return;
         Table table = ((TableFrame) frame).getTable();
         // Check all columns are numeric
-        for (Column column : table.columns())
+        if(!Table.hasOnlyNumericColumns(table))
         {
-            if (!(column instanceof NumericColumn))
-            {
-                throw new IllegalArgumentException("Requires table with numeric columns only");
-            }
+            throw new IllegalArgumentException("Requires table with numeric columns only");
         }
         
         new PcaDialog(frame, "Principal Components Analysis", table);

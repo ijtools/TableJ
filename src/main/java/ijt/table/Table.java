@@ -122,6 +122,18 @@ public interface Table
         return table;
     }
     
+    // =============================================================
+    // Static methods
+    
+    public static boolean hasOnlyNumericColumns(Table table)
+    {
+        for (Column col : table.columns())
+        {
+            if (!(col instanceof NumericColumn)) return false;
+        }
+        return true;
+    }
+    
 
     // =============================================================
     // Global methods

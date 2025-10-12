@@ -3,8 +3,6 @@
  */
 package ijt.table.gui.action.process;
 
-import ijt.table.Column;
-import ijt.table.NumericColumn;
 import ijt.table.Table;
 import ijt.table.gui.BaseFrame;
 import ijt.table.gui.FramePlugin;
@@ -28,13 +26,11 @@ public class CorrelationMatrix implements FramePlugin
         {
             return;
         }
+        
         // Check all columns are numeric
-        for (Column column : table.columns())
+        if(!Table.hasOnlyNumericColumns(table))
         {
-            if (!(column instanceof NumericColumn))
-            {
-                throw new IllegalArgumentException("Requires table with numeric columns only");
-            }
+            throw new IllegalArgumentException("Requires table with numeric columns only");
         }
         
         Table res = new ijt.table.process.CorrelationMatrix().process(table);
@@ -43,6 +39,8 @@ public class CorrelationMatrix implements FramePlugin
     
     public boolean isAvailable(TableFrame frame)
     {
-        return frame.getTable() != null;
+        Table table = frame.getTable();
+        if (table == null) return false;
+        return Table.hasOnlyNumericColumns(table);
     }
 }
