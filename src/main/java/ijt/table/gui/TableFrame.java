@@ -126,11 +126,16 @@ public class TableFrame extends BaseFrame
     {
         // Create JTable instance
         JTable jTable = computeJTable(table);
+        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         // Setup layout
         Container panel = jFrame.getContentPane();
 
-        JScrollPane scrollPane = new JScrollPane(jTable);
+        JScrollPane scrollPane = new JScrollPane(jTable, 
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        // decorate the scroll panel with row index
         JTable rowTable = new RowNumberTable(jTable);
         scrollPane.setRowHeaderView(rowTable);
         scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, rowTable.getTableHeader());
