@@ -10,7 +10,9 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -71,6 +73,13 @@ public class TableFrame extends BaseFrame
         return frame;
     }
     
+    static Map<Table, TableFrame> tableFrameMap = new HashMap<>();
+    
+    public static final TableFrame retrieveTableFrame(Table table)
+    {
+        return tableFrameMap.get(table);
+    }
+    
     /**
      * The table displayed within this frame.
      */
@@ -90,6 +99,7 @@ public class TableFrame extends BaseFrame
         super("Data Table");
 
         this.table = table;
+        tableFrameMap.put(table, this);
         
         // index the table into the manager
         String name = table.getName();
@@ -115,9 +125,7 @@ public class TableFrame extends BaseFrame
             @Override
             public void windowClosing(WindowEvent evt)
             {
-                String tableName = table.getName();
-                manager.removeTable(tableName);
-                jFrame.dispose();
+                close();
             }           
         });
     }
@@ -302,6 +310,18 @@ public class TableFrame extends BaseFrame
         
         setTitle(title);
     }
+    
+    /**
+     * Close the frame and removes all dependencies.
+     */
+    public void close()
+    {
+        String tableName = table.getName();
+        TableManager.getInstance().removeTable(tableName);
+        tableFrameMap.remove(table);
+        jFrame.dispose();
+    }
+    
     
     // ===================================================================
     // Utility methods

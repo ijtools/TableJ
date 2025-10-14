@@ -4,6 +4,7 @@
 package ijt.table.gui.action.edit;
 
 import ijt.table.Table;
+import ijt.table.TableJ;
 import ijt.table.gui.BaseFrame;
 import ijt.table.gui.FramePlugin;
 import ijt.table.gui.TableFrame;
@@ -28,6 +29,8 @@ public class Summary implements FramePlugin
         
         Table res = table.summary();
         TableFrame.create(res, frame);
+        
+        TableJ.recordCommand(getClass(), table, options);
     }
     
     public boolean isAvailable(TableFrame frame)
