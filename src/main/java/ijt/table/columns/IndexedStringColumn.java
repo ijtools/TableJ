@@ -13,8 +13,7 @@ import ijt.table.CategoricalColumn;
  * A column of strings that stores the list of strings, and the string index for
  * each row.
  * 
- * @author dlegland
- *
+ * @see StringColumn
  */
 public class IndexedStringColumn extends AbstractColumn implements CategoricalColumn, Iterable<String>
 {
